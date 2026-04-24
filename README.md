@@ -14,11 +14,29 @@ Subscription e-commerce backend + storefront for Novapatch vitamin patches (Mexi
 - [Bun](https://bun.sh) ≥ 1.1 (the API runs on Bun)
 - [pnpm](https://pnpm.io) ≥ 9 (workspace management)
 - Node ≥ 20 (for dev tooling)
+- Docker (local Postgres via `docker compose`)
 
 ## Setup
 
 ```bash
+# 1. Install dependencies
 pnpm install
+
+# 2. Create your local env file (gitignored)
+cp .env.example .env
+
+# 3. Let apps/api find the env when Bun runs from a subpackage
+ln -sf ../../.env apps/api/.env
+
+# 4. Start local Postgres
+docker compose up -d postgres
+
+# 5. Apply migrations to the dev DB
+pnpm --filter @novapatch/api db:migrate
+
+# 6. Create the test DB (one-time, safe to re-run — errors on exists are fine)
+docker exec -i novapatchv2-postgres psql -U novapatch -d novapatch \
+  -c "CREATE DATABASE novapatch_test;" 2>/dev/null || true
 ```
 
 ## Running the API
