@@ -2,6 +2,7 @@ import { auth } from "@clerk/nextjs/server";
 import { getTranslations } from "next-intl/server";
 import { redirect } from "next/navigation";
 import { fetchCustomer, ApiError } from "@/lib/api";
+import { toBcp47 } from "@/lib/i18n";
 import {
   Card,
   CardHeader,
@@ -65,7 +66,7 @@ export default async function CuentaPage({
               <dt className="text-muted-foreground">{t("email_label")}</dt>
               <dd>{customer.email}</dd>
               <dt className="text-muted-foreground">{t("member_since_label")}</dt>
-              <dd>{new Date(customer.createdAt).toLocaleDateString(locale)}</dd>
+              <dd>{new Date(customer.createdAt).toLocaleDateString(toBcp47(locale))}</dd>
             </dl>
           ) : (
             <p className="text-muted-foreground">{t("loading")}</p>
