@@ -1,0 +1,58 @@
+import type { Product } from "./types";
+
+export const PRODUCTS: Readonly<Record<Product["slug"], Readonly<Product>>> = {
+  energy: {
+    slug: "energy",
+    name: "Energy",
+    description: "Parche vitamínico para energía sostenida durante el día.",
+    images: ["/products/energy-1.webp"],
+    basePrice: { mx: 45000, br: 8900, ar: 1200000, cl: 3500000, co: 13000000 },
+    isStockable: true,
+    subscriptionDiscounts: { 30: 20, 60: 15, 90: 10 },
+  },
+  sleep: {
+    slug: "sleep",
+    name: "Sleep",
+    description: "Parche nocturno con melatonina y magnesio para descanso profundo.",
+    images: ["/products/sleep-1.webp"],
+    basePrice: { mx: 45000, br: 8900, ar: 1200000, cl: 3500000, co: 13000000 },
+    isStockable: true,
+    subscriptionDiscounts: { 30: 20, 60: 15, 90: 10 },
+  },
+  glow: {
+    slug: "glow",
+    name: "Glow",
+    description: "Parche con colágeno y vitamina C para piel luminosa.",
+    images: ["/products/glow-1.webp"],
+    basePrice: { mx: 45000, br: 8900, ar: 1200000, cl: 3500000, co: 13000000 },
+    isStockable: true,
+    subscriptionDiscounts: { 30: 20, 60: 15, 90: 10 },
+  },
+  shield: {
+    slug: "shield",
+    name: "Shield",
+    description: "Parche inmunológico con zinc, vitamina D y antioxidantes.",
+    images: ["/products/shield-1.webp"],
+    basePrice: { mx: 45000, br: 8900, ar: 1200000, cl: 3500000, co: 13000000 },
+    isStockable: true,
+    subscriptionDiscounts: { 30: 20, 60: 15, 90: 10 },
+  },
+  zen: {
+    slug: "zen",
+    name: "Zen",
+    description: "Parche calmante con L-teanina y ashwagandha para manejo del estrés.",
+    images: ["/products/zen-1.webp"],
+    basePrice: { mx: 45000, br: 8900, ar: 1200000, cl: 3500000, co: 13000000 },
+    isStockable: true,
+    subscriptionDiscounts: { 30: 20, 60: 15, 90: 10 },
+  },
+  woman: {
+    slug: "woman",
+    name: "Woman",
+    description: "Parche específico para el equilibrio hormonal femenino.",
+    images: ["/products/woman-1.webp"],
+    basePrice: { mx: 45000, br: 8900, ar: 1200000, cl: 3500000, co: 13000000 },
+    isStockable: true,
+    subscriptionDiscounts: { 30: 20, 60: 15, 90: 10 },
+  },
+};
