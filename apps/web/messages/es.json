@@ -106,6 +106,71 @@
         }
       }
     },
+    "faq": {
+      "hero": {
+        "eyebrow": "FAQ",
+        "title": "Preguntas frecuentes",
+        "body": "Todo lo que necesitas saber sobre NovaPatch."
+      },
+      "questions": [
+        { "q": "¿Cómo cancelo mi suscripción?", "a": "Puedes cancelar desde tu cuenta en cualquier momento, antes de la siguiente fecha de cobro. Sin penalidades ni cargos adicionales." },
+        { "q": "¿Puedo pausar mi suscripción?", "a": "Sí. Desde tu dashboard puedes pausar por 1 mes sin costo. Tu próximo pedido se reprograma automáticamente al mes siguiente." },
+        { "q": "¿Puedo cambiar la frecuencia de entrega?", "a": "Claro. Entra a tu cuenta, selecciona la suscripción y elige la nueva frecuencia. El cambio aplica desde el siguiente ciclo de facturación." },
+        { "q": "¿Cuándo se realiza el cobro?", "a": "El cobro se realiza automáticamente en tu fecha de renovación. Recibirás un recordatorio por email 3 días antes." },
+        { "q": "¿Cuántas suscripciones puedo tener activas?", "a": "Las que quieras. Puedes suscribirte a múltiples productos simultáneamente, cada uno con su propia frecuencia y ciclo de entrega." },
+        { "q": "¿Cuánto tarda en llegar mi pedido?", "a": "Ciudad de México: 1–2 días hábiles. Resto de México: 3–5 días hábiles. Todos los pedidos incluyen número de seguimiento por email." },
+        { "q": "¿Envían a toda la República Mexicana?", "a": "Sí, hacemos envíos a todo México. Próximamente Brasil y otros países de LATAM." },
+        { "q": "¿Cuánto cuesta el envío?", "a": "El costo de envío es de $85 MXN fijo para todos los pedidos, incluyendo suscripciones." },
+        { "q": "¿Puedo rastrear mi pedido?", "a": "Sí. Una vez que tu pedido es despachado recibirás un email con el número de guía para rastrear tu envío en tiempo real." },
+        { "q": "¿Qué métodos de pago aceptan?", "a": "Tarjeta de crédito y débito (Visa, Mastercard, American Express)." },
+        { "q": "¿Es seguro pagar en la web?", "a": "Sí. Usamos encriptación SSL y los datos de tu tarjeta se tokenizan mediante Openpay — nunca se almacenan en nuestros servidores." },
+        { "q": "¿Me pueden dar factura?", "a": "Sí. Solicítala por email a hola@novapatch.care con tus datos fiscales dentro de los 5 días naturales de tu compra." },
+        { "q": "¿Cómo se usa el parche?", "a": "1. Retira el film protector. 2. Pega en piel limpia y seca (brazo, hombro o espalda). 3. Presiona 30 segundos. 4. Déjalo actuar 8–12 horas." },
+        { "q": "¿El parche es resistente al agua?", "a": "Sí. Puedes ducharte, nadar y hacer ejercicio con el parche puesto. Está diseñado para mantenerse adherido en condiciones normales de humedad." },
+        { "q": "¿Cuáles son los ingredientes?", "a": "Cada parche tiene ingredientes específicos según su función. Puedes ver la lista completa en la página de cada producto. Todos son veganos, sin gluten y sin azúcar." },
+        { "q": "¿Tiene efectos secundarios?", "a": "Los parches están formulados con ingredientes naturales y seguros. Si tienes piel sensible, prueba primero en un área pequeña. Consulta a tu médico si estás embarazada o tomas medicamentos." },
+        { "q": "¿Cómo funciona la garantía de satisfacción?", "a": "30 días de garantía total. Si no estás satisfecho con tu primer pedido, te reembolsamos el importe completo sin necesidad de devolver el producto." },
+        { "q": "¿Cuánto tarda el reembolso?", "a": "Una vez aprobada tu solicitud, el reembolso se procesa en 5–7 días hábiles dependiendo de tu banco." },
+        { "q": "¿La garantía aplica a suscripciones activas?", "a": "La garantía de 30 días aplica solo al primer pedido por cliente. Los ciclos subsecuentes de suscripción no están cubiertos por la garantía." }
+      ]
+    },
+    "suscripciones": {
+      "hero": {
+        "eyebrow": "Suscripciones",
+        "title": "El hábito que no tienes que recordar.",
+        "body": "Elige tus parches, define cada cuánto los quieres y olvídate del resto. Tu bienestar llega solo — con descuento, sin compromiso."
+      },
+      "features": {
+        "sin_interrupciones": {
+          "title": "Sin interrupciones",
+          "body": "Tu parche llega antes de que se te acabe. Sin acordarte. Sin perder el ritmo."
+        },
+        "precio_suscriptor": {
+          "title": "Precio de suscriptor",
+          "body": "Siempre más bajo que la compra individual. El hábito que sostiene, conviene."
+        },
+        "tu_controlas": {
+          "title": "Tú controlas",
+          "body": "Pausa, cambia o cancela cuando quieras. Sin llamadas, sin penalizaciones."
+        },
+        "pausa": {
+          "title": "Pausa cuando lo necesites",
+          "body": "¿Te vas de viaje o ya tienes stock? Pausa cualquier producto desde tu cuenta, sin explicaciones."
+        },
+        "cambia_frecuencia": {
+          "title": "Cambia tus parches o tu frecuencia",
+          "body": "¿Cambió tu rutina? Ajusta qué productos recibes y cada cuánto, antes de tu próximo envío."
+        },
+        "sin_penalizaciones": {
+          "title": "Cancela sin penalizaciones",
+          "body": "Si decides salir, sales. Sin llamadas, sin formularios complicados, sin cargos extra."
+        }
+      },
+      "cta": {
+        "label": "Armar mi plan",
+        "href": "/tienda"
+      }
+    },
     "garantia": {
       "hero": {
         "eyebrow": "Garantía de satisfacción",
