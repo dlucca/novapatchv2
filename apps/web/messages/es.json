@@ -1,0 +1,17 @@
+{
+  "home": {
+    "title": "Novapatch",
+    "subtitle": "Parches vitamínicos por suscripción.",
+    "cta_cuenta": "Ver mi cuenta"
+  },
+  "cuenta": {
+    "title": "Mi cuenta",
+    "email_label": "Correo",
+    "member_since_label": "Cliente desde",
+    "loading": "Cargando..."
+  },
+  "nav": {
+    "mi_cuenta": "Mi cuenta",
+    "iniciar_sesion": "Iniciar sesión"
+  }
+}

@@ -1,13 +1,16 @@
 import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
+import createIntlMiddleware from "next-intl/middleware";
+import { routing } from "@/i18n/routing";
 
-// Any path that ends with /cuenta (optionally followed by more segments) is protected.
-// The leading `(.*/)?` allows the match to fire whether or not a locale prefix is present.
+const intlMiddleware = createIntlMiddleware(routing);
+
 const isProtectedRoute = createRouteMatcher(["/(.*/)?cuenta(.*)"]);
 
 export default clerkMiddleware(async (auth, req) => {
   if (isProtectedRoute(req)) {
     await auth.protect();
   }
+  return intlMiddleware(req);
 });
 
 export const config = {
