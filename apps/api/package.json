@@ -7,16 +7,23 @@
     "start": "bun run src/server.ts",
     "test": "bun test",
     "typecheck": "tsc --noEmit",
-    "build": "echo 'bun runs TS directly, no build step'"
+    "build": "echo 'bun runs TS directly, no build step'",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "bun run src/db/migrate.ts",
+    "db:studio": "drizzle-kit studio",
+    "db:push": "drizzle-kit push"
   },
   "dependencies": {
     "@novapatch/markets": "workspace:*",
     "@novapatch/catalog": "workspace:*",
     "hono": "^4.6.0",
-    "zod": "^3.23.8"
+    "zod": "^3.23.8",
+    "drizzle-orm": "^0.36.4",
+    "postgres": "^3.4.5"
   },
   "devDependencies": {
     "bun-types": "^1.1.0",
-    "typescript": "^5.6.2"
+    "typescript": "^5.6.2",
+    "drizzle-kit": "^0.28.1"
   }
 }

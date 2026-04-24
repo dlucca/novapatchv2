@@ -20,6 +20,7 @@ const envSchema = z.object({
   // Forward declarations — consumed by later plans (DB, auth, payments, email).
   // Kept optional here so the API boots without them until each subsystem lands.
   DATABASE_URL: z.string().optional(),
+  DATABASE_URL_TEST: z.string().optional(),
 
   CLERK_SECRET_KEY: z.string().optional(),
   CLERK_PUBLISHABLE_KEY: z.string().optional(),
