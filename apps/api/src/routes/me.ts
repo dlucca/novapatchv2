@@ -7,6 +7,7 @@ import { upsertCustomerByClerkUserId } from "../repos/customers";
 import type { Customer } from "../db/schema/customers";
 import { createCheckoutRoutes } from "./checkout";
 import { createSubscriptionRoutes } from "./subscriptions";
+import { createOrdersRoutes } from "./orders";
 
 function serializeCustomer(c: Customer) {
   return {
@@ -53,6 +54,11 @@ export function createMeRoutes(deps: MeDeps): Hono {
       userClient: deps.userClient,
       getNow: deps.getNow ?? (() => new Date()),
     }),
+  );
+
+  me.route(
+    "/orders",
+    createOrdersRoutes({ db: deps.db, userClient: deps.userClient }),
   );
 
   if (deps.gateway) {
