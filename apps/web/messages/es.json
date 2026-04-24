@@ -80,6 +80,54 @@
     "mi_cuenta": "Mi cuenta",
     "iniciar_sesion": "Iniciar sesión"
   },
+  "pages": {
+    "nosotros": {
+      "hero": {
+        "eyebrow": "Nosotros",
+        "title": "Creemos que cuidarse no debería ser complicado.",
+        "body": "Novapatch nació de una pregunta simple: ¿por qué el bienestar diario sigue siendo tan difícil de sostener?"
+      },
+      "sections": {
+        "problem": {
+          "title": "El problema no era la intención.",
+          "body": "La mayoría de las personas quiere cuidarse. Compra suplementos, los toma unos días, los olvida, los retoma, los abandona. No por falta de voluntad — sino porque el formato no acompaña la vida real.\n\nPastillas que requieren agua. Horarios estrictos. Cápsulas que irritan el estómago. Rituales que se sienten como obligaciones."
+        },
+        "idea": {
+          "title": "Un parche. Un gesto. Todo el día.",
+          "body": "La absorción a través de la piel no es una novedad — se usa en medicina desde hace décadas. Lo que hicimos fue aplicar ese conocimiento al bienestar cotidiano.\n\nFormulamos cada parche desde cero para este formato. No adaptamos suplementos en cápsula: diseñamos ingredientes seleccionados bajo criterios precisos, pensados para que el cuerpo los absorba de forma progresiva, sin pasar por el sistema digestivo, sin interferencias."
+        },
+        "values": {
+          "title": "Constancia por sobre impacto.",
+          "body": "En bienestar, el producto que se usa todos los días siempre gana al producto perfecto que se abandona a la semana.\n\nPor eso todo lo que hacemos apunta a lo mismo: eliminar la fricción. Hacer que cuidarse sea tan fácil que no haya excusa para no hacerlo. Un solo gesto, integrado a lo que ya haces, sin rituales que mantener ni horarios que respetar."
+        },
+        "honesty": {
+          "title": "Sin promesas que no podemos cumplir.",
+          "body": "No prometemos transformaciones. No vendemos soluciones mágicas. No usamos lenguaje clínico para parecer más serios de lo que somos.\n\nSomos una marca de bienestar que cree en la honestidad sobre la exageración, en la constancia sobre el impacto inmediato, y en acompañar — no en prometer."
+        }
+      }
+    },
+    "garantia": {
+      "hero": {
+        "eyebrow": "Garantía de satisfacción",
+        "title": "30 días de garantía. Sin riesgo.",
+        "body": "Si tu primer pedido no te convence, te devolvemos el dinero. Sin trámites complicados, sin devolver el producto."
+      },
+      "sections": {
+        "coverage": {
+          "title": "Qué cubre",
+          "body": "100% del importe del primer pedido por cliente\n\nSin necesidad de devolver el producto\n\nAplica a compra única y al primer ciclo de suscripción\n\nTe pedimos tu número de pedido y una experiencia breve — la usamos para mejorar, no para evaluar tu caso"
+        },
+        "process": {
+          "title": "Cómo solicitarlo",
+          "body": "Llenas el formulario de Solicitar reembolso\n\nIndica tu número de pedido y nombre completo\n\nCuéntanos brevemente qué notaste o qué no funcionó\n\nProcesamos el reembolso en 5–7 días hábiles"
+        },
+        "conditions": {
+          "title": "Condiciones",
+          "body": "Solo aplica al primer pedido por cliente\n\nSolicitud dentro de los 30 días naturales de recibido\n\nMáximo un reembolso por cliente\n\nNo aplica a ciclos posteriores de suscripción"
+        }
+      }
+    }
+  },
   "site": {
     "navbar": {
       "tienda": "Tienda",
