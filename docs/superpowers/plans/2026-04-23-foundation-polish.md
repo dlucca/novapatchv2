@@ -269,7 +269,7 @@ import { apiError } from "./lib/errors";
 export function registerErrorHandlers(target: Hono): void {
   target.notFound((c) => {
     const { body, status } = apiError("not_found", `route not found: ${c.req.path}`, 404);
-    return c.json(body, status as 404);
+    return c.json(body, status);
   });
 
   target.onError((err, c) => {
@@ -279,7 +279,7 @@ export function registerErrorHandlers(target: Hono): void {
       "an internal error occurred",
       500,
     );
-    return c.json(body, status as 500);
+    return c.json(body, status);
   });
 }
 
@@ -455,7 +455,7 @@ export const marketMiddleware: MiddlewareHandler = async (c, next) => {
       "missing ?market query parameter",
       400,
     );
-    return c.json(body, status as 400);
+    return c.json(body, status);
   }
   const normalized = raw.trim().toLowerCase();
   if (normalized === "") {
@@ -464,7 +464,7 @@ export const marketMiddleware: MiddlewareHandler = async (c, next) => {
       "empty ?market query parameter",
       400,
     );
-    return c.json(body, status as 400);
+    return c.json(body, status);
   }
   if (!isMarketId(normalized)) {
     const { body, status } = apiError(
@@ -472,7 +472,7 @@ export const marketMiddleware: MiddlewareHandler = async (c, next) => {
       `unknown market: ${raw}`,
       400,
     );
-    return c.json(body, status as 400);
+    return c.json(body, status);
   }
   c.set("market", resolveMarket(normalized));
   await next();
@@ -537,7 +537,7 @@ Replace with:
       `product not found: ${slug}`,
       404,
     );
-    return c.json(body, status as 404);
+    return c.json(body, status);
 ```
 
 And add the import at the top of the file:
@@ -685,7 +685,7 @@ import { readEnv } from "./env";
 export function registerErrorHandlers(target: Hono): void {
   target.notFound((c) => {
     const { body, status } = apiError("not_found", `route not found: ${c.req.path}`, 404);
-    return c.json(body, status as 404);
+    return c.json(body, status);
   });
 
   target.onError((err, c) => {
@@ -695,7 +695,7 @@ export function registerErrorHandlers(target: Hono): void {
       "an internal error occurred",
       500,
     );
-    return c.json(body, status as 500);
+    return c.json(body, status);
   });
 }
 
