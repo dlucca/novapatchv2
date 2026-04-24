@@ -14,7 +14,8 @@
     ],
     "paths": {
       "@/*": ["./src/*"]
-    }
+    },
+    "types": ["node", "bun-types"]
   },
   "include": ["next-env.d.ts", "src/**/*", "test/**/*", ".next/types/**/*.ts", "middleware.ts"],
   "exclude": ["node_modules", ".next"]
