@@ -8,6 +8,26 @@ on:
 jobs:
   ci:
     runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: novapatch
+          POSTGRES_PASSWORD: novapatch
+          POSTGRES_DB: novapatch
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U novapatch -d novapatch"
+          --health-interval 2s
+          --health-timeout 2s
+          --health-retries 10
+
+    env:
+      DATABASE_URL: postgres://novapatch:novapatch@localhost:5432/novapatch
+      DATABASE_URL_TEST: postgres://novapatch:novapatch@localhost:5432/novapatch_test
+
     steps:
       - uses: actions/checkout@v4
 
@@ -26,6 +46,11 @@ jobs:
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
+
+      - name: Create test database
+        run: >
+          PGPASSWORD=novapatch psql -h localhost -U novapatch -d novapatch
+          -c 'CREATE DATABASE novapatch_test;'
 
       - name: Typecheck
         run: pnpm typecheck
