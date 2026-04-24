@@ -61,7 +61,7 @@ export function createApp(deps: AppDeps = {}): Hono {
       origin: env.CORS_ORIGINS,
       credentials: true,
       allowMethods: ["GET", "POST", "PATCH", "DELETE", "OPTIONS"],
-      allowHeaders: ["Authorization", "Content-Type"],
+      allowHeaders: ["Authorization", "Content-Type", "Idempotency-Key"],
       maxAge: 600,
     }),
   );
