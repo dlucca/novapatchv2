@@ -83,21 +83,13 @@ export function createDiscountRoutes(db: Db): Hono {
       discount: result.discount,
     });
 
-    const eligibleSubtotal = quote.lines
-      .filter((l) => {
-        if (result.discount.appliesTo === "all") return true;
-        if (result.discount.appliesTo === "subscription") return l.isSubscription;
-        return !l.isSubscription; // "once"
-      })
-      .reduce((sum, l) => sum + l.lineSubtotal, 0);
-
     return c.json({
       valid: true as const,
       code: result.code.code,
       discountPct: result.discount.discountPct,
       appliesTo: result.discount.appliesTo,
       discountAmount: quote.discountAmount,
-      eligibleSubtotal,
+      eligibleSubtotal: quote.eligibleSubtotal,
       quote,
     });
   });

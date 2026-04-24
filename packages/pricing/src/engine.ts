@@ -37,9 +37,16 @@ export function calculateQuote(input: CalculateQuoteInput): PricingQuote {
 
   const subtotal = lines.reduce((sum, l) => sum + l.lineSubtotal, 0);
 
-  const discountAmount = input.discount
-    ? computeDiscountAmount(lines, input.discount)
-    : 0;
+  let eligibleSubtotal: number;
+  let discountAmount: number;
+  if (input.discount) {
+    assertValidDiscountPct(input.discount.discountPct);
+    eligibleSubtotal = computeEligibleSubtotal(lines, input.discount.appliesTo);
+    discountAmount = Math.round((eligibleSubtotal * input.discount.discountPct) / 100);
+  } else {
+    eligibleSubtotal = subtotal;
+    discountAmount = 0;
+  }
 
   const taxableBase = subtotal - discountAmount;
   const tax = Math.round(taxableBase * input.market.taxRate);
@@ -51,6 +58,7 @@ export function calculateQuote(input: CalculateQuoteInput): PricingQuote {
     currency: input.market.currency,
     lines,
     subtotal,
+    eligibleSubtotal,
     discountAmount,
     taxableBase,
     tax,
@@ -59,23 +67,19 @@ export function calculateQuote(input: CalculateQuoteInput): PricingQuote {
   };
 }
 
-function computeDiscountAmount(
+function computeEligibleSubtotal(
   lines: readonly QuoteLine[],
-  discount: DiscountInput,
+  appliesTo: DiscountInput["appliesTo"],
 ): number {
-  if (
-    !Number.isInteger(discount.discountPct) ||
-    discount.discountPct < 1 ||
-    discount.discountPct > 100
-  ) {
-    throw new Error(
-      `discountPct must be an integer in 1..100 (got ${discount.discountPct})`,
-    );
-  }
-  const eligible = lines
-    .filter((l) => matchesScope(l, discount.appliesTo))
+  return lines
+    .filter((l) => matchesScope(l, appliesTo))
     .reduce((sum, l) => sum + l.lineSubtotal, 0);
-  return Math.round((eligible * discount.discountPct) / 100);
+}
+
+function assertValidDiscountPct(pct: number): void {
+  if (!Number.isInteger(pct) || pct < 1 || pct > 100) {
+    throw new Error(`discountPct must be an integer in 1..100 (got ${pct})`);
+  }
 }
 
 function matchesScope(line: QuoteLine, appliesTo: DiscountInput["appliesTo"]): boolean {

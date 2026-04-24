@@ -19,6 +19,7 @@ describe("calculateQuote — no discount", () => {
       isSubscription: false,
     });
     expect(q.subtotal).toBe(45000);
+    expect(q.eligibleSubtotal).toBe(45000);
     expect(q.discountAmount).toBe(0);
     expect(q.taxableBase).toBe(45000);
     expect(q.tax).toBe(7200);     // round(45000 * 0.16)
@@ -91,6 +92,7 @@ describe("calculateQuote — with discount", () => {
       discount: { code: "WELCOME10", discountPct: 10, appliesTo: "all" },
     });
     expect(q.subtotal).toBe(81000);
+    expect(q.eligibleSubtotal).toBe(81000);
     expect(q.discountAmount).toBe(Math.round(81000 * 0.10)); // 8100
     expect(q.taxableBase).toBe(81000 - 8100);
     expect(q.tax).toBe(Math.round((81000 - 8100) * 0.16));
@@ -107,6 +109,7 @@ describe("calculateQuote — with discount", () => {
       discount: { code: "ONCE15", discountPct: 15, appliesTo: "once" },
     });
     // Only the 45000 one-time portion is eligible.
+    expect(q.eligibleSubtotal).toBe(45000);
     expect(q.discountAmount).toBe(Math.round(45000 * 0.15));
   });
 
@@ -119,6 +122,7 @@ describe("calculateQuote — with discount", () => {
       market: MARKETS.mx,
       discount: { code: "SUB20", discountPct: 20, appliesTo: "subscription" },
     });
+    expect(q.eligibleSubtotal).toBe(36000);
     expect(q.discountAmount).toBe(Math.round(36000 * 0.20));
   });
 
@@ -129,6 +133,7 @@ describe("calculateQuote — with discount", () => {
       discount: { code: "SUBONLY", discountPct: 25, appliesTo: "subscription" },
     });
     expect(q.discountAmount).toBe(0);
+    expect(q.eligibleSubtotal).toBe(0);
     expect(q.taxableBase).toBe(45000);
   });
 

@@ -34,6 +34,12 @@ export interface PricingQuote {
   currency: string;
   lines: readonly QuoteLine[];
   subtotal: number;
+  /**
+   * Sum of lineSubtotals for lines that match `discount.appliesTo`. Equals
+   * `subtotal` when `appliesTo==="all"` or no discount was supplied. 0 when
+   * the cart has no lines matching the scope.
+   */
+  eligibleSubtotal: number;
   discountAmount: number;
   taxableBase: number;
   tax: number;
