@@ -5,11 +5,23 @@ import { healthRoutes } from "./routes/health";
 import { catalogRoutes } from "./routes/catalog";
 import { apiError } from "./lib/errors";
 import { readEnv } from "./env";
+import type { TokenVerifier, ClerkUserClient } from "./lib/clerk";
+import type { Db } from "./db";
 
-// Root application. Route modules live in ./routes/*.ts and are mounted below.
-// Convention: the mount prefix lives HERE; route modules use bare paths internally.
-// e.g. `app.route("/catalog", catalogRoutes)` + `catalogRoutes.get("/", ...)` → `/catalog`.
-// This gives us a single routing table of contents in this file.
+export interface AppDeps {
+  verifier?: TokenVerifier;
+  userClient?: ClerkUserClient;
+  db?: Db;
+}
+
+// Root application factory.
+// Always mounts: logger, cors, error handlers, /health, /catalog.
+// Conditionally mounts /me/* when all auth+db deps are provided.
+//
+// Convention: the mount prefix lives HERE; route modules use bare paths
+// internally. e.g. `app.route("/catalog", catalogRoutes)`
+// + `catalogRoutes.get("/", ...)` -> `/catalog`. One routing table of contents
+// in this file.
 
 /**
  * Attaches the canonical error envelope to `notFound` and `onError` on the given app.
@@ -32,24 +44,37 @@ export function registerErrorHandlers(target: Hono): void {
   });
 }
 
-const env = readEnv();
+export function createApp(deps: AppDeps = {}): Hono {
+  const env = readEnv();
+  const app = new Hono();
 
-export const app = new Hono();
+  app.use("*", logger());
 
-app.use("*", logger());
+  app.use(
+    "*",
+    cors({
+      origin: env.CORS_ORIGINS,
+      credentials: true,
+      allowMethods: ["GET", "POST", "PATCH", "DELETE", "OPTIONS"],
+      allowHeaders: ["Authorization", "Content-Type"],
+      maxAge: 600,
+    }),
+  );
 
-app.use(
-  "*",
-  cors({
-    origin: env.CORS_ORIGINS,
-    credentials: true,
-    allowMethods: ["GET", "POST", "PATCH", "DELETE", "OPTIONS"],
-    allowHeaders: ["Authorization", "Content-Type"],
-    maxAge: 600,
-  }),
-);
+  registerErrorHandlers(app);
 
-registerErrorHandlers(app);
+  app.route("/", healthRoutes);
+  app.route("/catalog", catalogRoutes);
 
-app.route("/", healthRoutes);
-app.route("/catalog", catalogRoutes);
+  // /me/* is wired in Task 4 once the route factory exists.
+  // Guarded so tests that don't pass deps still work.
+  if (deps.verifier && deps.userClient && deps.db) {
+    // placeholder — Task 4 adds the actual mount
+  }
+
+  return app;
+}
+
+// Backward-compatible singleton for existing tests that do
+// `import { app } from "../src/index"`. No deps -> /me is omitted.
+export const app = createApp();
