@@ -493,12 +493,13 @@ git commit -m "feat(markets): MARKETS config + resolveMarket helper with tests"
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "outDir": "dist",
-    "rootDir": "src",
     "types": ["bun-types"]
   },
   "include": ["src/**/*", "test/**/*"]
 }
 ```
+
+> **Note on `rootDir`:** omitted because this package is source-exported (no build step) and `include` covers both `src/` and `test/`. Setting `rootDir: "src"` would make TypeScript reject test files as outside-of-root (TS6059).
 
 > **Note:** `bun-types` is scoped here (not at the base) because the package uses `bun:test` for its tests.
 
@@ -837,12 +838,13 @@ git commit -m "feat(catalog): 6 launch SKUs + pricing helpers with tests"
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "outDir": "dist",
-    "rootDir": "src",
     "types": ["bun-types"]
   },
   "include": ["src/**/*", "test/**/*"]
 }
 ```
+
+> **Note on `rootDir`:** omitted because Bun runs TS directly (no build step) and `include` covers both `src/` and `test/`.
 
 - [ ] **Step 4.3: Install deps**
 
