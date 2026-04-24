@@ -1,5 +1,6 @@
 import { getTranslations } from "next-intl/server";
 import Link from "next/link";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 
 export default async function Home({
   params,
@@ -10,14 +11,20 @@ export default async function Home({
   const t = await getTranslations({ locale, namespace: "home" });
   return (
     <main className="min-h-screen p-12">
-      <h1 className="text-4xl font-bold">{t("title")}</h1>
-      <p className="mt-4 text-gray-600">{t("subtitle")}</p>
-      <Link
-        href={`/${locale}/cuenta`}
-        className="mt-8 inline-block rounded bg-black px-4 py-2 text-sm font-medium text-white"
-      >
-        {t("cta_cuenta")}
-      </Link>
+      <Card className="mx-auto max-w-2xl">
+        <CardHeader>
+          <CardTitle>{t("title")}</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <p className="text-muted-foreground">{t("subtitle")}</p>
+          <Link
+            href={`/${locale}/cuenta`}
+            className="mt-6 inline-block rounded bg-primary px-4 py-2 text-sm font-medium text-primary-foreground"
+          >
+            {t("cta_cuenta")}
+          </Link>
+        </CardContent>
+      </Card>
     </main>
   );
 }
