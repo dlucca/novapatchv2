@@ -318,6 +318,38 @@
         }
       ]
     },
+    "influencers": {
+      "hero": {
+        "eyebrow": "Influencers",
+        "title": "Crea contenido que transforma vidas.",
+        "body": "Únete a la red de embajadores de Novapatch. Gana acceso anticipado a nuevos parches, colaboraciones pagadas y una comunidad que apuesta por el bienestar real."
+      },
+      "cards": {
+        "productos_gratis": {
+          "title": "Productos gratis",
+          "body": "Recibe parches Novapatch a cambio de contenido auténtico. Comparte tu experiencia real con tu comunidad y nosotros te abastecemos."
+        },
+        "colaboraciones_pagas": {
+          "title": "Colaboraciones pagas",
+          "body": "Para perfiles seleccionados, ofrecemos colaboraciones con compensación económica. Crea contenido de impacto y recibe una retribución justa por tu trabajo."
+        },
+        "comunidad_real": {
+          "title": "Comunidad real",
+          "body": "Forma parte de una red de creadores de bienestar en LATAM. Conecta con personas que comparten tu misión de promover hábitos de salud sostenibles."
+        }
+      },
+      "cta": {
+        "label": "Aplicar ahora",
+        "href": "/influencers/aplicar"
+      }
+    },
+    "influencers_aplicar": {
+      "hero": {
+        "eyebrow": "Aplicar",
+        "title": "Próximamente",
+        "body": "Estamos ultimando los detalles del programa. Mientras tanto, escribinos a influencers@novapatch.mx y te contactamos apenas el formulario esté disponible."
+      }
+    },
     "garantia": {
       "hero": {
         "eyebrow": "Garantía de satisfacción",
