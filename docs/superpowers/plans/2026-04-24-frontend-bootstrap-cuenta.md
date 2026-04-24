@@ -276,7 +276,7 @@ git commit -m "feat(web): bootstrap Next.js 15 + React 19 + Tailwind v4"
 **Files:**
 - Modify: `apps/web/package.json` — add `@clerk/nextjs`
 - Modify: `apps/web/src/app/layout.tsx` — wrap with `ClerkProvider` + add header nav
-- Create: `apps/web/middleware.ts` — protect `/cuenta` routes via Clerk
+- Create: `apps/web/src/middleware.ts` — protect `/cuenta` routes via Clerk
 
 - [ ] **Step 2.1: Add `@clerk/nextjs` dep**
 
@@ -346,7 +346,7 @@ export default function RootLayout({
 }
 ```
 
-- [ ] **Step 2.3: Create `apps/web/middleware.ts`**
+- [ ] **Step 2.3: Create `apps/web/src/middleware.ts`**
 
 ```typescript
 import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
@@ -407,7 +407,7 @@ Then delete the temporary file: `rm apps/web/.env.local`.
 - [ ] **Step 2.6: Commit**
 
 ```bash
-git add apps/web/package.json apps/web/src/app/layout.tsx apps/web/middleware.ts pnpm-lock.yaml
+git add apps/web/package.json apps/web/src/app/layout.tsx apps/web/src/middleware.ts pnpm-lock.yaml
 git commit -m "feat(web): Clerk integration — ClerkProvider + cuenta route protection"
 ```
 
@@ -421,7 +421,7 @@ git commit -m "feat(web): Clerk integration — ClerkProvider + cuenta route pro
 - Create: `apps/web/src/i18n/request.ts`
 - Create: `apps/web/messages/es.json`
 - Modify: `apps/web/next.config.ts` — add the next-intl plugin
-- Modify: `apps/web/middleware.ts` — compose with `createIntlMiddleware`
+- Modify: `apps/web/src/middleware.ts` — compose with `createIntlMiddleware`
 - MOVE: `apps/web/src/app/layout.tsx` → `apps/web/src/app/[locale]/layout.tsx`
 - MOVE: `apps/web/src/app/page.tsx` → `apps/web/src/app/[locale]/page.tsx`
 
@@ -625,7 +625,7 @@ export default async function Home({
 }
 ```
 
-- [ ] **Step 3.9: Update `apps/web/middleware.ts` to compose Clerk with next-intl**
+- [ ] **Step 3.9: Update `apps/web/src/middleware.ts` to compose Clerk with next-intl**
 
 Replace with:
 
