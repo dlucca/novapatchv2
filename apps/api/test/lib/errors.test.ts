@@ -43,4 +43,18 @@ describe("apiError", () => {
       expect(body.error.code).toBe(code);
     }
   });
+
+  it("omits details from the envelope when not provided", () => {
+    const { body } = apiError("internal_error", "msg", 500);
+    expect("details" in body.error).toBe(false);
+  });
+
+  it("includes details when provided (e.g. zod field errors)", () => {
+    const fieldErrors = [
+      { path: ["email"], message: "Invalid email" },
+      { path: ["age"], message: "Must be >= 18" },
+    ];
+    const { body } = apiError("validation_failed", "validation failed", 422, fieldErrors);
+    expect(body.error.details).toEqual(fieldErrors);
+  });
 });

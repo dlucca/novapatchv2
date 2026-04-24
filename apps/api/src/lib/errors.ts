@@ -24,6 +24,11 @@ export interface ApiErrorBody {
   error: {
     code: ApiErrorCode;
     message: string;
+    /**
+     * Optional, shape-free field for structured extras (e.g. Zod field errors
+     * on a `validation_failed` response). Frontend parses it per-code.
+     */
+    details?: unknown;
   };
 }
 
@@ -35,14 +40,17 @@ export interface ApiErrorResult {
 /**
  * Builds a typed error envelope. Call `c.json(...apiError(...))` in Hono handlers,
  * or spread the result manually when a handler needs more control.
+ *
+ * Pass `details` when the code needs structured extra data (e.g. per-field
+ * validation errors). Omit otherwise — the field is absent from the JSON.
  */
 export function apiError(
   code: ApiErrorCode,
   message: string,
   status: ApiErrorStatus,
+  details?: unknown,
 ): ApiErrorResult {
-  return {
-    body: { error: { code, message } },
-    status,
-  };
+  const error: ApiErrorBody["error"] =
+    details === undefined ? { code, message } : { code, message, details };
+  return { body: { error }, status };
 }
