@@ -171,6 +171,153 @@
         "href": "/tienda"
       }
     },
+    "privacidad": {
+      "hero": {
+        "eyebrow": "Aviso de Privacidad",
+        "title": "Aviso de Privacidad",
+        "body": "Última actualización: enero de 2025 · Cumplimiento LFPDPPP"
+      },
+      "sections": [
+        {
+          "title": "1. Identidad y datos de contacto del responsable",
+          "body": "NOVAPATCH (SOCIEDAD ANÓNIMA PROMOTORA DE INVERSIÓN DE CAPITAL VARIABLE), en lo sucesivo \"Novapatch\", con domicilio en PRIVADA LAGO BOLSENA 22, COLONIA MODELO PENSIL, C.P. 11450, ALCALDÍA MIGUEL HIDALGO, CIUDAD DE MÉXICO, es el responsable del tratamiento de los datos personales que recopila a través del sitio web www.novapatch.care.\n\nPara cualquier asunto relacionado con el tratamiento de tus datos personales puedes contactarnos en: info@novapatch.care · Teléfono: 55 4545 1328"
+        },
+        {
+          "title": "2. Datos personales que recopilamos",
+          "body": "Podemos recopilar las siguientes categorías de datos personales cuando navegas por el Sitio, creas una cuenta, realizas una compra, te suscribes a nuestro newsletter o te comunicas con nosotros:\n\nDatos de identificación y contacto: nombre, apellidos, correo electrónico, número de teléfono, dirección de envío y facturación.\nDatos de cuenta: usuario, contraseña, historial de compras, preferencias, suscripciones activas.\nDatos de pago: tipo de tarjeta y últimos dígitos, método de pago. Los datos completos son procesados por nuestros proveedores de pago y no se almacenan en nuestros servidores.\nDatos de navegación: dirección IP, tipo de navegador, páginas visitadas, cookies.\nDatos de comunicaciones: mensajes que nos envías por chat, correo o formularios de contacto."
+        },
+        {
+          "title": "3. Finalidades del tratamiento",
+          "body": "Finalidades primarias (necesarias para la prestación del servicio):\n\nProcesar y gestionar tus pedidos, pagos, envíos y devoluciones.\nCrear, administrar y mantener tu cuenta de usuario.\nGestionar tu suscripción y envíos recurrentes.\nAtender consultas, reclamaciones y ejercicio de derechos.\nCumplir con obligaciones legales y fiscales aplicables.\n\nFinalidades secundarias (sujetas a consentimiento):\n\nEnviarte comunicaciones comerciales y promociones.\nRealizar encuestas de satisfacción.\nMejorar nuestros productos y servicios mediante análisis de uso."
+        },
+        {
+          "title": "4. Base legal del tratamiento",
+          "body": "El tratamiento de tus datos se basa en: (a) la ejecución del contrato de compraventa; (b) el cumplimiento de obligaciones legales; (c) tu consentimiento para finalidades secundarias; y (d) nuestro interés legítimo en mejorar nuestros servicios."
+        },
+        {
+          "title": "5. Transferencia de datos a terceros",
+          "body": "Podemos compartir tus datos con proveedores de servicios que actúan en nuestro nombre (procesadores de pago, empresas de logística, plataformas de email marketing, servicios de análisis web). Estos proveedores están obligados a tratar tus datos únicamente según nuestras instrucciones y a mantener su confidencialidad.\n\nNo vendemos tus datos personales a terceros."
+        },
+        {
+          "title": "6. Cookies y tecnologías similares",
+          "body": "Utilizamos cookies propias y de terceros para el funcionamiento del Sitio, análisis de uso y personalización. Puedes configurar o deshabilitar las cookies desde la configuración de tu navegador, aunque esto puede afectar algunas funcionalidades del Sitio."
+        },
+        {
+          "title": "7. Tus derechos (ARCO)",
+          "body": "Conforme a la Ley Federal de Protección de Datos Personales en Posesión de los Particulares, tienes derecho a Acceder, Rectificar, Cancelar u Oponerte al tratamiento de tus datos personales. Para ejercer estos derechos, envía tu solicitud a info@novapatch.care indicando tu nombre completo, descripción del derecho que deseas ejercer y cualquier documento que facilite la localización de tus datos."
+        },
+        {
+          "title": "8. Seguridad de los datos",
+          "body": "Implementamos medidas técnicas y organizativas para proteger tus datos contra acceso no autorizado, pérdida, alteración o divulgación. Sin embargo, ningún sistema de transmisión por internet es 100% seguro."
+        },
+        {
+          "title": "9. Cambios a este aviso",
+          "body": "Podemos actualizar este Aviso de Privacidad periódicamente. Te notificaremos de cambios significativos a través del Sitio o por correo electrónico. El uso continuado del Sitio tras la publicación de cambios implica tu aceptación."
+        },
+        {
+          "title": "10. Contacto",
+          "body": "Para cualquier pregunta sobre este Aviso de Privacidad, contáctanos en info@novapatch.care o al teléfono 55 4545 1328."
+        }
+      ]
+    },
+    "terminos": {
+      "hero": {
+        "eyebrow": "Legal",
+        "title": "Términos y Condiciones",
+        "body": "Última actualización: enero de 2025 · Ley aplicable: México"
+      },
+      "sections": [
+        {
+          "title": "1. Aceptación de los Términos",
+          "body": "Al acceder y utilizar novapatch.care, usted acepta estos Términos y Condiciones en su totalidad. Si no está de acuerdo con alguna parte, le pedimos no utilizar nuestros servicios."
+        },
+        {
+          "title": "2. Productos y Precios",
+          "body": "Todos los productos están sujetos a disponibilidad. Los precios están expresados en Pesos Mexicanos (MXN) e incluyen IVA (16%). NovaPatch se reserva el derecho de modificar precios sin previo aviso. El precio aplicable es el vigente al momento de confirmar la compra."
+        },
+        {
+          "title": "3. Suscripciones",
+          "body": "Al adquirir una suscripción usted autoriza a NovaPatch a realizar cobros automáticos recurrentes según la frecuencia elegida (mensual, bimestral o trimestral) al método de pago registrado.\n\n• Puede cancelar su suscripción en cualquier momento desde su cuenta, sin penalidades\n• Los cambios de frecuencia aplican a partir del siguiente ciclo de facturación\n• NovaPatch no se hace responsable por rechazos bancarios que interrumpan el servicio"
+        },
+        {
+          "title": "4. Pagos",
+          "body": "Los pagos son procesados de forma segura por Openpay. Al proporcionar sus datos de pago, usted garantiza que está autorizado a usar dicho método de pago.\n\nMétodos aceptados:\n• Tarjeta de crédito y débito (Visa, Mastercard, American Express)"
+        },
+        {
+          "title": "5. Envíos y Entregas",
+          "body": "Los pedidos se procesan en días hábiles. Los tiempos de entrega son estimados y pueden variar por circunstancias externas (clima, huelgas, situaciones de fuerza mayor). NovaPatch no se hace responsable por demoras ocasionadas por la empresa de mensajería una vez que el paquete ha sido despachado."
+        },
+        {
+          "title": "6. Garantía de Satisfacción",
+          "body": "Ofrecemos 30 días de garantía de satisfacción aplicable al primer pedido por cliente. Si no está satisfecho, le reembolsamos el importe sin necesidad de devolver el producto.\n\n• Solo aplica al primer pedido por cliente\n• La solicitud debe realizarse dentro de los 30 días naturales de recibido el pedido\n• No aplica a ciclos posteriores de suscripción"
+        },
+        {
+          "title": "7. Propiedad Intelectual",
+          "body": "Todo el contenido de novapatch.care, incluyendo textos, imágenes, logotipos, diseños y código fuente, es propiedad exclusiva de NovaPatch o sus licenciantes. Queda prohibida su reproducción total o parcial sin autorización escrita."
+        },
+        {
+          "title": "8. Limitación de Responsabilidad",
+          "body": "Los parches vitamínicos de NovaPatch son suplementos de bienestar general y no son medicamentos. No están destinados a diagnosticar, tratar, curar ni prevenir enfermedades. NovaPatch no se hace responsable por reacciones individuales derivadas del uso inadecuado del producto."
+        },
+        {
+          "title": "9. Ley Aplicable",
+          "body": "Estos Términos y Condiciones se rigen por las leyes vigentes en los Estados Unidos Mexicanos. Cualquier controversia será sometida a los tribunales competentes de la Ciudad de México, renunciando a cualquier otro fuero que pudiera corresponder por razón de domicilio."
+        }
+      ]
+    },
+    "terminos_influencers": {
+      "hero": {
+        "eyebrow": "Legal · Programa de Influencers",
+        "title": "Términos de Colaboración",
+        "body": "Versión 1.0 · Vigente desde abril 2026 · México"
+      },
+      "sections": [
+        {
+          "title": "1. Partes del acuerdo",
+          "body": "Este documento establece los términos de colaboración entre Novapatch México, sus afiliadas, subsidiarias, licenciatarias o entidades relacionadas que operen la marca Novapatch en México o en otros territorios que ésta determine de tiempo en tiempo (en lo sucesivo, \"Novapatch\" o la \"Marca\"), y el creador de contenido que complete el formulario de postulación o acepte expresamente participar en una colaboración (el \"Influencer\"). La relación entre las partes es de naturaleza estrictamente mercantil y civil, por lo que no constituye relación laboral, asociación, mandato, agencia, representación, joint venture ni exclusividad, salvo pacto expreso y por escrito."
+        },
+        {
+          "title": "2. Proceso de postulación y selección",
+          "body": "El envío del formulario de postulación no garantiza la aceptación en el programa. Novapatch evaluará cada perfil a su entera discreción y podrá aceptar o rechazar cualquier solicitud sin necesidad de expresar causa. La decisión podrá notificarse dentro de los 7 días hábiles posteriores al envío o en cualquier otro plazo razonable que Novapatch determine. Los criterios de selección podrán incluir, de manera enunciativa mas no limitativa, el nicho de contenido, tamaño y calidad de la audiencia, nivel de engagement, reputación digital, alineación con los valores de la marca, historial de colaboraciones, cumplimiento regulatorio y tipo de colaboración solicitado."
+        },
+        {
+          "title": "3. Modalidades de colaboración",
+          "body": "Las colaboraciones podrán ser, entre otras, de los siguientes tipos:\n\n• Producto a cambio de contenido: el Influencer recibe productos Novapatch como parte de la contraprestación o beneficio asociado a la colaboración, a cambio de crear y publicar el contenido acordado.\n• Colaboración paga: el Influencer recibe una compensación económica previamente acordada por la creación, entrega y publicación de contenido específico.\n• Embajador a largo plazo: relación continua con beneficios exclusivos, productos, compensación recurrente u otros incentivos, sujeta en su caso a condiciones particulares o contrato separado.\n\nEn todos los casos, los términos específicos de cada colaboración, incluyendo piezas requeridas, entregables, formatos, plazos, canales, uso de códigos, links, whitelisting, paid usage o cualquier otra condición aplicable, podrán ser confirmados por escrito por Novapatch antes del inicio de la colaboración y formarán parte integrante de este acuerdo."
+        },
+        {
+          "title": "4. Obligaciones del Influencer",
+          "body": "Al participar en el programa, el Influencer se obliga a:\n\n• Crear, entregar para revisión previa cuando Novapatch lo solicite, y publicar el contenido acordado en la forma, cantidad, formato, canales y dentro de los plazos establecidos por Novapatch.\n\n• Incluir de forma clara, visible y comprensible en cada publicación, historia, video o cualquier otro contenido patrocinado la existencia de su relación comercial con Novapatch, cumpliendo en todo momento con la normativa y lineamientos aplicables en materia de publicidad, protección al consumidor y divulgación comercial, así como con las instrucciones razonables que Novapatch le comunique. El incumplimiento de esta obligación facultará a Novapatch para exigir la corrección o eliminación inmediata del contenido y, en su caso, suspender o retener cualquier pago o compensación pendiente.\n\n• Abstenerse de realizar afirmaciones falsas, engañosas, no comprobadas, médicas, terapéuticas o de salud no autorizadas por escrito por Novapatch respecto de los productos, así como de efectuar declaraciones o publicaciones que puedan afectar la reputación, imagen o intereses comerciales de Novapatch.\n\n• No promocionar, colaborar, participar directa o indirectamente, ni aparecer asociado con marcas, productos o servicios que compitan directa o indirectamente con Novapatch durante la vigencia de la colaboración y por un plazo de 3 meses posteriores a su terminación, salvo autorización previa y por escrito de Novapatch.\n\n• Compartir con Novapatch, dentro de los 5 días naturales siguientes a cada publicación y también cuando ésta lo solicite, las métricas, reportes, capturas, enlaces, accesos y demás información relacionada con el desempeño del contenido, incluyendo alcance, impresiones, interacciones, clics, conversiones y cualquier otro indicador disponible.\n\n• Corregir, ajustar, retirar o sustituir, a solicitud de Novapatch y dentro del plazo que ésta indique, cualquier contenido que incumpla este acuerdo, los lineamientos de marca o la normativa aplicable.\n\n• Garantizar que el contenido creado o publicado por el Influencer será original o contará con todas las autorizaciones, licencias, consentimientos y derechos necesarios para su explotación conforme a este acuerdo, y que dicho contenido no infringirá derechos de terceros, incluidos derechos de autor, propiedad industrial, imagen, privacidad, datos personales o cualquier otro derecho aplicable."
+        },
+        {
+          "title": "5. Obligaciones de Novapatch",
+          "body": "Novapatch se obliga únicamente a:\n\n• Proporcionar al Influencer, en su caso, los productos, materiales, lineamientos de marca o la compensación expresamente acordados, sujeto al cumplimiento previo y completo por parte del Influencer de sus obligaciones conforme al presente acuerdo.\n\n• Revisar y emitir comentarios sobre el contenido cuando así lo considere conveniente, sin que la falta de observaciones, comentarios o respuesta implique aprobación automática del contenido ni limite el derecho de Novapatch de solicitar modificaciones, rechazar publicaciones o requerir el retiro de contenido en cualquier momento.\n\n• Realizar el pago o entrega de la compensación acordada conforme a los términos pactados, pudiendo suspender, retener, compensar o negar dicho pago en caso de incumplimiento del Influencer, publicación defectuosa, extemporánea, incompleta o contraria a los lineamientos de Novapatch o a la normativa aplicable.\n\n• Tratar la información personal del Influencer conforme a la legislación aplicable; sin perjuicio de lo anterior, Novapatch podrá utilizar, almacenar, analizar y compartir internamente las métricas, resultados y datos de desempeño derivados de la colaboración para fines comerciales, operativos, analíticos, regulatorios y legales."
+        },
+        {
+          "title": "6. Derechos sobre el contenido",
+          "body": "El Influencer reconoce y acepta que todo contenido creado, desarrollado, entregado o publicado con motivo de la colaboración podrá ser utilizado por Novapatch en los términos previstos en esta cláusula. En consecuencia, el Influencer otorga a favor de Novapatch, desde el momento de creación del contenido y sin necesidad de autorización adicional, una licencia gratuita, mundial, sublicenciable, transferible, no exclusiva e irrevocable durante el plazo máximo permitido por la ley aplicable, para usar, reproducir, fijar, almacenar, comunicar públicamente, distribuir, publicar, republicar, exhibir, adaptar, editar, recortar, traducir, subtitular, digitalizar y explotar dicho contenido, total o parcialmente, en cualquier medio, formato, canal o soporte, conocido o por conocerse, incluyendo de manera enunciativa redes sociales, sitios web, e-commerce, marketplaces, newsletters, materiales promocionales, presentaciones comerciales, materiales para puntos de venta y campañas publicitarias pagadas o no pagadas.\n\nEl Influencer autoriza expresamente a Novapatch para utilizar su nombre, imagen, voz, seudónimo, identificadores de redes sociales, signos distintivos personales y demás elementos de su personalidad incorporados en el contenido, exclusivamente en relación con la promoción, publicidad, comercialización y posicionamiento de Novapatch y sus productos.\n\nNovapatch podrá realizar las adaptaciones, modificaciones, ediciones, recortes y ajustes que considere razonablemente necesarios para fines de formato, diseño, consistencia de marca, adecuación a medios, cumplimiento normativo o aprovechamiento comercial, siempre que no se altere de manera dolosa el sentido general de las manifestaciones del Influencer. Salvo pacto expreso en contrario, el Influencer no tendrá derecho a pago adicional alguno por los usos autorizados en esta cláusula."
+        },
+        {
+          "title": "7. Productos, contraprestación y envíos",
+          "body": "Los productos enviados por Novapatch podrán constituir, según el caso, parte de la contraprestación, incentivo o beneficio asociado a la colaboración. La recepción de productos por parte del Influencer no lo libera del cumplimiento íntegro de sus obligaciones de contenido, publicación, disclosure y entrega de métricas.\n\nEn caso de que el Influencer no publique el contenido acordado dentro del plazo establecido, o incumpla cualquier obligación material de este acuerdo sin causa justificada aceptada por Novapatch, ésta podrá, a su elección, exigir la devolución de los productos enviados en buen estado, cobrar su valor comercial, compensar dicho valor contra pagos pendientes o dar por terminada la colaboración de forma inmediata, sin perjuicio de otras acciones que pudieran corresponderle.\n\nSalvo pacto expreso en contrario, los envíos correspondientes a la Fase 1 del programa se realizarán únicamente dentro del territorio mexicano."
+        },
+        {
+          "title": "8. Privacidad de datos",
+          "body": "Los datos personales recopilados mediante el formulario de postulación o durante la ejecución de la colaboración, incluyendo nombre, correo electrónico, handles, métricas, domicilio, datos fiscales o bancarios cuando resulten necesarios, serán tratados por Novapatch para evaluar, gestionar, documentar, ejecutar y dar seguimiento a la relación de colaboración, así como para fines administrativos, analíticos, legales y regulatorios relacionados con la misma.\n\nNovapatch no compartirá dichos datos con terceros ajenos a la operación ordinaria de la colaboración, salvo cuando ello sea necesario para la ejecución de la campaña, el cumplimiento de obligaciones legales o regulatorias, la defensa de sus derechos o conforme a su Aviso de Privacidad aplicable. Para más información, el Influencer podrá consultar el Aviso de Privacidad de Novapatch en el sitio web oficial de la marca."
+        },
+        {
+          "title": "9. Modificaciones y terminación",
+          "body": "Novapatch podrá modificar estos términos en cualquier momento, notificándolo por medios razonables, incluyendo correo electrónico, publicación en el sitio correspondiente o comunicación directa al Influencer. Las modificaciones entrarán en vigor en la fecha indicada por Novapatch y serán aplicables a futuras colaboraciones y, en la medida legalmente permitida, a colaboraciones en curso.\n\nCualquiera de las partes podrá dar por terminada una colaboración futura no iniciada en cualquier momento. Respecto de colaboraciones ya iniciadas o en ejecución, Novapatch podrá terminarlas total o parcialmente, de forma inmediata y sin responsabilidad, en caso de que el Influencer: (i) incumpla este acuerdo o los lineamientos de marca; (ii) publique contenido falso, engañoso, ilícito, ofensivo o reputacionalmente dañino; (iii) omita la divulgación de la relación comercial con Novapatch; (iv) realice afirmaciones médicas o regulatorias no autorizadas; (v) infrinja derechos de terceros; (vi) incurra en conductas públicas o privadas que, a juicio razonable de Novapatch, puedan afectar la imagen, reputación o intereses comerciales de la marca; o (vii) deje de cumplir con la campaña en tiempo, forma o calidad razonablemente esperada.\n\nLa terminación no liberará al Influencer de las obligaciones ya causadas ni afectará las cláusulas que por su naturaleza deban subsistir, incluyendo las relativas a derechos sobre el contenido, confidencialidad, responsabilidad, indemnización, jurisdicción y protección de datos."
+        },
+        {
+          "title": "10. Responsabilidad e indemnización",
+          "body": "El Influencer será el único responsable por las declaraciones, afirmaciones, opiniones, expresiones y materiales que emita o utilice en el marco de la colaboración, salvo respecto de textos o afirmaciones expresamente proporcionados por Novapatch para su reproducción literal.\n\nEl Influencer se obliga a sacar en paz y a salvo, defender e indemnizar a Novapatch, sus afiliadas, directivos, representantes, empleados, licenciatarios, distribuidores y cesionarios, frente a cualquier reclamación, queja, procedimiento, multa, sanción, daño, perjuicio, costo o gasto, incluyendo honorarios razonables de abogados, derivados de o relacionados con: (i) el incumplimiento de este acuerdo; (ii) la falta de divulgación adecuada de la relación comercial; (iii) afirmaciones falsas, engañosas, médicas o no autorizadas; (iv) la infracción de derechos de terceros; (v) el uso no autorizado de música, imágenes, marcas, obras o materiales; o (vi) cualquier conducta del Influencer que genere contingencias legales, regulatorias o reputacionales para Novapatch.\n\nEn ningún caso Novapatch será responsable frente al Influencer por daños indirectos, incidentales, especiales, consecuenciales o punitivos, ni por lucro cesante, pérdida de oportunidad, pérdida de audiencia o daño reputacional derivado de la suspensión, rechazo, edición o terminación de la colaboración."
+        },
+        {
+          "title": "11. Jurisdicción",
+          "body": "Este acuerdo se regirá e interpretará conforme a las leyes aplicables de los Estados Unidos Mexicanos. Cualquier controversia derivada de su interpretación, cumplimiento o ejecución que no pueda resolverse de buena fe entre las partes será sometida a la jurisdicción de los tribunales competentes de la Ciudad de México, renunciando las partes a cualquier otro fuero que pudiera corresponderles por razón de sus domicilios presentes o futuros."
+        }
+      ]
+    },
     "garantia": {
       "hero": {
         "eyebrow": "Garantía de satisfacción",
