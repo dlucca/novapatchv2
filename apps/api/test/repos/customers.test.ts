@@ -40,8 +40,10 @@ describe("customers repo", () => {
       // Wall-clock sleep so Postgres NOW() advances beyond the first call.
       // Locks in the "updated_at must advance on upsert" invariant — if
       // someone deletes the explicit `updatedAt: new Date()` in the repo,
-      // this test catches the regression.
-      await Bun.sleep(2);
+      // this test catches the regression. 10ms is generous — Postgres has µs
+      // resolution but OS clock jitter + test runner scheduling means 2ms
+      // sometimes lands in the same millisecond.
+      await Bun.sleep(10);
       const second = await upsertCustomerByClerkUserId(db, {
         clerkUserId: "user_carol",
         email: "carol.new@example.com",
