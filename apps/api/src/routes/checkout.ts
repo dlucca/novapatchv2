@@ -1,7 +1,8 @@
 import { Hono } from "hono";
 import { z } from "zod";
-import { resolveMarket, isMarketId } from "@novapatch/markets";
-import { calculateQuote, type CartItemInput } from "@novapatch/pricing";
+import { resolveMarket, isMarketId, type MarketId } from "@novapatch/markets";
+import { calculateQuote, type CartItemInput, type PricingQuote, type QuoteLine } from "@novapatch/pricing";
+import type { ProductSlug } from "@novapatch/catalog";
 import type { Db } from "../db";
 import type { ClerkUserClient } from "../lib/clerk";
 import type { PaymentGateway } from "../lib/payment-gateway";
@@ -53,10 +54,48 @@ export interface CheckoutDeps {
   getNow: () => Date;
 }
 
+/**
+ * Reconstruct a PricingQuote-shaped object from persisted order + items.
+ *
+ * Note on `eligibleSubtotal`: the original quote tracks which lines were
+ * eligible for the discount (based on appliesTo: "all"|"once"|"subscription").
+ * We don't snapshot that scope on the order row, so on replay we return
+ * `subtotal` as an upper-bound approximation. This matches the original value
+ * when appliesTo==="all" and over-reports for narrower scopes — acceptable for
+ * an idempotent replay response.
+ */
+function reconstructQuote(r: OrderWithRelations): PricingQuote {
+  const lines: QuoteLine[] = r.items.map((item) => {
+    const base: QuoteLine = {
+      slug: item.productSlug as ProductSlug,
+      quantity: item.quantity,
+      unitPrice: item.unitPrice,
+      lineSubtotal: item.unitPrice * item.quantity,
+      isSubscription: item.isSubscription,
+    };
+    return item.intervalDays != null
+      ? { ...base, interval: item.intervalDays as 30 | 60 | 90 }
+      : base;
+  });
+  return {
+    market: r.order.market as MarketId,
+    currency: r.order.currency,
+    lines,
+    subtotal: r.order.subtotal,
+    eligibleSubtotal: r.order.subtotal,
+    discountAmount: r.order.discountAmount,
+    taxableBase: r.order.subtotal - r.order.discountAmount,
+    tax: r.order.tax,
+    shipping: r.order.shipping,
+    total: r.order.total,
+  };
+}
+
 function serializeReplay(r: OrderWithRelations) {
   return {
     orderId: r.order.id,
     chargeId: r.order.paymentChargeId,
+    quote: reconstructQuote(r),
     subscriptions: r.subscriptions.map((s) => ({
       id: s.id,
       slug: s.productSlug,

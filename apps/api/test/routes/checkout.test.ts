@@ -127,6 +127,41 @@ describe("POST /me/checkout — happy paths", () => {
     expect(savedSub[0]?.unitPrice).toBe(36000);
   });
 
+  it("200 replay response has the same shape as the 201 (includes quote)", async () => {
+    const app = appBuilder(getDb);
+    const body = {
+      market: "mx",
+      items: [{ slug: "energy", quantity: 1 }],
+      shippingAddress: SHIPPING,
+      paymentToken: "tok_ok",
+    };
+
+    const first = await postCheckout(app, body, {
+      auth: "Bearer tok_alice",
+      idempotencyKey: "ik-shape",
+    });
+    expect(first.status).toBe(201);
+    const firstBody = (await first.json()) as {
+      orderId: string;
+      chargeId: string;
+      quote: { subtotal: number; total: number; currency: string };
+      subscriptions: unknown[];
+    };
+
+    const second = await postCheckout(app, body, {
+      auth: "Bearer tok_alice",
+      idempotencyKey: "ik-shape",
+    });
+    expect(second.status).toBe(200);
+    const secondBody = (await second.json()) as typeof firstBody;
+
+    expect(secondBody.orderId).toBe(firstBody.orderId);
+    expect(secondBody.chargeId).toBe(firstBody.chargeId);
+    expect(secondBody.quote.subtotal).toBe(firstBody.quote.subtotal);
+    expect(secondBody.quote.total).toBe(firstBody.quote.total);
+    expect(secondBody.quote.currency).toBe(firstBody.quote.currency);
+  });
+
   it("201 mixed cart + discount: persists order + items + sub + redemption, bumps times_used", async () => {
     const db = getDb();
     const [code] = await db
