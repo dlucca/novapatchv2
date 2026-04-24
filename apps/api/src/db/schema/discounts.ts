@@ -8,7 +8,7 @@ export const discountCodes = pgTable(
   "discount_codes",
   {
     id: uuid("id").primaryKey().defaultRandom(),
-    code: text("code").notNull().unique(),
+    code: text("code").notNull(), // uniqueness enforced by discount_codes_lower_code_unique (case-insensitive)
     kind: text("kind").notNull(),
     influencerId: uuid("influencer_id").references(() => influencers.id),
 
