@@ -14,3 +14,10 @@ describe("GET /health", () => {
     expect(res.headers.get("content-type")).toMatch(/application\/json/);
   });
 });
+
+describe("default 404", () => {
+  it("returns 404 for unknown paths", async () => {
+    const res = await app.fetch(new Request("http://localhost/does-not-exist"));
+    expect(res.status).toBe(404);
+  });
+});
