@@ -16,7 +16,7 @@ type CatalogListBody = {
 };
 
 type ProductBody = CatalogListBody["products"][number];
-type ErrorBody = { error: string };
+type ErrorBody = { error: { code: string; message: string } };
 
 describe("GET /catalog", () => {
   it("returns all 6 products with MX prices when market=mx", async () => {
@@ -70,11 +70,12 @@ describe("GET /catalog/:slug", () => {
     });
   });
 
-  it("returns 404 for unknown slug", async () => {
+  it("returns 404 + code=product_not_found for unknown slug", async () => {
     const res = await app.fetch(new Request("http://localhost/catalog/unknown?market=mx"));
     expect(res.status).toBe(404);
     const body = (await res.json()) as ErrorBody;
-    expect(body.error).toMatch(/not found/i);
+    expect(body.error.code).toBe("product_not_found");
+    expect(body.error.message).toMatch(/not found/i);
   });
 
   it("returns 400 for missing market", async () => {

@@ -1,0 +1,60 @@
+import { describe, it, expect } from "bun:test";
+import { apiError, type ApiErrorCode, type ApiErrorStatus } from "../../src/lib/errors";
+
+describe("apiError", () => {
+  it("returns the expected envelope with status code", () => {
+    const { body, status } = apiError("market_missing", "missing ?market query parameter", 400);
+    expect(status).toBe(400);
+    expect(body).toEqual({
+      error: {
+        code: "market_missing",
+        message: "missing ?market query parameter",
+      },
+    });
+  });
+
+  it("preserves literal status codes as-is", () => {
+    const { status: s404 } = apiError("product_not_found", "x", 404);
+    const { status: s500 } = apiError("internal_error", "x", 500);
+    expect(s404).toBe(404);
+    expect(s500).toBe(500);
+  });
+
+  it("accepts every status in the ApiErrorStatus union", () => {
+    const statuses: ApiErrorStatus[] = [400, 401, 403, 404, 409, 422, 429, 500, 502, 503];
+    for (const s of statuses) {
+      const { status } = apiError("internal_error", "x", s);
+      expect(status).toBe(s);
+    }
+  });
+
+  it("accepts all documented codes", () => {
+    const codes: ApiErrorCode[] = [
+      "market_missing",
+      "market_empty",
+      "market_unknown",
+      "product_not_found",
+      "not_found",
+      "internal_error",
+      "validation_failed",
+    ];
+    for (const code of codes) {
+      const { body } = apiError(code, "msg", 400);
+      expect(body.error.code).toBe(code);
+    }
+  });
+
+  it("omits details from the envelope when not provided", () => {
+    const { body } = apiError("internal_error", "msg", 500);
+    expect("details" in body.error).toBe(false);
+  });
+
+  it("includes details when provided (e.g. zod field errors)", () => {
+    const fieldErrors = [
+      { path: ["email"], message: "Invalid email" },
+      { path: ["age"], message: "Must be >= 18" },
+    ];
+    const { body } = apiError("validation_failed", "validation failed", 422, fieldErrors);
+    expect(body.error.details).toEqual(fieldErrors);
+  });
+});

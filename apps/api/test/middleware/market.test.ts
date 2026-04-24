@@ -3,7 +3,7 @@ import { Hono } from "hono";
 import { marketMiddleware } from "../../src/middleware/market";
 
 type MarketBody = { market: { id: string; currency: string } };
-type ErrorBody = { error: string };
+type ErrorBody = { error: { code: string; message: string } };
 
 function buildApp() {
   const app = new Hono();
@@ -38,27 +38,30 @@ describe("marketMiddleware", () => {
     expect(body.market.id).toBe("mx");
   });
 
-  it("returns 400 when ?market is missing", async () => {
+  it("returns 400 + code=market_missing when ?market is missing", async () => {
     const app = buildApp();
     const res = await app.fetch(new Request("http://localhost/probe"));
     expect(res.status).toBe(400);
     const body = (await res.json()) as ErrorBody;
-    expect(body.error).toMatch(/missing/i);
+    expect(body.error.code).toBe("market_missing");
+    expect(body.error.message).toMatch(/missing/i);
   });
 
-  it("returns 400 when ?market is empty", async () => {
+  it("returns 400 + code=market_empty when ?market is empty", async () => {
     const app = buildApp();
     const res = await app.fetch(new Request("http://localhost/probe?market="));
     expect(res.status).toBe(400);
     const body = (await res.json()) as ErrorBody;
-    expect(body.error).toMatch(/empty/i);
+    expect(body.error.code).toBe("market_empty");
+    expect(body.error.message).toMatch(/empty/i);
   });
 
-  it("returns 400 when ?market is unknown", async () => {
+  it("returns 400 + code=market_unknown when ?market is not a known id", async () => {
     const app = buildApp();
     const res = await app.fetch(new Request("http://localhost/probe?market=us"));
     expect(res.status).toBe(400);
     const body = (await res.json()) as ErrorBody;
-    expect(body.error).toMatch(/unknown/i);
+    expect(body.error.code).toBe("market_unknown");
+    expect(body.error.message).toMatch(/unknown market/i);
   });
 });

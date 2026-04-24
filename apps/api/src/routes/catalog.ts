@@ -9,6 +9,7 @@ import {
 } from "@novapatch/catalog";
 import type { Market } from "@novapatch/markets";
 import { marketMiddleware } from "../middleware/market";
+import { apiError } from "../lib/errors";
 
 export const catalogRoutes = new Hono();
 
@@ -48,7 +49,12 @@ catalogRoutes.get("/:slug", (c) => {
   const slug = c.req.param("slug");
   const product = getProduct(slug);
   if (!product) {
-    return c.json({ error: `product not found: ${slug}` }, 404);
+    const { body, status } = apiError(
+      "product_not_found",
+      `product not found: ${slug}`,
+      404,
+    );
+    return c.json(body, status);
   }
   return c.json(serializeProduct(product, market));
 });
