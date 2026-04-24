@@ -18,14 +18,17 @@ export type ApiErrorCode =
   | "discount_not_found"
   | "discount_below_minimum"
   | "discount_max_uses_reached"
-  | "discount_max_per_customer_reached";
+  | "discount_max_per_customer_reached"
+  | "idempotency_key_missing"
+  | "payment_declined"
+  | "gateway_error";
 
 /**
  * HTTP status codes this helper is designed for (4xx + 5xx only).
  * Narrowing to a literal union keeps callers cast-free when spreading
  * into Hono's `c.json(body, status)`.
  */
-export type ApiErrorStatus = 400 | 401 | 403 | 404 | 409 | 422 | 429 | 500 | 502 | 503;
+export type ApiErrorStatus = 400 | 401 | 402 | 403 | 404 | 409 | 422 | 429 | 500 | 502 | 503;
 
 export interface ApiErrorBody {
   error: {

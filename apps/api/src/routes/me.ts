@@ -2,8 +2,10 @@ import { Hono } from "hono";
 import { authMiddleware } from "../middleware/auth";
 import type { TokenVerifier, ClerkUserClient } from "../lib/clerk";
 import type { Db } from "../db";
+import type { PaymentGateway } from "../lib/payment-gateway";
 import { upsertCustomerByClerkUserId } from "../repos/customers";
 import type { Customer } from "../db/schema/customers";
+import { createCheckoutRoutes } from "./checkout";
 
 function serializeCustomer(c: Customer) {
   return {
@@ -15,30 +17,45 @@ function serializeCustomer(c: Customer) {
   };
 }
 
+export interface MeDeps {
+  verifier: TokenVerifier;
+  userClient: ClerkUserClient;
+  db: Db;
+  gateway?: PaymentGateway;
+  getNow?: () => Date;
+}
+
 /**
- * Factory for the `/me/*` route module. Takes explicit deps so tests can
- * inject stubs and production wires the real Clerk-backed clients.
- *
- * Protected: every route inside is guarded by `authMiddleware(verifier)`.
+ * Factory for the `/me/*` route module. Auth middleware runs for every
+ * nested route. `/checkout` is mounted only when `gateway` is provided;
+ * `/customer` is always mounted.
  */
-export function createMeRoutes(
-  verifier: TokenVerifier,
-  userClient: ClerkUserClient,
-  db: Db,
-): Hono {
+export function createMeRoutes(deps: MeDeps): Hono {
   const me = new Hono();
 
-  me.use("*", authMiddleware(verifier));
+  me.use("*", authMiddleware(deps.verifier));
 
   me.get("/customer", async (c) => {
     const clerkUserId = c.get("clerkUserId");
-    const { email } = await userClient.getUser(clerkUserId);
-    const customer = await upsertCustomerByClerkUserId(db, {
+    const { email } = await deps.userClient.getUser(clerkUserId);
+    const customer = await upsertCustomerByClerkUserId(deps.db, {
       clerkUserId,
       email,
     });
     return c.json(serializeCustomer(customer));
   });
+
+  if (deps.gateway) {
+    me.route(
+      "/checkout",
+      createCheckoutRoutes({
+        db: deps.db,
+        userClient: deps.userClient,
+        gateway: deps.gateway,
+        getNow: deps.getNow ?? (() => new Date()),
+      }),
+    );
+  }
 
   return me;
 }
