@@ -1,5 +1,6 @@
 import { describe, it, expect } from "bun:test";
 import { PRODUCTS, DISPLAY_ORDER, getProduct, listProducts } from "../src/index";
+import { isProductSlug } from "../src/index";
 
 describe("PRODUCTS", () => {
   it("contains exactly the 6 launch SKUs", () => {
@@ -49,5 +50,25 @@ describe("listProducts", () => {
   it("returns all products in DISPLAY_ORDER", () => {
     const slugs = listProducts().map((p) => p.slug);
     expect(slugs).toEqual([...DISPLAY_ORDER]);
+  });
+});
+
+describe("isProductSlug", () => {
+  it("returns true for all 6 launch SKUs", () => {
+    for (const slug of ["energy", "sleep", "glow", "shield", "zen", "woman"]) {
+      expect(isProductSlug(slug)).toBe(true);
+    }
+  });
+
+  it("returns false for unknown slugs", () => {
+    expect(isProductSlug("nope")).toBe(false);
+    expect(isProductSlug("")).toBe(false);
+    expect(isProductSlug("Energy")).toBe(false); // case-sensitive
+  });
+
+  it("returns false for non-strings", () => {
+    expect(isProductSlug(null)).toBe(false);
+    expect(isProductSlug(undefined)).toBe(false);
+    expect(isProductSlug(42)).toBe(false);
   });
 });

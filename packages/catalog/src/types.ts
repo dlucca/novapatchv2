@@ -14,10 +14,10 @@ export interface Product {
   slug: ProductSlug;
   name: string;
   description: string;
-  images: string[];
-  basePrice: Record<MarketId, number>;
+  readonly images: readonly string[];
+  readonly basePrice: Readonly<Record<MarketId, number>>;
   isStockable: boolean;
-  subscriptionDiscounts: Record<SubscriptionInterval, number>;
+  readonly subscriptionDiscounts: Readonly<Record<SubscriptionInterval, number>>;
 }
 
 export const DISPLAY_ORDER: readonly ProductSlug[] = [

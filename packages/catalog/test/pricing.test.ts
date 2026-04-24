@@ -1,6 +1,7 @@
 import { describe, it, expect } from "bun:test";
 import { getPriceForMarket, getSubscriptionPrice } from "../src/pricing";
 import { PRODUCTS } from "../src/products";
+import type { Product } from "../src/types";
 
 describe("getPriceForMarket", () => {
   it("returns base price for a given market", () => {
@@ -26,8 +27,12 @@ describe("getSubscriptionPrice", () => {
     expect(getSubscriptionPrice(PRODUCTS.energy, "mx", 90)).toBe(40500);
   });
 
-  it("rounds to integer cents", () => {
-    const result = getSubscriptionPrice(PRODUCTS.energy, "br", 30);
-    expect(Number.isInteger(result)).toBe(true);
+  it("rounds half-cent results to nearest integer cent", () => {
+    // Synthetic: 4501 * 80 / 100 = 3600.8 → rounds to 3601
+    const synthetic: Product = {
+      ...PRODUCTS.energy,
+      basePrice: { ...PRODUCTS.energy.basePrice, mx: 4501 },
+    };
+    expect(getSubscriptionPrice(synthetic, "mx", 30)).toBe(3601);
   });
 });
