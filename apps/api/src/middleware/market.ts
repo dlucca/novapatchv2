@@ -1,18 +1,15 @@
 import type { MiddlewareHandler } from "hono";
-import { isMarketId, resolveMarket, type Market } from "@novapatch/markets";
-
-declare module "hono" {
-  interface ContextVariableMap {
-    market: Market;
-  }
-}
+import { isMarketId, resolveMarket } from "@novapatch/markets";
 
 export const marketMiddleware: MiddlewareHandler = async (c, next) => {
   const raw = c.req.query("market");
-  if (!raw) {
+  if (raw === undefined) {
     return c.json({ error: "missing ?market query parameter" }, 400);
   }
-  const normalized = raw.toLowerCase();
+  const normalized = raw.trim().toLowerCase();
+  if (normalized === "") {
+    return c.json({ error: "empty ?market query parameter" }, 400);
+  }
   if (!isMarketId(normalized)) {
     return c.json({ error: `unknown market: ${raw}` }, 400);
   }

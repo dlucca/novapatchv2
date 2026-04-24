@@ -2,6 +2,9 @@ import { describe, it, expect } from "bun:test";
 import { Hono } from "hono";
 import { marketMiddleware } from "../../src/middleware/market";
 
+type MarketBody = { market: { id: string; currency: string } };
+type ErrorBody = { error: string };
+
 function buildApp() {
   const app = new Hono();
   app.use("*", marketMiddleware);
@@ -14,7 +17,7 @@ describe("marketMiddleware", () => {
     const app = buildApp();
     const res = await app.fetch(new Request("http://localhost/probe?market=mx"));
     expect(res.status).toBe(200);
-    const body = (await res.json()) as any;
+    const body = (await res.json()) as MarketBody;
     expect(body.market.id).toBe("mx");
     expect(body.market.currency).toBe("MXN");
   });
@@ -23,7 +26,15 @@ describe("marketMiddleware", () => {
     const app = buildApp();
     const res = await app.fetch(new Request("http://localhost/probe?market=MX"));
     expect(res.status).toBe(200);
-    const body = (await res.json()) as any;
+    const body = (await res.json()) as MarketBody;
+    expect(body.market.id).toBe("mx");
+  });
+
+  it("trims surrounding whitespace", async () => {
+    const app = buildApp();
+    const res = await app.fetch(new Request("http://localhost/probe?market=%20mx%20"));
+    expect(res.status).toBe(200);
+    const body = (await res.json()) as MarketBody;
     expect(body.market.id).toBe("mx");
   });
 
@@ -31,15 +42,23 @@ describe("marketMiddleware", () => {
     const app = buildApp();
     const res = await app.fetch(new Request("http://localhost/probe"));
     expect(res.status).toBe(400);
-    const body = (await res.json()) as any;
-    expect(body.error).toMatch(/market/i);
+    const body = (await res.json()) as ErrorBody;
+    expect(body.error).toMatch(/missing/i);
+  });
+
+  it("returns 400 when ?market is empty", async () => {
+    const app = buildApp();
+    const res = await app.fetch(new Request("http://localhost/probe?market="));
+    expect(res.status).toBe(400);
+    const body = (await res.json()) as ErrorBody;
+    expect(body.error).toMatch(/empty/i);
   });
 
   it("returns 400 when ?market is unknown", async () => {
     const app = buildApp();
     const res = await app.fetch(new Request("http://localhost/probe?market=us"));
     expect(res.status).toBe(400);
-    const body = (await res.json()) as any;
-    expect(body.error).toMatch(/market/i);
+    const body = (await res.json()) as ErrorBody;
+    expect(body.error).toMatch(/unknown/i);
   });
 });
