@@ -106,4 +106,18 @@ describe("validateDiscount", () => {
       expect(result.discountCodeId).toBe(baseCode.id);
     }
   });
+
+  it("throws when the DB row has an invalid appliesTo value", async () => {
+    // Guards against DB corruption or a schema drift that snuck in a bogus value.
+    await expect(
+      validateDiscount({
+        code: "welcome10",
+        market: "mx",
+        subtotal: 45000,
+        now: new Date(),
+        findActiveByCode: async () => ({ ...baseCode, appliesTo: "bogus" as unknown as "all" }),
+        countRedemptionsByCustomer: async () => 0,
+      }),
+    ).rejects.toThrow(/invalid discount_codes\.applies_to/);
+  });
 });

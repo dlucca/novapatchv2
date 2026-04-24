@@ -2,6 +2,10 @@ import type { MarketId } from "@novapatch/markets";
 import type { DiscountInput } from "@novapatch/pricing";
 import type { DiscountCode } from "../db/schema/discounts";
 
+function isDiscountAppliesTo(value: string): value is DiscountInput["appliesTo"] {
+  return value === "all" || value === "once" || value === "subscription";
+}
+
 export type DiscountRejectionReason =
   | "discount_not_found"
   | "discount_below_minimum"
@@ -62,6 +66,12 @@ export async function validateDiscount(
     }
   }
 
+  if (!isDiscountAppliesTo(code.appliesTo)) {
+    throw new Error(
+      `invalid discount_codes.applies_to for id=${code.id}: ${code.appliesTo}`,
+    );
+  }
+
   return {
     ok: true,
     discountCodeId: code.id,
@@ -69,7 +79,7 @@ export async function validateDiscount(
     discount: {
       code: code.code,
       discountPct: code.discountPct,
-      appliesTo: code.appliesTo as DiscountInput["appliesTo"],
+      appliesTo: code.appliesTo,
     },
   };
 }
