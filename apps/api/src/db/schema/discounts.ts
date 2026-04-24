@@ -24,7 +24,10 @@ export const discountCodes = pgTable("discount_codes", {
   status: text("status").notNull().default("active"), // 'active' | 'disabled'
 
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
-  updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
+  updatedAt: timestamp("updated_at", { withTimezone: true })
+    .notNull()
+    .defaultNow()
+    .$onUpdate(() => new Date()),
 });
 
 export const discountRedemptions = pgTable("discount_redemptions", {

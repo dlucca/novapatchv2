@@ -15,7 +15,10 @@ export const customers = pgTable("customers", {
   recurringConsentAt: timestamp("recurring_consent_at", { withTimezone: true }),
 
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
-  updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
+  updatedAt: timestamp("updated_at", { withTimezone: true })
+    .notNull()
+    .defaultNow()
+    .$onUpdate(() => new Date()),
 });
 
 export type Customer = typeof customers.$inferSelect;

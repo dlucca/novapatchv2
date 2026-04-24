@@ -8,6 +8,8 @@ import {
   jsonb,
 } from "drizzle-orm/pg-core";
 import { customers } from "./customers";
+import { discountCodes } from "./discounts";
+import { influencers } from "./influencers";
 
 export const orders = pgTable("orders", {
   id: uuid("id").primaryKey().defaultRandom(),
@@ -24,10 +26,8 @@ export const orders = pgTable("orders", {
   total: integer("total").notNull(),
   discountAmount: integer("discount_amount").notNull().default(0),
 
-  // FK-less on purpose to avoid import cycles with discounts/influencers modules.
-  // App-layer enforcement via repo writes.
-  discountCodeId: uuid("discount_code_id"),
-  influencerId: uuid("influencer_id"),
+  discountCodeId: uuid("discount_code_id").references(() => discountCodes.id),
+  influencerId: uuid("influencer_id").references(() => influencers.id),
 
   status: text("status").notNull(), // pending|paid|fulfilled|failed|refunded
   paymentProvider: text("payment_provider").notNull(), // openpay|mercadopago
