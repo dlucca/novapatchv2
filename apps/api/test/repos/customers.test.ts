@@ -31,18 +31,24 @@ describe("customers repo", () => {
       expect(second.id).toBe(first.id);
     });
 
-    it("updates the email if it changed in Clerk", async () => {
+    it("updates the email + updatedAt if the email changed in Clerk", async () => {
       const db = getDb();
       const first = await upsertCustomerByClerkUserId(db, {
         clerkUserId: "user_carol",
         email: "carol@example.com",
       });
+      // Wall-clock sleep so Postgres NOW() advances beyond the first call.
+      // Locks in the "updated_at must advance on upsert" invariant — if
+      // someone deletes the explicit `updatedAt: new Date()` in the repo,
+      // this test catches the regression.
+      await Bun.sleep(2);
       const second = await upsertCustomerByClerkUserId(db, {
         clerkUserId: "user_carol",
         email: "carol.new@example.com",
       });
       expect(second.id).toBe(first.id);
       expect(second.email).toBe("carol.new@example.com");
+      expect(second.updatedAt.getTime()).toBeGreaterThan(first.updatedAt.getTime());
     });
   });
 

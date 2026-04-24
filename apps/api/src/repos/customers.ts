@@ -28,6 +28,9 @@ export async function upsertCustomerByClerkUserId(
       target: customers.clerkUserId,
       set: {
         email: input.email,
+        // Explicit — Drizzle's schema-level $onUpdate hook does not always fire
+        // on the SET clause of INSERT ... ON CONFLICT DO UPDATE. Set manually
+        // so updated_at always advances on upsert.
         updatedAt: new Date(),
       },
     })
