@@ -39,7 +39,11 @@ export function authMiddleware(verifier: TokenVerifier): MiddlewareHandler {
       const { clerkUserId } = await verifier.verify(token);
       c.set("clerkUserId", clerkUserId);
       await next();
-    } catch {
+    } catch (err) {
+      // Don't leak internals to the client, but log for ops — Clerk downtime
+      // and a genuinely bad token look identical in the response, so the
+      // server log is the only way to tell them apart.
+      console.warn("[auth] verify failed:", err instanceof Error ? err.message : err);
       const { body, status } = apiError(
         "auth_invalid",
         "token could not be verified",
