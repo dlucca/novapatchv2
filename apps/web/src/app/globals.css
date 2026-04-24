@@ -69,6 +69,12 @@
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
+
+  /* Brand — ported from novafrontend */
+  --color-brand-coral: oklch(0.65 0.23 30);
+  --color-brand-deep-blue: oklch(0.42 0.10 250);
+  --color-brand-sky: oklch(0.72 0.08 240);
+  --color-brand-cream: oklch(0.97 0.01 90);
 }
 
 @layer base {

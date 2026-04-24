@@ -79,5 +79,40 @@
   "nav": {
     "mi_cuenta": "Mi cuenta",
     "iniciar_sesion": "Iniciar sesión"
+  },
+  "site": {
+    "navbar": {
+      "tienda": "Tienda",
+      "suscripciones": "Suscripciones",
+      "nosotros": "Nosotros",
+      "faq": "Preguntas frecuentes",
+      "influencers": "Influencers",
+      "open_menu": "Abrir menú",
+      "close_menu": "Cerrar menú"
+    },
+    "footer": {
+      "sections": {
+        "navega": "Navega",
+        "legales": "Legales",
+        "novapatch": "Novapatch"
+      },
+      "links": {
+        "tienda": "Tienda",
+        "suscripciones": "Suscripciones",
+        "faq": "Preguntas frecuentes",
+        "contacto": "Contáctanos",
+        "privacidad": "Aviso de Privacidad",
+        "terminos": "Términos y Condiciones",
+        "terminos_influencers": "Términos Influencers",
+        "garantia": "Garantía",
+        "reembolso": "Solicitar reembolso",
+        "nosotros": "Nosotros",
+        "influencers": "Influencers"
+      },
+      "contact_label": "contacto@novapatch.mx",
+      "contact_email": "contacto@novapatch.mx",
+      "tagline": "Hecho en México",
+      "copyright": "© 2026 Novapatch"
+    }
   }
 }
