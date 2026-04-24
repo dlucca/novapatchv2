@@ -12,7 +12,7 @@ The current Novapatch backend runs on Medusa.js v2. For a subscription e-commerc
 
 1. Replace Medusa with a minimal TypeScript stack that the developer can reason about end-to-end.
 2. Preserve all existing external integrations without lock-in to any framework.
-3. Keep feature parity: subscriptions with pause/resume/cancel/frequency, discount codes, influencer codes, multi-market (MX first, LATAM next), daily billing jobs, transactional emails, shipping label generation, admin operations.
+3. Keep feature parity: subscriptions with 30/60/90-day cycles (scheduled and charged by us, since neither Openpay nor MercadoPago supports those intervals natively), pause/resume/cancel/frequency, discount codes, influencer codes, multi-market (MX first, LATAM next), daily billing jobs with a defined dunning policy, transactional emails, shipping label generation, admin operations.
 4. Use TDD from day one — every module starts with a failing test.
 5. Deploy as a monorepo on Railway (same platform as today).
 
@@ -33,8 +33,8 @@ The current Novapatch backend runs on Medusa.js v2. For a subscription e-commerc
 | Database | PostgreSQL | Unchanged from current |
 | Validation | Zod | Runtime validation + inferred types |
 | Auth | `@clerk/backend` | Already used; JWT verification middleware |
-| Payments (MX) | Openpay REST | Direct HTTP, no plugin layer |
-| Payments (LATAM) | MercadoPago REST | Direct HTTP |
+| Payments (MX) | Openpay REST — `/charges` + customer vault | Direct HTTP; we call charge APIs only, never the subscription product (30/60/90-day cycles aren't supported natively) |
+| Payments (LATAM) | MercadoPago REST — `/v1/payments` + customer cards | Same pattern: one-time charges against vault-stored cards, cycle scheduling on our side |
 | Email | Resend SDK + React Email | Unchanged from current |
 | Shipping | Envia REST | Direct HTTP client |
 | Error tracking | `@sentry/node` | Hono middleware available |
@@ -69,7 +69,7 @@ novapatchv2/
 Five core tables plus two for discounts/influencers. Schema favors snapshots over FKs to product/pricing data (the catalog is code, not a table).
 
 ### `customers`
-Links Clerk users to payment provider vaults.
+Links Clerk users to payment provider vaults. The `default_card_id` is the vault's persistent card identifier (not a single-use tokenization token) — what we use for recurring MIT charges. See **Recurring Billing Architecture** below.
 
 | Column | Type | Notes |
 |---|---|---|
@@ -78,7 +78,10 @@ Links Clerk users to payment provider vaults.
 | email | text | |
 | openpay_customer_id | text NULL | MX vault ID |
 | mercadopago_customer_id | text NULL | LATAM vault ID |
-| default_card_token | text NULL | provider-agnostic token id |
+| default_card_id | text NULL | vault card id (persistent; for MIT charges) |
+| default_card_brand | text NULL | `visa`\|`mastercard`\|`amex` (for UI display) |
+| default_card_last4 | text NULL | last 4 digits (for UI display) |
+| recurring_consent_at | timestamp NULL | when customer accepted recurring charges |
 | created_at, updated_at | timestamp | |
 
 ### `orders`
@@ -135,7 +138,7 @@ Snapshot rows, no FK to product.
 | created_at, updated_at, canceled_at | timestamp | |
 
 ### `subscription_billings`
-Audit trail for every billing attempt (success or failure).
+Audit trail for every billing attempt (success or failure). Multiple rows per cycle when dunning retries are needed.
 
 | Column | Type | Notes |
 |---|---|---|
@@ -143,10 +146,14 @@ Audit trail for every billing attempt (success or failure).
 | subscription_id | uuid FK | |
 | order_id | uuid FK NULL | created only on success |
 | cycle_number | integer | 1-indexed |
+| attempt_number | integer | 1 = first try, 2/3/4 = dunning retries |
 | amount | integer | cents |
 | status | text | `success`\|`failed`\|`oos` |
 | charged_at | timestamp | |
-| error_message | text NULL | |
+| error_code | text NULL | provider's decline code (e.g. `insufficient_funds`) |
+| error_message | text NULL | human-readable reason |
+
+Next dunning attempt date lives on the subscription itself (`next_billing_date` is advanced to the next retry date on failure, to the next cycle date on success). See **Dunning Policy** below.
 
 ### `influencers`
 
@@ -249,32 +256,94 @@ GET    /admin/influencers/:id/commissions          → pending payouts
 
 The only endpoint with non-trivial orchestration. Lives in `POST /checkout`.
 
+Carts can mix line items: some are one-time, some are subscriptions (each with its own 30/60/90-day interval). All items are charged together in a single initial transaction; subsequent recurring charges happen per subscription on our own schedule — see **Recurring Billing Architecture** below.
+
 ```
-1. Validate body with Zod (items, shipping_address, payment_token, discount_code?, market)
+1. Validate body with Zod (items, shipping_address, payment_token, device_session_id, recurring_consent, discount_code?, market)
 2. Verify every item exists in the static catalog
 3. Recompute subtotal/tax/shipping/total on the server (never trust frontend)
-4. If discount_code provided:
+4. If any item is a subscription, require body.recurring_consent === true
+   (frontend enforces a checkbox; backend re-verifies)
+5. If discount_code provided:
    - Verify active, not expired, market applies
    - Verify max_uses and max_uses_per_customer (query discount_redemptions)
    - Verify min_subtotal threshold
-5. Resolve payment provider from market (mx → openpay, others → mercadopago)
-6. BEGIN TRANSACTION
+6. Resolve payment provider from market (mx → openpay, others → mercadopago)
+7. BEGIN TRANSACTION
    a. Upsert customer by clerk_user_id (or email for guest)
    b. Insert order with status='pending'
    c. Insert order_items
    d. If discount_code: insert discount_redemption + increment times_used
-7. COMMIT
-8. Charge payment gateway with token
+8. COMMIT
+9. Charge payment gateway (initial, CIT — Customer Initiated Transaction):
+   - Pass payment_token + device_session_id (3DS/SCA context preserved)
    - Failure: UPDATE order SET status='failed'; return 402 to frontend
    - Success:
      a. UPDATE order SET status='paid', payment_charge_id
-     b. For each subscription item: insert subscription (unit_price already includes discount)
-     c. Fire-and-forget: confirmation email via Resend
-     d. Fire-and-forget: Envia label generation
-9. Return order to frontend
+     b. Save card to the customer's vault; store default_card_id, default_card_brand, default_card_last4
+     c. If any subscription items AND customer.recurring_consent_at IS NULL: set recurring_consent_at = NOW()
+     d. For each subscription item: insert subscription (unit_price already includes discount, next_billing_date = today + interval_days)
+     e. Fire-and-forget: confirmation email via Resend
+     f. Fire-and-forget: Envia label generation
+10. Return order to frontend
 ```
 
-**Compensation model:** no distributed transaction is needed. If step 8 fails after the DB commit, the order sits in `status='failed'` — no partial state, no inconsistency. The customer retries and creates a new order. Side-effects (email, Envia) are fired asynchronously after the response; failures surface in Sentry and are retriable from the admin.
+**Compensation model:** no distributed transaction is needed. If step 9 fails after the DB commit, the order sits in `status='failed'` — no partial state, no inconsistency. The customer retries and creates a new order. Side-effects (email, Envia) are fired asynchronously after the response; failures surface in Sentry and are retriable from the admin.
+
+**Vault-save failure after successful charge (edge case):** if the gateway charge succeeds but the subsequent vault save fails, the order still completes (status=paid) — we just don't have a `default_card_id` to use for recurring charges. The subscription is created with `status='past_due'` and an admin alert fires; the customer is emailed a link to add a payment method before the next cycle.
+
+## Recurring Billing Architecture
+
+**Problem.** Openpay and MercadoPago's native subscription products only support monthly (and sometimes weekly/yearly) intervals. Novapatch offers 30/60/90-day cycles, so we cannot delegate recurring logic to the gateway.
+
+**Solution.** We use the gateways only for **card charges** — never for subscriptions. We maintain our own cycle scheduling, and every recurring charge is a server-to-server MIT (Merchant Initiated Transaction) against a vault-stored card.
+
+### Lifecycle of a subscription
+
+```
+[checkout]                  [daily job]                   [daily job]
+CIT charge     →     MIT charge #1 (cycle 2)     →     MIT charge #2 (cycle 3)    →  ...
+device_session_id    card_id from vault                card_id from vault
+3DS/SCA if required  recurring flag                    recurring flag
+```
+
+- **CIT (initial checkout):** customer present, 3DS/SCA enforced by the gateway using `device_session_id` (Openpay) or the card token's SCA context (MercadoPago). This is the only transaction that the cardholder actively authenticates.
+- **MIT (subsequent cycles):** server-initiated, no cardholder present. We flag the charge as recurring so the issuer bank treats it as a pre-authorized card-on-file charge and doesn't demand 3DS.
+
+### Provider-specific flags
+
+| Gateway | CIT field | MIT field |
+|---|---|---|
+| Openpay | `device_session_id` on `/charges` POST | `use_card_points: false`, `method: "card"`, `source_id = default_card_id`; omit `device_session_id` |
+| MercadoPago | `token` (single-use) + `three_d_secure_mode: "optional"` on `/v1/payments` | `capture: true`, `payment_method_id`, `token` fetched from saved card endpoint, `issuer_id` from vault |
+
+Exact payloads live in the `lib/openpay.ts` and `lib/mercadopago.ts` clients, not in the spec — but the key distinction (CIT vs MIT) must be honored in every charge call.
+
+### Customer consent
+
+The frontend checkout form MUST include a checked-by-default checkbox confirming the customer accepts recurring charges for any subscription item, with plain-language copy that references the frequency (30/60/90 days) and the per-cycle amount. The backend:
+- Requires `recurring_consent: true` in the checkout body when any item is a subscription (Zod-level validation).
+- Stamps `customers.recurring_consent_at = NOW()` on the first subscription checkout.
+- Never re-prompts for consent on follow-on subscriptions from the same customer (a single signed consent covers all future subscriptions).
+
+This consent record is what we present if an issuer bank ever challenges an MIT charge.
+
+### Dunning Policy
+
+When an MIT charge fails, the subscription enters `status='past_due'` and enters a retry schedule. Subsequent retries are also MITs (same consent, same vault card, unless the customer has updated it in the meantime).
+
+| Attempt | Schedule | Action on failure |
+|---|---|---|
+| 1 (initial) | `next_billing_date` (today) | status → `past_due`; email "update your card"; advance `next_billing_date` to today + 1 |
+| 2 | +1 day after attempt 1 | email "2nd attempt failed"; advance `next_billing_date` to today + 3 |
+| 3 | +3 days after attempt 2 | email "final attempt in 7 days"; advance `next_billing_date` to today + 7 |
+| 4 (final) | +7 days after attempt 3 | status → `canceled` (reason: `payment_failed`); final email; **no more attempts** |
+
+On any successful retry: status → `active`, `next_billing_date` advances one full `interval_days` from the original cycle date (not from the retry date — we don't want to reward failed payments with shorter cycles). The `subscription_billings` row is inserted with `status='success'` and the `attempt_number` that succeeded.
+
+**Customer-initiated card update during dunning:** if the customer updates their default card while `past_due`, the next retry uses the new card. No change to the schedule.
+
+**"Immediate retry" endpoint:** the admin can trigger a retry on-demand via `POST /admin/subscriptions/:id/trigger-billing` (already in the HTTP API). This is useful after the customer reports "I updated my card, try now."
 
 ## Background Jobs
 
@@ -282,27 +351,45 @@ Scheduled via `Bun.cron()` — no Redis required.
 
 ### `processDailyBilling` — daily at 09:00 CDMX
 
+Picks up both fresh cycles (`status='active'`) and dunning retries (`status='past_due'`). Every charge is an MIT (see **Recurring Billing Architecture**). Dunning schedule follows the **Dunning Policy** table.
+
 ```
-SELECT subscriptions WHERE status='active' AND next_billing_date <= today
+SELECT subscriptions
+WHERE status IN ('active', 'past_due')
+  AND next_billing_date <= today
+  AND customer.default_card_id IS NOT NULL
 
 For each:
+  attempt_number = 1 + (count of failed billings for this subscription + cycle_number)
+  cycle_number   = 1 + (count of successful billings for this subscription)
+
   - Check stock in catalog (if is_stockable flag on SKU)
-    - OOS → status='delayed_oos', continue
-  - Charge payment provider using customer's default_card_token
+    - OOS → status='delayed_oos', continue (no charge)
+
+  - Charge gateway as MIT using customer.default_card_id
     - Success:
       - Insert order + order_items (snapshot of subscription data)
-      - Insert subscription_billing(status='success', order_id=new)
-      - Advance subscriptions.next_billing_date by interval_days
+      - Insert subscription_billing(status='success', attempt_number, cycle_number, order_id=new)
+      - status='active'
+      - Advance next_billing_date by interval_days (from the ORIGINAL cycle date, not from today)
       - Fire renewal email
       - Fire Envia label workflow
     - Failure:
-      - Insert subscription_billing(status='failed', error_message)
-      - Update subscription.status='past_due'
-      - Fire payment-failed email
-  - Log summary to Slack at end
+      - Insert subscription_billing(status='failed', attempt_number, cycle_number, error_code, error_message)
+      - status='past_due'
+      - Apply dunning schedule:
+          attempt 1 failed → next_billing_date = today + 1, email "update card"
+          attempt 2 failed → next_billing_date = today + 3, email "2nd attempt failed"
+          attempt 3 failed → next_billing_date = today + 7, email "final attempt coming"
+          attempt 4 failed → status='canceled' (reason='payment_failed'), final email
+
+  - Subscriptions with status='past_due' AND default_card_id IS NULL get the same
+    "update card" email but are skipped for charging (can't MIT without a card)
 ```
 
-**Idempotency:** the query filters by `next_billing_date <= today`. On success, the date is advanced. If the job runs twice the same day, the second run finds no matching rows.
+**Idempotency:** the query filters by `next_billing_date <= today`. On success, the date is advanced by `interval_days`. On failure, it advances to the next dunning step. If the job runs twice the same day, the second run finds no matching rows.
+
+**Card-update during dunning:** when a customer updates `default_card_id` via `POST /me/payment-methods/default`, the next scheduled retry uses the new card automatically. No extra wiring needed.
 
 ### `sendUpcomingChargeReminders` — daily at 14:00 CDMX
 
