@@ -18,7 +18,10 @@ export type ApiErrorCode =
   | "discount_not_found"
   | "discount_below_minimum"
   | "discount_max_uses_reached"
-  | "discount_max_per_customer_reached";
+  | "discount_max_per_customer_reached"
+  | "idempotency_key_missing"
+  | "payment_declined"
+  | "gateway_error";
 
 /**
  * HTTP status codes this helper is designed for (4xx + 5xx only).

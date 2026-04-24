@@ -9,11 +9,14 @@ import { apiError } from "./lib/errors";
 import { readEnv } from "./env";
 import type { TokenVerifier, ClerkUserClient } from "./lib/clerk";
 import type { Db } from "./db";
+import type { PaymentGateway } from "./lib/payment-gateway";
 
 export interface AppDeps {
   verifier?: TokenVerifier;
   userClient?: ClerkUserClient;
   db?: Db;
+  gateway?: PaymentGateway;
+  getNow?: () => Date;
 }
 
 // Root application factory.
@@ -73,7 +76,16 @@ export function createApp(deps: AppDeps = {}): Hono {
   }
 
   if (deps.verifier && deps.userClient && deps.db) {
-    app.route("/me", createMeRoutes(deps.verifier, deps.userClient, deps.db));
+    app.route(
+      "/me",
+      createMeRoutes({
+        verifier: deps.verifier,
+        userClient: deps.userClient,
+        db: deps.db,
+        ...(deps.gateway ? { gateway: deps.gateway } : {}),
+        ...(deps.getNow ? { getNow: deps.getNow } : {}),
+      }),
+    );
   }
 
   return app;
