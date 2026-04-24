@@ -10,6 +10,7 @@ import {
   UserButton,
 } from "@clerk/nextjs";
 import Link from "next/link";
+import { Toaster } from "@/components/ui/sonner";
 import { routing } from "@/i18n/routing";
 import "../globals.css";
 
@@ -60,6 +61,7 @@ export default async function LocaleLayout({
               </div>
             </header>
             {children}
+            <Toaster position="bottom-right" richColors />
           </NextIntlClientProvider>
         </body>
       </html>

@@ -1,4 +1,4 @@
-import { eq, sql } from "drizzle-orm";
+import { desc, eq, inArray, sql } from "drizzle-orm";
 import type { Db } from "../db";
 import { orders, orderItems, type NewOrder, type NewOrderItem, type Order, type OrderItem } from "../db/schema/orders";
 import { subscriptions, type NewSubscription, type Subscription } from "../db/schema/subscriptions";
@@ -67,6 +67,41 @@ export async function persistOrder(
 
     return { orderId: order.id, subscriptionIds };
   });
+}
+
+export interface OrderWithItems {
+  order: Order;
+  items: OrderItem[];
+}
+
+/**
+ * Lists a customer's orders with their items embedded, sorted by createdAt DESC.
+ * Two queries (one for orders, one for items), fanned out in-memory. For v1
+ * volumes this is fine; a JOIN would add complexity without a measurable win.
+ */
+export async function listOrdersWithItemsByCustomerId(
+  db: Db,
+  customerId: string,
+): Promise<OrderWithItems[]> {
+  const orderRows = await db
+    .select()
+    .from(orders)
+    .where(eq(orders.customerId, customerId))
+    .orderBy(desc(orders.createdAt));
+  if (orderRows.length === 0) return [];
+
+  const ids = orderRows.map((o) => o.id);
+  const items = await db
+    .select()
+    .from(orderItems)
+    .where(inArray(orderItems.orderId, ids));
+  const byOrderId = new Map<string, OrderItem[]>();
+  for (const it of items) {
+    const bucket = byOrderId.get(it.orderId) ?? [];
+    bucket.push(it);
+    byOrderId.set(it.orderId, bucket);
+  }
+  return orderRows.map((o) => ({ order: o, items: byOrderId.get(o.id) ?? [] }));
 }
 
 export interface OrderWithRelations {

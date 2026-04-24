@@ -8,7 +8,73 @@
     "title": "Mi cuenta",
     "email_label": "Correo",
     "member_since_label": "Cliente desde",
-    "loading": "Cargando..."
+    "loading": "Cargando...",
+    "nav": {
+      "perfil": "Perfil",
+      "suscripciones": "Suscripciones",
+      "pedidos": "Pedidos"
+    },
+    "status": {
+      "active": "Activa",
+      "paused": "Pausada",
+      "canceled": "Cancelada",
+      "past_due": "Pago pendiente",
+      "delayed_oos": "Demorada",
+      "paid": "Pagado",
+      "failed": "Fallido",
+      "refunded": "Reembolsado"
+    },
+    "subscriptions": {
+      "next_billing": "Próximo cobro",
+      "every_days": "Cada {days} días",
+      "actions": {
+        "pause": "Pausar",
+        "resume": "Reanudar",
+        "change_frequency": "Cambiar frecuencia",
+        "cancel": "Cancelar",
+        "confirm": "Confirmar",
+        "back": "Volver"
+      },
+      "frequency_options": {
+        "every_30": "Cada mes (30 días)",
+        "every_60": "Cada 2 meses (60 días)",
+        "every_90": "Cada 3 meses (90 días)"
+      },
+      "frequency_dialog": {
+        "title": "Cambiar frecuencia",
+        "body": "Con esta frecuencia, tu próximo cobro será el {date}. ¿Confirmar?"
+      },
+      "cancel_dialog": {
+        "title": "Cancelar suscripción",
+        "body": "Al cancelar, no recibirás más envíos. Esta acción no se puede deshacer.",
+        "confirm": "Cancelar suscripción",
+        "back": "Volver"
+      },
+      "toasts": {
+        "paused": "Suscripción pausada",
+        "resumed": "Suscripción reanudada — próximo cobro: {date}",
+        "canceled": "Suscripción cancelada",
+        "frequency_changed": "Frecuencia actualizada — próximo cobro: {date}",
+        "session_expired": "Tu sesión expiró. Recargá la página.",
+        "generic_error": "Ocurrió un error: {code}"
+      },
+      "empty": "Aún no tienes suscripciones activas.",
+      "shop_cta": "Ver tienda"
+    },
+    "orders": {
+      "order_label": "Pedido #{id}",
+      "subtotal": "Subtotal",
+      "discount": "Descuento",
+      "tax": "Impuestos",
+      "shipping": "Envío",
+      "total": "Total",
+      "subscription_chip": "Suscripción cada {days} días",
+      "empty": "No tienes pedidos todavía."
+    },
+    "errors": {
+      "title": "No pudimos cargar tu información",
+      "retry": "Reintentar"
+    }
   },
   "nav": {
     "mi_cuenta": "Mi cuenta",
