@@ -261,3 +261,184 @@ describe("POST /me/checkout — validation", () => {
     expect(body.error.details?.reason).toBe("recurring_consent_required");
   });
 });
+
+describe("POST /me/checkout — gateway + replay + burn prevention", () => {
+  const { getDb } = useTestDb();
+
+  it("402 payment_declined when gateway declines — writes NOTHING to DB", async () => {
+    const db = getDb();
+    const app = appBuilder(getDb, {
+      outcomeByToken: { tok_decline: "declined" },
+      declineReason: "card_declined",
+    });
+    const res = await postCheckout(
+      app,
+      {
+        market: "mx",
+        items: [{ slug: "energy", quantity: 1 }],
+        shippingAddress: SHIPPING,
+        paymentToken: "tok_decline",
+      },
+      { auth: "Bearer tok_alice", idempotencyKey: "ik-declined" },
+    );
+    expect(res.status).toBe(402);
+    const body = (await res.json()) as { error: { code: string; details?: { declineReason: string } } };
+    expect(body.error.code).toBe("payment_declined");
+    expect(body.error.details?.declineReason).toBe("card_declined");
+
+    expect(await db.select().from(orders)).toHaveLength(0);
+    expect(await db.select().from(orderItems)).toHaveLength(0);
+    expect(await db.select().from(subscriptions)).toHaveLength(0);
+  });
+
+  it("502 gateway_error when gateway throws — writes NOTHING to DB", async () => {
+    const db = getDb();
+    const app = appBuilder(getDb, { outcomeByToken: { tok_boom: "throw" } });
+    const res = await postCheckout(
+      app,
+      {
+        market: "mx",
+        items: [{ slug: "energy", quantity: 1 }],
+        shippingAddress: SHIPPING,
+        paymentToken: "tok_boom",
+      },
+      { auth: "Bearer tok_alice", idempotencyKey: "ik-boom" },
+    );
+    expect(res.status).toBe(502);
+    const body = (await res.json()) as { error: { code: string } };
+    expect(body.error.code).toBe("gateway_error");
+
+    expect(await db.select().from(orders)).toHaveLength(0);
+  });
+
+  it("idempotent replay: second identical request returns 200 with same orderId, no double insert, no double charge", async () => {
+    const db = getDb();
+    let chargeCalls = 0;
+    const gateway = {
+      async charge(input: unknown) {
+        chargeCalls += 1;
+        return createStubGateway({ defaultOutcome: "succeeded" }).charge(
+          input as Parameters<ReturnType<typeof createStubGateway>["charge"]>[0],
+        );
+      },
+    };
+    const verifier = createStubVerifier({ tok_alice: { clerkUserId: "user_alice" } });
+    const userClient = createStubUserClient({
+      user_alice: { clerkUserId: "user_alice", email: "alice@example.com" },
+    });
+    const app = createApp({
+      verifier,
+      userClient,
+      db,
+      gateway,
+      getNow: () => FIXED_NOW,
+    });
+
+    const body = {
+      market: "mx",
+      items: [{ slug: "energy", quantity: 1 }],
+      shippingAddress: SHIPPING,
+      paymentToken: "tok_ok",
+    };
+    const first = await postCheckout(app, body, {
+      auth: "Bearer tok_alice",
+      idempotencyKey: "ik-replay",
+    });
+    expect(first.status).toBe(201);
+    const firstBody = (await first.json()) as { orderId: string };
+
+    const second = await postCheckout(app, body, {
+      auth: "Bearer tok_alice",
+      idempotencyKey: "ik-replay",
+    });
+    expect(second.status).toBe(200);
+    const secondBody = (await second.json()) as { orderId: string };
+
+    expect(secondBody.orderId).toBe(firstBody.orderId);
+    expect(chargeCalls).toBe(1);
+    expect(await db.select().from(orders)).toHaveLength(1);
+  });
+
+  it("discount burn prevention: declined charge does NOT bump times_used, retry with good token bumps to 1", async () => {
+    const db = getDb();
+    const [code] = await db
+      .insert(discountCodes)
+      .values({
+        code: "welcome10",
+        kind: "promo",
+        discountPct: 10,
+        markets: ["mx"],
+        appliesTo: "all",
+        status: "active",
+      })
+      .returning();
+
+    const app = appBuilder(getDb, {
+      outcomeByToken: { tok_decline: "declined", tok_ok: "succeeded" },
+    });
+
+    const declined = await postCheckout(
+      app,
+      {
+        market: "mx",
+        items: [{ slug: "energy", quantity: 1 }],
+        shippingAddress: SHIPPING,
+        paymentToken: "tok_decline",
+        discountCode: "welcome10",
+      },
+      { auth: "Bearer tok_alice", idempotencyKey: "ik-burn-1" },
+    );
+    expect(declined.status).toBe(402);
+
+    const after1 = await db.select().from(discountCodes).where(eq(discountCodes.id, code!.id));
+    expect(after1[0]?.timesUsed).toBe(0);
+
+    const ok = await postCheckout(
+      app,
+      {
+        market: "mx",
+        items: [{ slug: "energy", quantity: 1 }],
+        shippingAddress: SHIPPING,
+        paymentToken: "tok_ok",
+        discountCode: "welcome10",
+      },
+      { auth: "Bearer tok_alice", idempotencyKey: "ik-burn-2" },
+    );
+    expect(ok.status).toBe(201);
+
+    const after2 = await db.select().from(discountCodes).where(eq(discountCodes.id, code!.id));
+    expect(after2[0]?.timesUsed).toBe(1);
+  });
+
+  it("400 discount_below_minimum when code minSubtotal > cart subtotal", async () => {
+    const db = getDb();
+    await db
+      .insert(discountCodes)
+      .values({
+        code: "bigspender",
+        kind: "promo",
+        discountPct: 20,
+        markets: ["mx"],
+        appliesTo: "all",
+        status: "active",
+        minSubtotal: 1_000_000,
+      })
+      .returning();
+
+    const app = appBuilder(getDb);
+    const res = await postCheckout(
+      app,
+      {
+        market: "mx",
+        items: [{ slug: "energy", quantity: 1 }],
+        shippingAddress: SHIPPING,
+        paymentToken: "tok_ok",
+        discountCode: "bigspender",
+      },
+      { auth: "Bearer tok_alice", idempotencyKey: "ik-below-min" },
+    );
+    expect(res.status).toBe(400);
+    const body = (await res.json()) as { error: { code: string } };
+    expect(body.error.code).toBe("discount_below_minimum");
+  });
+});
