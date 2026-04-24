@@ -16,6 +16,10 @@ describe("discount unique indexes", () => {
       markets: ["mx"],
       appliesTo: "all",
     });
+    // Drizzle insert builders are thenables, not native Promises. bun:test's
+    // expect(...).rejects only recognizes native Promises, so wrap with
+    // Promise.resolve() to force one. Apply this pattern in every DB
+    // constraint-violation assertion.
     await expect(
       Promise.resolve(
         db.insert(discountCodes).values({
