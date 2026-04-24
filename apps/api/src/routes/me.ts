@@ -6,6 +6,7 @@ import type { PaymentGateway } from "../lib/payment-gateway";
 import { upsertCustomerByClerkUserId } from "../repos/customers";
 import type { Customer } from "../db/schema/customers";
 import { createCheckoutRoutes } from "./checkout";
+import { createSubscriptionRoutes } from "./subscriptions";
 
 function serializeCustomer(c: Customer) {
   return {
@@ -44,6 +45,15 @@ export function createMeRoutes(deps: MeDeps): Hono {
     });
     return c.json(serializeCustomer(customer));
   });
+
+  me.route(
+    "/subscriptions",
+    createSubscriptionRoutes({
+      db: deps.db,
+      userClient: deps.userClient,
+      getNow: deps.getNow ?? (() => new Date()),
+    }),
+  );
 
   if (deps.gateway) {
     me.route(

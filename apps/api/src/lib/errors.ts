@@ -21,7 +21,8 @@ export type ApiErrorCode =
   | "discount_max_per_customer_reached"
   | "idempotency_key_missing"
   | "payment_declined"
-  | "gateway_error";
+  | "gateway_error"
+  | "subscription_invalid_state";
 
 /**
  * HTTP status codes this helper is designed for (4xx + 5xx only).
