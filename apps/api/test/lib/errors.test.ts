@@ -37,6 +37,9 @@ describe("apiError", () => {
       "not_found",
       "internal_error",
       "validation_failed",
+      "auth_missing",
+      "auth_malformed",
+      "auth_invalid",
     ];
     for (const code of codes) {
       const { body } = apiError(code, "msg", 400);

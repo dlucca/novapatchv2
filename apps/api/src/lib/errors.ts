@@ -11,7 +11,10 @@ export type ApiErrorCode =
   | "product_not_found"
   | "not_found"
   | "internal_error"
-  | "validation_failed";
+  | "validation_failed"
+  | "auth_missing"
+  | "auth_malformed"
+  | "auth_invalid";
 
 /**
  * HTTP status codes this helper is designed for (4xx + 5xx only).
