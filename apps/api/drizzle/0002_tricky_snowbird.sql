@@ -1,0 +1,1 @@
+ALTER TABLE "discount_codes" DROP CONSTRAINT "discount_codes_code_unique";

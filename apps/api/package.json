@@ -16,6 +16,7 @@
   "dependencies": {
     "@novapatch/markets": "workspace:*",
     "@novapatch/catalog": "workspace:*",
+    "@novapatch/pricing": "workspace:*",
     "@clerk/backend": "^1.17.0",
     "hono": "^4.6.0",
     "zod": "^3.23.8",

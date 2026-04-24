@@ -1,0 +1,2 @@
+CREATE UNIQUE INDEX IF NOT EXISTS "discount_codes_lower_code_unique" ON "discount_codes" USING btree (lower("code"));--> statement-breakpoint
+CREATE UNIQUE INDEX IF NOT EXISTS "discount_redemptions_code_customer_order_unique" ON "discount_redemptions" USING btree ("discount_code_id","customer_id","order_id");
