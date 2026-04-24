@@ -28,6 +28,9 @@ cp .env.example .env
 # 3. Let apps/api find the env when Bun runs from a subpackage
 ln -sf ../../.env apps/api/.env
 
+# 3b. Same trick for the web app — Next.js also reads .env from its package dir.
+ln -sf ../../.env apps/web/.env
+
 # 4. Start local Postgres
 docker compose up -d postgres
 
@@ -52,6 +55,16 @@ curl 'http://localhost:9000/health'
 curl 'http://localhost:9000/catalog?market=mx'
 curl 'http://localhost:9000/catalog/energy?market=mx'
 ```
+
+## Running the frontend
+
+Start Next.js on port 3000:
+
+```bash
+pnpm --filter @novapatch/web dev
+```
+
+With the API running on port 9000 and a real Clerk key in `.env`, sign in via the header button and visit `/mx/cuenta` to see your customer row.
 
 ## Testing
 
