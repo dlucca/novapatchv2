@@ -14,7 +14,11 @@ export type ApiErrorCode =
   | "validation_failed"
   | "auth_missing"
   | "auth_malformed"
-  | "auth_invalid";
+  | "auth_invalid"
+  | "discount_not_found"
+  | "discount_below_minimum"
+  | "discount_max_uses_reached"
+  | "discount_max_per_customer_reached";
 
 /**
  * HTTP status codes this helper is designed for (4xx + 5xx only).
