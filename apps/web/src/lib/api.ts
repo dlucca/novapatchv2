@@ -38,6 +38,8 @@ export async function fetchCustomer({ token, apiUrl }: FetchCustomerInput): Prom
   let res: Response;
   try {
     res = await fetch(`${apiUrl}/me/customer`, {
+      // Per-user authenticated fetch must never be cached by the Next.js RSC layer.
+      cache: "no-store",
       headers: {
         Authorization: `Bearer ${token}`,
         Accept: "application/json",
