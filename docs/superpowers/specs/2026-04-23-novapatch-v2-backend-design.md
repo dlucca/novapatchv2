@@ -437,6 +437,17 @@ Changing a price requires a PR, review, and deploy. For 20 SKUs curated by the f
 
 Admin lives in the Next.js `web` app under protected `/admin/*` routes, consuming the backend's `/admin/*` API. Clerk roles (role `admin`) gate access. This removes the need for a separate admin build (Medusa's admin UI) and consolidates to a single frontend deploy.
 
+**UI library:** [shadcn/ui](https://ui.shadcn.com) (Radix primitives + Tailwind CSS v4). Components are copied into the codebase via `npx shadcn@latest add <component>` — not a package dependency — so they can be customized freely. Concrete expected usage:
+
+- **`DataTable`** (on TanStack Table) — orders, subscriptions, influencers, redemptions lists with server-side pagination, status filters, CSV export trigger.
+- **`Form`** (react-hook-form + Zod) — influencer CRUD, discount code CRUD. Zod schemas are shared with the backend via `packages/types` when appropriate.
+- **`Dialog` / `AlertDialog`** — destructive confirmations (cancel subscription, disable code).
+- **`Badge`** — status chips (`active`, `paused`, `past_due`, `canceled`, `delayed_oos`).
+- **`Toast` (sonner)** — feedback on mutations and background actions (trigger-billing, CSV generated, etc.).
+- **`Combobox` / `Command`** — multi-select filters (markets, influencer, status).
+
+Accessibility is in-scope by default because Radix primitives handle focus management, keyboard nav, and ARIA wiring. Dark mode is supported out of the box via Tailwind's `dark:` variants — the admin respects the user's OS preference.
+
 ## Testing Strategy
 
 TDD is required from the first module.
