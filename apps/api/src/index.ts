@@ -1,5 +1,6 @@
 import { Hono } from "hono";
 import { cors } from "hono/cors";
+import { logger } from "hono/logger";
 import { healthRoutes } from "./routes/health";
 import { catalogRoutes } from "./routes/catalog";
 import { apiError } from "./lib/errors";
@@ -34,6 +35,8 @@ export function registerErrorHandlers(target: Hono): void {
 const env = readEnv();
 
 export const app = new Hono();
+
+app.use("*", logger());
 
 app.use(
   "*",
