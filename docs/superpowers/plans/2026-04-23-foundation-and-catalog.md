@@ -139,11 +139,12 @@ packages:
     "declaration": true,
     "declarationMap": true,
     "sourceMap": true,
-    "forceConsistentCasingInFileNames": true,
-    "types": ["bun-types"]
+    "forceConsistentCasingInFileNames": true
   }
 }
 ```
+
+> **Note:** `bun-types` is scoped to `apps/api` only (added in Task 4's `apps/api/tsconfig.json`). Keeping it out of the shared base prevents Bun globals from leaking into `packages/*` and the future `apps/web` Next.js app.
 
 - [ ] **Step 1.5: Create `.gitignore`**
 
@@ -239,11 +240,14 @@ git commit -m "chore: bootstrap pnpm workspace monorepo"
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "outDir": "dist",
-    "rootDir": "src"
+    "rootDir": "src",
+    "types": ["bun-types"]
   },
   "include": ["src/**/*", "test/**/*"]
 }
 ```
+
+> **Note:** `bun-types` is scoped here (not at the base) because the package uses `bun:test` for its tests. The runtime code itself has no Bun dependency.
 
 - [ ] **Step 2.3: Install package deps**
 
@@ -489,11 +493,15 @@ git commit -m "feat(markets): MARKETS config + resolveMarket helper with tests"
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "outDir": "dist",
-    "rootDir": "src"
+    "types": ["bun-types"]
   },
   "include": ["src/**/*", "test/**/*"]
 }
 ```
+
+> **Note on `rootDir`:** omitted because this package is source-exported (no build step) and `include` covers both `src/` and `test/`. Setting `rootDir: "src"` would make TypeScript reject test files as outside-of-root (TS6059).
+
+> **Note:** `bun-types` is scoped here (not at the base) because the package uses `bun:test` for its tests.
 
 - [ ] **Step 3.3: Install deps**
 
@@ -830,16 +838,18 @@ git commit -m "feat(catalog): 6 launch SKUs + pricing helpers with tests"
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "outDir": "dist",
-    "rootDir": "src"
+    "types": ["bun-types"]
   },
   "include": ["src/**/*", "test/**/*"]
 }
 ```
 
+> **Note on `rootDir`:** omitted because Bun runs TS directly (no build step) and `include` covers both `src/` and `test/`.
+
 - [ ] **Step 4.3: Install deps**
 
 Run: `pnpm install`
-Expected: hono and zod installed into apps/api.
+Expected: hono, zod, and bun-types installed into apps/api.
 
 - [ ] **Step 4.4: Create `apps/api/src/env.ts`**
 
