@@ -3,6 +3,7 @@ import { cors } from "hono/cors";
 import { logger } from "hono/logger";
 import { healthRoutes } from "./routes/health";
 import { catalogRoutes } from "./routes/catalog";
+import { createMeRoutes } from "./routes/me";
 import { apiError } from "./lib/errors";
 import { readEnv } from "./env";
 import type { TokenVerifier, ClerkUserClient } from "./lib/clerk";
@@ -66,10 +67,8 @@ export function createApp(deps: AppDeps = {}): Hono {
   app.route("/", healthRoutes);
   app.route("/catalog", catalogRoutes);
 
-  // /me/* is wired in Task 4 once the route factory exists.
-  // Guarded so tests that don't pass deps still work.
   if (deps.verifier && deps.userClient && deps.db) {
-    // placeholder — Task 4 adds the actual mount
+    app.route("/me", createMeRoutes(deps.verifier, deps.userClient, deps.db));
   }
 
   return app;
