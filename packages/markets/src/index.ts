@@ -2,7 +2,7 @@ import type { Market, MarketId } from "./types";
 
 export * from "./types";
 
-export const MARKETS: Record<MarketId, Market> = {
+export const MARKETS: Readonly<Record<MarketId, Readonly<Market>>> = {
   mx: {
     id: "mx",
     currency: "MXN",
@@ -45,12 +45,17 @@ export const MARKETS: Record<MarketId, Market> = {
   },
 };
 
-const MARKET_IDS = Object.keys(MARKETS) as MarketId[];
+const MARKET_IDS = ["mx", "br", "ar", "cl", "co"] as const satisfies readonly MarketId[];
 
+/** Strict type-predicate for MarketId. Case-sensitive — does not normalize input. */
 export function isMarketId(value: unknown): value is MarketId {
-  return typeof value === "string" && (MARKET_IDS as string[]).includes(value.toLowerCase());
+  return typeof value === "string" && (MARKET_IDS as readonly string[]).includes(value);
 }
 
+/**
+ * Resolves a Market by its id. Case-insensitive — "MX", "mx", and "Mx" all resolve to MARKETS.mx.
+ * Throws if the value is not a known MarketId.
+ */
 export function resolveMarket(value: string): Market {
   const lower = value.toLowerCase();
   if (!isMarketId(lower)) {

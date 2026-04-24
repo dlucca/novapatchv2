@@ -53,4 +53,9 @@ describe("isMarketId", () => {
     expect(isMarketId("us")).toBe(false);
     expect(isMarketId("")).toBe(false);
   });
+
+  it("is case-sensitive (strict type-guard)", () => {
+    expect(isMarketId("MX")).toBe(false);
+    expect(isMarketId("Mx")).toBe(false);
+  });
 });
