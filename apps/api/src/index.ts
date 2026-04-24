@@ -1,7 +1,9 @@
 import { Hono } from "hono";
+import { cors } from "hono/cors";
 import { healthRoutes } from "./routes/health";
 import { catalogRoutes } from "./routes/catalog";
 import { apiError } from "./lib/errors";
+import { readEnv } from "./env";
 
 // Root application. Route modules live in ./routes/*.ts and are mounted below.
 // Convention: the mount prefix lives HERE; route modules use bare paths internally.
@@ -29,7 +31,20 @@ export function registerErrorHandlers(target: Hono): void {
   });
 }
 
+const env = readEnv();
+
 export const app = new Hono();
+
+app.use(
+  "*",
+  cors({
+    origin: env.CORS_ORIGINS,
+    credentials: true,
+    allowMethods: ["GET", "POST", "PATCH", "DELETE", "OPTIONS"],
+    allowHeaders: ["Authorization", "Content-Type"],
+    maxAge: 600,
+  }),
+);
 
 registerErrorHandlers(app);
 
