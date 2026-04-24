@@ -79,3 +79,82 @@ describe("calculateQuote — no discount", () => {
     expect(q.shipping).toBe(2500);
   });
 });
+
+describe("calculateQuote — with discount", () => {
+  it("applies an `all` discount to full subtotal", () => {
+    const q = calculateQuote({
+      items: [
+        { slug: "energy", quantity: 1 }, // 45000
+        { slug: "sleep", quantity: 1, subscription: { interval: 30 } }, // 36000
+      ],
+      market: MARKETS.mx,
+      discount: { code: "WELCOME10", discountPct: 10, appliesTo: "all" },
+    });
+    expect(q.subtotal).toBe(81000);
+    expect(q.discountAmount).toBe(Math.round(81000 * 0.10)); // 8100
+    expect(q.taxableBase).toBe(81000 - 8100);
+    expect(q.tax).toBe(Math.round((81000 - 8100) * 0.16));
+    expect(q.total).toBe(q.taxableBase + q.tax + q.shipping);
+  });
+
+  it("applies a `once` discount only to one-time lines", () => {
+    const q = calculateQuote({
+      items: [
+        { slug: "energy", quantity: 1 }, // 45000 one-time
+        { slug: "sleep", quantity: 1, subscription: { interval: 30 } }, // 36000 sub
+      ],
+      market: MARKETS.mx,
+      discount: { code: "ONCE15", discountPct: 15, appliesTo: "once" },
+    });
+    // Only the 45000 one-time portion is eligible.
+    expect(q.discountAmount).toBe(Math.round(45000 * 0.15));
+  });
+
+  it("applies a `subscription` discount only to subscription lines", () => {
+    const q = calculateQuote({
+      items: [
+        { slug: "energy", quantity: 1 }, // 45000 one-time
+        { slug: "sleep", quantity: 1, subscription: { interval: 30 } }, // 36000 sub
+      ],
+      market: MARKETS.mx,
+      discount: { code: "SUB20", discountPct: 20, appliesTo: "subscription" },
+    });
+    expect(q.discountAmount).toBe(Math.round(36000 * 0.20));
+  });
+
+  it("applies 0 when scope matches no lines", () => {
+    const q = calculateQuote({
+      items: [{ slug: "energy", quantity: 1 }], // only one-time
+      market: MARKETS.mx,
+      discount: { code: "SUBONLY", discountPct: 25, appliesTo: "subscription" },
+    });
+    expect(q.discountAmount).toBe(0);
+    expect(q.taxableBase).toBe(45000);
+  });
+
+  it("rounds discountAmount (not floor/ceil)", () => {
+    const q = calculateQuote({
+      items: [{ slug: "energy", quantity: 3 }],
+      market: MARKETS.mx,
+      discount: { code: "P13", discountPct: 13, appliesTo: "all" },
+    });
+    expect(q.discountAmount).toBe(Math.round(135000 * 0.13));
+  });
+
+  it("throws on discountPct outside 1..100", () => {
+    expect(() =>
+      calculateQuote({
+        items: [{ slug: "energy", quantity: 1 }],
+        market: MARKETS.mx,
+        discount: { code: "X", discountPct: 0, appliesTo: "all" },
+      }),
+    ).toThrow(/discountPct must be/);
+    expect(() =>
+      calculateQuote({
+        items: [{ slug: "energy", quantity: 1 }],
+        market: MARKETS.mx,
+        discount: { code: "X", discountPct: 101, appliesTo: "all" },
+      }),
+    ).toThrow(/discountPct must be/);
+  });
+});

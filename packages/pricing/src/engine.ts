@@ -37,8 +37,9 @@ export function calculateQuote(input: CalculateQuoteInput): PricingQuote {
 
   const subtotal = lines.reduce((sum, l) => sum + l.lineSubtotal, 0);
 
-  // Discount path is covered by Task 3. For now, always 0.
-  const discountAmount = 0;
+  const discountAmount = input.discount
+    ? computeDiscountAmount(lines, input.discount)
+    : 0;
 
   const taxableBase = subtotal - discountAmount;
   const tax = Math.round(taxableBase * input.market.taxRate);
@@ -56,4 +57,30 @@ export function calculateQuote(input: CalculateQuoteInput): PricingQuote {
     shipping,
     total,
   };
+}
+
+function computeDiscountAmount(
+  lines: readonly QuoteLine[],
+  discount: DiscountInput,
+): number {
+  if (
+    !Number.isInteger(discount.discountPct) ||
+    discount.discountPct < 1 ||
+    discount.discountPct > 100
+  ) {
+    throw new Error(
+      `discountPct must be an integer in 1..100 (got ${discount.discountPct})`,
+    );
+  }
+  const eligible = lines
+    .filter((l) => matchesScope(l, discount.appliesTo))
+    .reduce((sum, l) => sum + l.lineSubtotal, 0);
+  return Math.round((eligible * discount.discountPct) / 100);
+}
+
+function matchesScope(line: QuoteLine, appliesTo: DiscountInput["appliesTo"]): boolean {
+  if (appliesTo === "all") return true;
+  if (appliesTo === "subscription") return line.isSubscription;
+  if (appliesTo === "once") return !line.isSubscription;
+  return false;
 }
