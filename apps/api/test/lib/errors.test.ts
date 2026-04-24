@@ -1,5 +1,5 @@
 import { describe, it, expect } from "bun:test";
-import { apiError, type ApiErrorCode } from "../../src/lib/errors";
+import { apiError, type ApiErrorCode, type ApiErrorStatus } from "../../src/lib/errors";
 
 describe("apiError", () => {
   it("returns the expected envelope with status code", () => {
@@ -13,11 +13,19 @@ describe("apiError", () => {
     });
   });
 
-  it("preserves numeric status codes as-is", () => {
+  it("preserves literal status codes as-is", () => {
     const { status: s404 } = apiError("product_not_found", "x", 404);
     const { status: s500 } = apiError("internal_error", "x", 500);
     expect(s404).toBe(404);
     expect(s500).toBe(500);
+  });
+
+  it("accepts every status in the ApiErrorStatus union", () => {
+    const statuses: ApiErrorStatus[] = [400, 401, 403, 404, 409, 422, 429, 500, 502, 503];
+    for (const s of statuses) {
+      const { status } = apiError("internal_error", "x", s);
+      expect(status).toBe(s);
+    }
   });
 
   it("accepts all documented codes", () => {
