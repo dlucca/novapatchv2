@@ -19,13 +19,15 @@ describe("readEnv", () => {
     ]);
   });
 
-  it("accepts DATABASE_URL, CLERK_SECRET_KEY, CLERK_PUBLISHABLE_KEY as optional strings", () => {
+  it("accepts DATABASE_URL + DATABASE_URL_TEST, CLERK_SECRET_KEY, CLERK_PUBLISHABLE_KEY as optional strings", () => {
     const env = readEnv({
       DATABASE_URL: "postgres://user:pass@host:5432/db",
+      DATABASE_URL_TEST: "postgres://user:pass@host:5432/db_test",
       CLERK_SECRET_KEY: "sk_test_123",
       CLERK_PUBLISHABLE_KEY: "pk_test_123",
     });
     expect(env.DATABASE_URL).toBe("postgres://user:pass@host:5432/db");
+    expect(env.DATABASE_URL_TEST).toBe("postgres://user:pass@host:5432/db_test");
     expect(env.CLERK_SECRET_KEY).toBe("sk_test_123");
     expect(env.CLERK_PUBLISHABLE_KEY).toBe("pk_test_123");
   });

@@ -1,0 +1,20 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: novapatchv2-postgres
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_USER: novapatch
+      POSTGRES_PASSWORD: novapatch
+      POSTGRES_DB: novapatch
+    volumes:
+      - novapatchv2_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U novapatch -d novapatch"]
+      interval: 2s
+      timeout: 2s
+      retries: 10
+
+volumes:
+  novapatchv2_pgdata:
