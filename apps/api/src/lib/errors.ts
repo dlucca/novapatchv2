@@ -28,7 +28,7 @@ export type ApiErrorCode =
  * Narrowing to a literal union keeps callers cast-free when spreading
  * into Hono's `c.json(body, status)`.
  */
-export type ApiErrorStatus = 400 | 401 | 403 | 404 | 409 | 422 | 429 | 500 | 502 | 503;
+export type ApiErrorStatus = 400 | 401 | 402 | 403 | 404 | 409 | 422 | 429 | 500 | 502 | 503;
 
 export interface ApiErrorBody {
   error: {

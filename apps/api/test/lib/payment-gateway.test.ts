@@ -13,6 +13,7 @@ describe("createStubGateway", () => {
     const gw = createStubGateway({ defaultOutcome: "declined", declineReason: "card_declined" });
     const res = await gw.charge({ token: "tok_x", amount: 1000, currency: "MXN" });
     expect(res.status).toBe("declined");
+    if (res.status !== "declined") throw new Error("expected declined");
     expect(res.declineReason).toBe("card_declined");
     expect(res.chargeId).toMatch(/^stub_/);
   });
@@ -35,6 +36,7 @@ describe("createStubGateway", () => {
     );
     const declined = await gw.charge({ token: "tok_bad", amount: 1, currency: "MXN" });
     expect(declined.status).toBe("declined");
+    if (declined.status !== "declined") throw new Error("expected declined");
     expect(declined.declineReason).toBe("insufficient_funds");
     await expect(gw.charge({ token: "tok_boom", amount: 1, currency: "MXN" })).rejects.toThrow();
   });
