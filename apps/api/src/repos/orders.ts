@@ -3,6 +3,7 @@ import type { Db } from "../db";
 import { orders, orderItems, type NewOrder, type NewOrderItem, type Order, type OrderItem } from "../db/schema/orders";
 import { subscriptions, type NewSubscription, type Subscription } from "../db/schema/subscriptions";
 import { discountCodes, discountRedemptions } from "../db/schema/discounts";
+import { paymentAttempts } from "../db/schema/payment-attempts";
 
 export interface PersistOrderInput {
   order: NewOrder;
@@ -14,6 +15,16 @@ export interface PersistOrderInput {
     discountAmount: number;
     influencerId: string | null;
     commissionAmount: number | null;
+  };
+  paymentAttempt: {
+    provider: string;
+    providerChargeId: string;
+    providerCustomerId?: string;
+    amount: number;
+    currency: string;
+    status: "succeeded" | "failed" | "refunded" | "pending";
+    failureCode?: string;
+    providerResponse?: unknown;
   };
 }
 
@@ -64,6 +75,18 @@ export async function persistOrder(
       if (!row) throw new Error("persistOrder: subscription insert returned no row");
       subscriptionIds.push(row.id);
     }
+
+    await tx.insert(paymentAttempts).values({
+      orderId: order.id,
+      provider: input.paymentAttempt.provider,
+      providerChargeId: input.paymentAttempt.providerChargeId,
+      providerCustomerId: input.paymentAttempt.providerCustomerId ?? null,
+      amount: input.paymentAttempt.amount,
+      currency: input.paymentAttempt.currency,
+      status: input.paymentAttempt.status,
+      failureCode: input.paymentAttempt.failureCode ?? null,
+      providerResponse: input.paymentAttempt.providerResponse ?? null,
+    });
 
     return { orderId: order.id, subscriptionIds };
   });

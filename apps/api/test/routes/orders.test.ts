@@ -70,6 +70,13 @@ async function seedOrder(
       },
     ],
     subscriptions: [],
+    paymentAttempt: {
+      provider: "stub",
+      providerChargeId: `stub_${crypto.randomUUID()}`,
+      amount: 95500,
+      currency: "MXN",
+      status: "succeeded",
+    },
   });
   return res.orderId;
 }

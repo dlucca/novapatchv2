@@ -7,6 +7,7 @@ import { useTestDb } from "../helpers/db";
 import { discountCodes } from "../../src/db/schema/discounts";
 import { orders, orderItems } from "../../src/db/schema/orders";
 import { subscriptions } from "../../src/db/schema/subscriptions";
+import { paymentAttempts } from "../../src/db/schema/payment-attempts";
 
 const FIXED_NOW = new Date("2026-05-01T00:00:00Z");
 
@@ -82,6 +83,7 @@ describe("POST /me/checkout — happy paths", () => {
     const body = (await res.json()) as {
       orderId: string;
       chargeId: string;
+      quote: { total: number; currency: string };
       subscriptions: unknown[];
     };
     expect(body.orderId).toMatch(/^[0-9a-f-]{36}$/i);
@@ -94,6 +96,21 @@ describe("POST /me/checkout — happy paths", () => {
     const items = await db.select().from(orderItems).where(eq(orderItems.orderId, body.orderId));
     expect(items).toHaveLength(1);
     expect(items[0]?.quantity).toBe(2);
+
+    // payment_attempts row mirrors the successful charge.
+    const attempts = await db
+      .select()
+      .from(paymentAttempts)
+      .where(eq(paymentAttempts.orderId, body.orderId));
+    expect(attempts).toHaveLength(1);
+    expect(attempts[0]).toMatchObject({
+      provider: "stub",
+      status: "succeeded",
+      amount: body.quote.total,
+      currency: body.quote.currency,
+    });
+    expect(attempts[0]?.providerChargeId).toBe(body.chargeId);
+    expect(attempts[0]?.subscriptionRunId).toBeNull();
   });
 
   it("201 subscription only: persists subscription with nextBillingDate = now + 30d", async () => {
