@@ -1,5 +1,5 @@
 import { pgTable, uuid, text, integer, timestamp, jsonb, index, uniqueIndex, check } from "drizzle-orm/pg-core";
-import { sql } from "drizzle-orm";
+import { sql, desc } from "drizzle-orm";
 import { orders } from "./orders";
 import { subscriptionRuns } from "./subscription-runs";
 
@@ -40,7 +40,7 @@ export const paymentAttempts = pgTable(
       .where(sql`${t.providerChargeId} IS NOT NULL`),
     orderIdx: index("payment_attempts_order_id_idx").on(t.orderId),
     subRunIdx: index("payment_attempts_subscription_run_id_idx").on(t.subscriptionRunId),
-    statusIdx: index("payment_attempts_status_attempted_at_idx").on(t.status, t.attemptedAt),
+    statusIdx: index("payment_attempts_status_attempted_at_idx").on(t.status, desc(t.attemptedAt)),
   }),
 );
 
