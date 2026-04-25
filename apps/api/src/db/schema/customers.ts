@@ -1,14 +1,31 @@
-import { pgTable, uuid, text, timestamp } from "drizzle-orm/pg-core";
+import { pgTable, uuid, text, timestamp, jsonb } from "drizzle-orm/pg-core";
 
 export const customers = pgTable("customers", {
   id: uuid("id").primaryKey().defaultRandom(),
   clerkUserId: text("clerk_user_id").notNull().unique(),
   email: text("email").notNull(),
 
-  openpayCustomerId: text("openpay_customer_id"),
-  mercadopagoCustomerId: text("mercadopago_customer_id"),
+  country: text("country").notNull().default("mx"),
 
-  // Vault state for recurring billing. See spec: "Recurring Billing Architecture".
+  // JSONB shape: { stripe?: string, mercadopago?: string }
+  // Empty object default avoids null checks at read time.
+  gatewayCustomerIds: jsonb("gateway_customer_ids")
+    .$type<{ stripe?: string; mercadopago?: string }>()
+    .notNull()
+    .default({}),
+
+  // JSONB shape matches orders.shipping_address:
+  //   { line1, line2?, city, state, postalCode, country }
+  defaultShippingAddress: jsonb("default_shipping_address").$type<{
+    line1: string;
+    line2?: string;
+    city: string;
+    state: string;
+    postalCode: string;
+    country: string;
+  }>(),
+
+  // Vault state for recurring billing.
   defaultCardId: text("default_card_id"),
   defaultCardBrand: text("default_card_brand"),
   defaultCardLast4: text("default_card_last4"),

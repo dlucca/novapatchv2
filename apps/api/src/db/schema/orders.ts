@@ -44,6 +44,11 @@ export const orders = pgTable(
 
     idempotencyKey: text("idempotency_key"),
 
+    fulfillmentStatus: text("fulfillment_status").notNull().default("pending"),
+    pickedAt: timestamp("picked_at", { withTimezone: true }),
+    shippedAt: timestamp("shipped_at", { withTimezone: true }),
+    deliveredAt: timestamp("delivered_at", { withTimezone: true }),
+
     createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
   },
   (t) => ({
