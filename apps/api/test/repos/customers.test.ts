@@ -11,6 +11,7 @@ describe("customers repo", () => {
       const customer = await upsertCustomerByClerkUserId(db, {
         clerkUserId: "user_abc",
         email: "alice@example.com",
+        market: "mx",
       });
       expect(customer.clerkUserId).toBe("user_abc");
       expect(customer.email).toBe("alice@example.com");
@@ -23,10 +24,12 @@ describe("customers repo", () => {
       const first = await upsertCustomerByClerkUserId(db, {
         clerkUserId: "user_bob",
         email: "bob@example.com",
+        market: "mx",
       });
       const second = await upsertCustomerByClerkUserId(db, {
         clerkUserId: "user_bob",
         email: "bob@example.com",
+        market: "mx",
       });
       expect(second.id).toBe(first.id);
     });
@@ -36,6 +39,7 @@ describe("customers repo", () => {
       const first = await upsertCustomerByClerkUserId(db, {
         clerkUserId: "user_carol",
         email: "carol@example.com",
+        market: "mx",
       });
       // Wall-clock sleep so Postgres NOW() advances beyond the first call.
       // Locks in the "updated_at must advance on upsert" invariant — if
@@ -47,6 +51,7 @@ describe("customers repo", () => {
       const second = await upsertCustomerByClerkUserId(db, {
         clerkUserId: "user_carol",
         email: "carol.new@example.com",
+        market: "mx",
       });
       expect(second.id).toBe(first.id);
       expect(second.email).toBe("carol.new@example.com");
