@@ -26,7 +26,7 @@ describe("validateDiscount", () => {
     const result = await validateDiscount({
       code: "bogus",
       market: "mx",
-      subtotal: 45000,
+      subtotal: 75000,
       now: new Date(),
       findActiveByCode: async () => undefined,
       countRedemptionsByCustomer: async () => 0,
@@ -52,7 +52,7 @@ describe("validateDiscount", () => {
     const result = await validateDiscount({
       code: "welcome10",
       market: "mx",
-      subtotal: 45000,
+      subtotal: 75000,
       now: new Date(),
       findActiveByCode: async () => ({ ...baseCode, maxUses: 100, timesUsed: 100 }),
       countRedemptionsByCustomer: async () => 0,
@@ -65,7 +65,7 @@ describe("validateDiscount", () => {
     const result = await validateDiscount({
       code: "welcome10",
       market: "mx",
-      subtotal: 45000,
+      subtotal: 75000,
       now: new Date(),
       findActiveByCode: async () => ({ ...baseCode, maxUsesPerCustomer: 1 }),
       countRedemptionsByCustomer: async () => 999,
@@ -77,7 +77,7 @@ describe("validateDiscount", () => {
     const result = await validateDiscount({
       code: "welcome10",
       market: "mx",
-      subtotal: 45000,
+      subtotal: 75000,
       customerId: "11111111-1111-1111-1111-111111111111",
       now: new Date(),
       findActiveByCode: async () => ({ ...baseCode, maxUsesPerCustomer: 1 }),
@@ -91,7 +91,7 @@ describe("validateDiscount", () => {
     const result = await validateDiscount({
       code: "welcome10",
       market: "mx",
-      subtotal: 45000,
+      subtotal: 75000,
       now: new Date(),
       findActiveByCode: async () => baseCode,
       countRedemptionsByCustomer: async () => 0,
@@ -113,7 +113,7 @@ describe("validateDiscount", () => {
       validateDiscount({
         code: "welcome10",
         market: "mx",
-        subtotal: 45000,
+        subtotal: 75000,
         now: new Date(),
         findActiveByCode: async () => ({ ...baseCode, appliesTo: "bogus" as unknown as "all" }),
         countRedemptionsByCustomer: async () => 0,

@@ -12,7 +12,7 @@ function sub(overrides: Partial<Subscription> = {}): Subscription {
     originalOrderId: "33333333-3333-3333-3333-333333333333",
     productSlug: "sleep",
     intervalDays: 30,
-    unitPrice: 36000,
+    unitPrice: 63750,
     quantity: 1,
     market: "mx",
     currency: "MXN",

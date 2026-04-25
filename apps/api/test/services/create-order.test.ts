@@ -52,7 +52,7 @@ describe("createOrderFromCart", () => {
     expect(out.orderItems[0]).toMatchObject({
       productSlug: "energy",
       name: "Energy",
-      unitPrice: 45000,
+      unitPrice: 75000,
       quantity: 2,
       isSubscription: false,
     });
@@ -84,7 +84,7 @@ describe("createOrderFromCart", () => {
       productSlug: "sleep",
       intervalDays: 30,
       quantity: 1,
-      unitPrice: 36000, // 45000 * 0.80
+      unitPrice: 63750, // 75000 * 0.85
       market: "mx",
       currency: "MXN",
       status: "active",
@@ -94,7 +94,7 @@ describe("createOrderFromCart", () => {
     expect(out.subscriptions[1]).toMatchObject({
       productSlug: "glow",
       intervalDays: 90,
-      unitPrice: 40500, // 45000 * 0.90
+      unitPrice: 71250, // 75000 * 0.95
       nextBillingDate: "2026-07-30",
     });
   });
@@ -165,7 +165,7 @@ describe("createOrderFromCart", () => {
     expect(out.orderItems[0]?.isSubscription).toBe(false);
     expect(out.orderItems[1]?.isSubscription).toBe(true);
     expect(out.orderItems[1]?.intervalDays).toBe(30);
-    expect(out.orderItems[1]?.discountPct).toBe(20); // frequency discount on sub line
+    expect(out.orderItems[1]?.discountPct).toBe(15); // frequency discount on sub line
     expect(out.subscriptions).toHaveLength(1);
     expect(out.redemption?.influencerId).toBe("inf-uuid");
   });

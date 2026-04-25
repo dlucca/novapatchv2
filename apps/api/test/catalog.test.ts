@@ -28,11 +28,11 @@ describe("GET /catalog", () => {
     expect(body.products).toHaveLength(6);
     const energy = body.products[0];
     expect(energy?.slug).toBe("energy");
-    expect(energy?.price).toBe(45000);
+    expect(energy?.price).toBe(75000);
     expect(energy?.subscriptionPrices).toEqual({
-      "30": 36000,
-      "60": 38250,
-      "90": 40500,
+      "30": 63750,
+      "60": 67500,
+      "90": 71250,
     });
   });
 
@@ -61,12 +61,12 @@ describe("GET /catalog/:slug", () => {
     const body = (await res.json()) as ProductBody;
     expect(body.slug).toBe("energy");
     expect(body.name).toBe("Energy");
-    expect(body.price).toBe(45000);
+    expect(body.price).toBe(75000);
     expect(body.currency).toBe("MXN");
     expect(body.subscriptionPrices).toEqual({
-      "30": 36000,
-      "60": 38250,
-      "90": 40500,
+      "30": 63750,
+      "60": 67500,
+      "90": 71250,
     });
   });
 

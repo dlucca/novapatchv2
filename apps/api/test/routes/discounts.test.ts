@@ -112,11 +112,11 @@ describe("POST /discounts/validate", () => {
     expect(body.code).toBe("welcome10");
     expect(body.discountPct).toBe(10);
     expect(body.appliesTo).toBe("all");
-    expect(body.eligibleSubtotal).toBe(45000);
-    expect(body.discountAmount).toBe(4500);
-    expect(body.quote.subtotal).toBe(45000);
-    expect(body.quote.discountAmount).toBe(4500);
-    expect(body.quote.total).toBe(45000 - 4500 + Math.round((45000 - 4500) * 0.16) + 8500);
+    expect(body.eligibleSubtotal).toBe(75000);
+    expect(body.discountAmount).toBe(7500);
+    expect(body.quote.subtotal).toBe(75000);
+    expect(body.quote.discountAmount).toBe(7500);
+    expect(body.quote.total).toBe(75000 - 7500 + Math.round((75000 - 7500) * 0.16) + 8500);
   });
 
   it("returns {valid:false, reason:discount_below_minimum} when cart is too small", async () => {

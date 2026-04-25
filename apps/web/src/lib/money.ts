@@ -2,7 +2,7 @@
  * Formats integer cents as a localized currency string.
  *
  * Example:
- *   formatMoney(45000, "MXN", "es-MX") → "$450.00"
+ *   formatMoney(75000, "MXN", "es-MX") → "$750.00"
  */
 export function formatMoney(
   cents: number,

@@ -124,7 +124,7 @@ describe("POST /me/checkout — happy paths", () => {
       .select()
       .from(subscriptions)
       .where(eq(subscriptions.id, body.subscriptions[0]!.id));
-    expect(savedSub[0]?.unitPrice).toBe(36000);
+    expect(savedSub[0]?.unitPrice).toBe(63750);
   });
 
   it("200 replay response has the same shape as the 201 (includes quote)", async () => {
@@ -198,7 +198,7 @@ describe("POST /me/checkout — happy paths", () => {
       orderId: string;
       quote: { discountAmount: number; subtotal: number };
     };
-    expect(body.quote.discountAmount).toBe(Math.round((45000 + 36000) * 0.1));
+    expect(body.quote.discountAmount).toBe(Math.round((75000 + 63750) * 0.1));
 
     const refreshed = await db.select().from(discountCodes).where(eq(discountCodes.id, code!.id));
     expect(refreshed[0]?.timesUsed).toBe(1);

@@ -23,7 +23,7 @@ describe("PRODUCTS", () => {
 
   it("every product has subscription discounts for 30/60/90", () => {
     for (const product of Object.values(PRODUCTS)) {
-      expect(product.subscriptionDiscounts).toEqual({ 30: 20, 60: 15, 90: 10 });
+      expect(product.subscriptionDiscounts).toEqual({ 30: 15, 60: 10, 90: 5 });
     }
   });
 });
