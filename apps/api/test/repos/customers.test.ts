@@ -75,14 +75,14 @@ describe("customers repo", () => {
   });
 
   describe("upsertCustomerByClerkUserId — country handling", () => {
-    it("sets country from market on insert", async () => {
+    it("sets country from market on insert (non-default market)", async () => {
       const db = getDb();
       const c = await upsertCustomerByClerkUserId(db, {
-        clerkUserId: "u_country_mx",
-        email: "mx@example.com",
-        market: "mx",
+        clerkUserId: "u_country_ar",
+        email: "ar@example.com",
+        market: "ar",
       });
-      expect(c.country).toBe("mx");
+      expect(c.country).toBe("ar");
     });
 
     it("does not overwrite country on subsequent upserts", async () => {
