@@ -1,3 +1,4 @@
+import { sql } from "drizzle-orm";
 import { pgTable, uuid, text, timestamp, jsonb } from "drizzle-orm/pg-core";
 
 export const customers = pgTable("customers", {
@@ -12,7 +13,7 @@ export const customers = pgTable("customers", {
   gatewayCustomerIds: jsonb("gateway_customer_ids")
     .$type<{ stripe?: string; mercadopago?: string }>()
     .notNull()
-    .default({}),
+    .default(sql`'{}'::jsonb`),
 
   // JSONB shape matches orders.shipping_address:
   //   { line1, line2?, city, state, postalCode, country }

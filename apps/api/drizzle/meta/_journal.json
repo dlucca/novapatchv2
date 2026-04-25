@@ -29,6 +29,13 @@
       "when": 1777055118380,
       "tag": "0003_orange_rogue",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1777158049310,
+      "tag": "0004_flippant_mastermind",
+      "breakpoints": true
     }
   ]
 }
