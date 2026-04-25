@@ -60,6 +60,7 @@ describe("customers repo", () => {
       const inserted = await upsertCustomerByClerkUserId(db, {
         clerkUserId: "user_dan",
         email: "dan@example.com",
+        market: "mx",
       });
       const loaded = await getCustomerById(db, inserted.id);
       expect(loaded?.id).toBe(inserted.id);
@@ -70,6 +71,49 @@ describe("customers repo", () => {
       const db = getDb();
       const loaded = await getCustomerById(db, "00000000-0000-0000-0000-000000000000");
       expect(loaded).toBeUndefined();
+    });
+  });
+
+  describe("upsertCustomerByClerkUserId — country handling", () => {
+    it("sets country from market on insert", async () => {
+      const db = getDb();
+      const c = await upsertCustomerByClerkUserId(db, {
+        clerkUserId: "u_country_mx",
+        email: "mx@example.com",
+        market: "mx",
+      });
+      expect(c.country).toBe("mx");
+    });
+
+    it("does not overwrite country on subsequent upserts", async () => {
+      const db = getDb();
+      const first = await upsertCustomerByClerkUserId(db, {
+        clerkUserId: "u_country_keep",
+        email: "k@example.com",
+        market: "mx",
+      });
+      expect(first.country).toBe("mx");
+      const second = await upsertCustomerByClerkUserId(db, {
+        clerkUserId: "u_country_keep",
+        email: "k@example.com",
+        market: "ar",
+      });
+      expect(second.country).toBe("mx");
+    });
+
+    it("updates email on conflict", async () => {
+      const db = getDb();
+      await upsertCustomerByClerkUserId(db, {
+        clerkUserId: "u_email",
+        email: "old@example.com",
+        market: "mx",
+      });
+      const updated = await upsertCustomerByClerkUserId(db, {
+        clerkUserId: "u_email",
+        email: "new@example.com",
+        market: "mx",
+      });
+      expect(updated.email).toBe("new@example.com");
     });
   });
 });

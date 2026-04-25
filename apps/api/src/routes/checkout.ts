@@ -160,7 +160,7 @@ export function createCheckoutRoutes(deps: CheckoutDeps): Hono {
     // 5. Upsert customer.
     const clerkUserId = c.get("clerkUserId");
     const { email } = await deps.userClient.getUser(clerkUserId);
-    const customer = await upsertCustomerByClerkUserId(deps.db, { clerkUserId, email });
+    const customer = await upsertCustomerByClerkUserId(deps.db, { clerkUserId, email, market: market.id });
 
     // 6. Idempotent replay.
     const existing = await findOrderByIdempotencyKey(deps.db, idempotencyKey);

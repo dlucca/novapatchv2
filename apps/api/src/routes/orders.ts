@@ -50,6 +50,7 @@ export function createOrdersRoutes(deps: OrdersRoutesDeps): Hono {
     const customer = await upsertCustomerByClerkUserId(deps.db, {
       clerkUserId,
       email,
+      market: "mx",
     });
     const rows: OrderWithItems[] = await listOrdersWithItemsByCustomerId(
       deps.db,
