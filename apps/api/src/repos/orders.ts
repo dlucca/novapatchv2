@@ -4,6 +4,7 @@ import { orders, orderItems, type NewOrder, type NewOrderItem, type Order, type 
 import { subscriptions, type NewSubscription, type Subscription } from "../db/schema/subscriptions";
 import { discountCodes, discountRedemptions } from "../db/schema/discounts";
 import { paymentAttempts } from "../db/schema/payment-attempts";
+import type { PaymentProvider, PaymentAttemptStatus } from "./payment-attempts";
 
 export interface PersistOrderInput {
   order: NewOrder;
@@ -17,12 +18,12 @@ export interface PersistOrderInput {
     commissionAmount: number | null;
   };
   paymentAttempt: {
-    provider: string;
+    provider: PaymentProvider;
     providerChargeId: string;
     providerCustomerId?: string;
     amount: number;
     currency: string;
-    status: "succeeded" | "failed" | "refunded" | "pending";
+    status: PaymentAttemptStatus;
     failureCode?: string;
     providerResponse?: unknown;
   };
