@@ -12,6 +12,7 @@ export type ApiErrorCode =
   | "not_found"
   | "internal_error"
   | "validation_failed"
+  | "invalid_input"
   | "auth_missing"
   | "auth_malformed"
   | "auth_invalid"
