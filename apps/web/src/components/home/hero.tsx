@@ -35,7 +35,7 @@ export function Hero() {
     useCart.getState().openDrawer();
   };
 
-  const bg = `linear-gradient(160deg, ${product.ink} 0%, var(--navy) 75%)`;
+  const bg = `linear-gradient(160deg, ${product.ink} 0%, var(--color-navy) 75%)`;
   const glow = `radial-gradient(900px 600px at 75% 40%, ${product.color}55, transparent 60%)`;
 
   return (

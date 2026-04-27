@@ -5,9 +5,9 @@ import { Clock } from "lucide-react";
 import { useTranslations } from "next-intl";
 
 const STEPS = [
-  { n: "01", k: "1", color: "var(--coral)" },
-  { n: "02", k: "2", color: "var(--teal)" },
-  { n: "03", k: "3", color: "var(--gold)" },
+  { n: "01", k: "1", color: "var(--color-coral)" },
+  { n: "02", k: "2", color: "var(--color-teal)" },
+  { n: "03", k: "3", color: "var(--color-gold)" },
 ] as const;
 
 export function HowItWorks() {

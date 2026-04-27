@@ -64,7 +64,7 @@ export function Footer() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="bg-[var(--cream-warm)] py-16">
+    <footer className="bg-[var(--color-blush)] py-16">
       <div className="mx-auto grid max-w-6xl gap-10 px-4 md:grid-cols-2 lg:grid-cols-[repeat(4,1fr)_1.4fr]">
         {COLUMNS.map((col) => (
           <div key={col.key}>

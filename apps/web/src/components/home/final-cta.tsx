@@ -18,7 +18,7 @@ export function FinalCTA() {
       <div className="relative mx-auto max-w-3xl px-4">
         <h2 className="font-outfit text-4xl font-black text-white lg:text-6xl">
           {t("title_a")}{" "}
-          <span className="font-newsreader italic font-normal text-[var(--gold)]">
+          <span className="font-newsreader italic font-normal text-[var(--color-gold)]">
             {t("title_b_italic")}
           </span>
           .

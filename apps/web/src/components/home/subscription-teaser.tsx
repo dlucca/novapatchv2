@@ -1,9 +1,9 @@
 import { getTranslations } from "next-intl/server";
 
 const TIERS = [
-  { days: 30, off: 20, color: "var(--teal)", k: "30" as const },
-  { days: 60, off: 15, color: "var(--sky)", k: "60" as const },
-  { days: 90, off: 10, color: "var(--gold)", k: "90" as const },
+  { days: 30, off: 20, color: "var(--color-teal)", k: "30" as const },
+  { days: 60, off: 15, color: "var(--color-sky)", k: "60" as const },
+  { days: 90, off: 10, color: "var(--color-gold)", k: "90" as const },
 ];
 
 interface SubscriptionTeaserProps {
@@ -31,7 +31,7 @@ export async function SubscriptionTeaser({ locale = "es" }: SubscriptionTeaserPr
             <span className="text-xs uppercase tracking-wider text-coral">{t("eyebrow")}</span>
             <h2 className="mt-3 font-outfit text-4xl font-black text-white lg:text-5xl">
               {t("title_a")}{" "}
-              <span className="font-newsreader italic font-normal text-[var(--gold)]">
+              <span className="font-newsreader italic font-normal text-[var(--color-gold)]">
                 {t("title_b_italic")}
               </span>
             </h2>
@@ -59,7 +59,7 @@ export async function SubscriptionTeaser({ locale = "es" }: SubscriptionTeaserPr
                 </div>
                 <span
                   className="rounded-full px-3 py-1 font-outfit text-sm font-black"
-                  style={{ background: tier.color, color: "var(--navy)" }}
+                  style={{ background: tier.color, color: "var(--color-navy)" }}
                 >
                   {t("discount_format", { percent: tier.off })}
                 </span>

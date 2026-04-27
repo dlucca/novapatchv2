@@ -15,7 +15,7 @@ const LAYERS = [
 export function Absorption() {
   const t = useTranslations("pages.home.absorption");
   return (
-    <section id="ciencia" className="bg-[var(--cream-warm)] py-20">
+    <section id="ciencia" className="bg-[var(--color-blush)] py-20">
       <div className="mx-auto grid max-w-6xl gap-12 px-4 lg:grid-cols-[1fr_1.25fr] lg:items-center">
         <div>
           <span className="text-xs uppercase tracking-wider text-coral">{t("eyebrow")}</span>
@@ -67,7 +67,7 @@ function SkinDiagramC() {
 
   return (
     <div className="relative max-w-[580px] rounded-3xl bg-[#EFE0D6] p-[18px]">
-      <div className="rounded-full bg-[var(--gold)] px-4 py-2 text-center font-outfit text-sm font-black uppercase tracking-wide text-navy">
+      <div className="rounded-full bg-[var(--color-gold)] px-4 py-2 text-center font-outfit text-sm font-black uppercase tracking-wide text-navy">
         {t("novapatch_label")}
       </div>
       <p className="mt-1 text-center text-xs text-navy/70">{t("novapatch_subtitle")}</p>
@@ -129,7 +129,7 @@ function SkinDiagramC() {
           <span
             key={i}
             aria-hidden
-            className="absolute top-0 h-2 w-2 rounded-full bg-[var(--coral)]"
+            className="absolute top-0 h-2 w-2 rounded-full bg-[var(--color-coral)]"
             style={{ left: `${d.l}%`, animation: `nc-descend-c 5s linear ${d.d}s infinite` }}
           />
         ))}
