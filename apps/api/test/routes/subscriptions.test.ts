@@ -85,6 +85,13 @@ async function seedSubViaPersist(
         shippingAddress: SHIPPING,
       },
     ],
+    paymentAttempt: {
+      provider: "stub",
+      providerChargeId: `stub_${crypto.randomUUID()}`,
+      amount: 50260,
+      currency: "MXN",
+      status: "succeeded",
+    },
   });
   return res.subscriptionIds[0]!;
 }

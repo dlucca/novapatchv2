@@ -43,6 +43,7 @@ export function createMeRoutes(deps: MeDeps): Hono {
     const customer = await upsertCustomerByClerkUserId(deps.db, {
       clerkUserId,
       email,
+      market: "mx",
     });
     return c.json(serializeCustomer(customer));
   });

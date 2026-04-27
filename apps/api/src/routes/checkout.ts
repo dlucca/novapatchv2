@@ -160,7 +160,7 @@ export function createCheckoutRoutes(deps: CheckoutDeps): Hono {
     // 5. Upsert customer.
     const clerkUserId = c.get("clerkUserId");
     const { email } = await deps.userClient.getUser(clerkUserId);
-    const customer = await upsertCustomerByClerkUserId(deps.db, { clerkUserId, email });
+    const customer = await upsertCustomerByClerkUserId(deps.db, { clerkUserId, email, market: market.id });
 
     // 6. Idempotent replay.
     const existing = await findOrderByIdempotencyKey(deps.db, idempotencyKey);
@@ -270,7 +270,16 @@ export function createCheckoutRoutes(deps: CheckoutDeps): Hono {
     // 13. Persist atomically.
     let persisted;
     try {
-      persisted = await persistOrder(deps.db, built);
+      persisted = await persistOrder(deps.db, {
+        ...built,
+        paymentAttempt: {
+          provider: "stub",
+          providerChargeId: chargeResult.chargeId,
+          amount: quote.total,
+          currency: market.currency,
+          status: "succeeded",
+        },
+      });
     } catch (err) {
       console.error("[checkout] persist failed after charge succeeded:", err);
       const { body, status } = apiError(

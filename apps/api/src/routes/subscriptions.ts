@@ -48,7 +48,7 @@ async function resolveCustomer(
   clerkUserId: string,
 ): Promise<{ id: string }> {
   const { email } = await deps.userClient.getUser(clerkUserId);
-  return await upsertCustomerByClerkUserId(deps.db, { clerkUserId, email });
+  return await upsertCustomerByClerkUserId(deps.db, { clerkUserId, email, market: "mx" });
 }
 
 export function createSubscriptionRoutes(deps: SubscriptionRoutesDeps): Hono {

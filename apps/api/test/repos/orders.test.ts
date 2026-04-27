@@ -47,6 +47,13 @@ describe("persistOrder", () => {
         },
       ],
       subscriptions: [],
+      paymentAttempt: {
+        provider: "stub",
+        providerChargeId: "stub_ik1",
+        amount: 60700,
+        currency: "MXN",
+        status: "succeeded",
+      },
     });
 
     expect(res.orderId).toMatch(/^[0-9a-f-]{36}$/i);
@@ -80,6 +87,13 @@ describe("persistOrder", () => {
           shippingAddress: {},
         },
       ],
+      paymentAttempt: {
+        provider: "stub",
+        providerChargeId: "stub_ik2",
+        amount: 60700,
+        currency: "MXN",
+        status: "succeeded",
+      },
     });
 
     expect(res.subscriptionIds).toHaveLength(1);
@@ -116,6 +130,13 @@ describe("persistOrder", () => {
         influencerId: null,
         commissionAmount: null,
       },
+      paymentAttempt: {
+        provider: "stub",
+        providerChargeId: "stub_ik3",
+        amount: 60700,
+        currency: "MXN",
+        status: "succeeded",
+      },
     });
 
     const savedRedemption = await db
@@ -150,6 +171,13 @@ describe("persistOrder", () => {
             shippingAddress: {},
           },
         ],
+        paymentAttempt: {
+          provider: "stub",
+          providerChargeId: "stub_ik4",
+          amount: 60700,
+          currency: "MXN",
+          status: "succeeded",
+        },
       }),
     ).rejects.toThrow();
 
@@ -193,6 +221,13 @@ describe("findOrderByIdempotencyKey", () => {
           shippingAddress: {},
         },
       ],
+      paymentAttempt: {
+        provider: "stub",
+        providerChargeId: "stub_lookup",
+        amount: 60700,
+        currency: "MXN",
+        status: "succeeded",
+      },
     });
     const r = await findOrderByIdempotencyKey(db, "ik-lookup");
     expect(r?.order.id).toBe(persisted.orderId);

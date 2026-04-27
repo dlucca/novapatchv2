@@ -11,6 +11,7 @@ describe("customers repo", () => {
       const customer = await upsertCustomerByClerkUserId(db, {
         clerkUserId: "user_abc",
         email: "alice@example.com",
+        market: "mx",
       });
       expect(customer.clerkUserId).toBe("user_abc");
       expect(customer.email).toBe("alice@example.com");
@@ -23,10 +24,12 @@ describe("customers repo", () => {
       const first = await upsertCustomerByClerkUserId(db, {
         clerkUserId: "user_bob",
         email: "bob@example.com",
+        market: "mx",
       });
       const second = await upsertCustomerByClerkUserId(db, {
         clerkUserId: "user_bob",
         email: "bob@example.com",
+        market: "mx",
       });
       expect(second.id).toBe(first.id);
     });
@@ -36,6 +39,7 @@ describe("customers repo", () => {
       const first = await upsertCustomerByClerkUserId(db, {
         clerkUserId: "user_carol",
         email: "carol@example.com",
+        market: "mx",
       });
       // Wall-clock sleep so Postgres NOW() advances beyond the first call.
       // Locks in the "updated_at must advance on upsert" invariant — if
@@ -47,6 +51,7 @@ describe("customers repo", () => {
       const second = await upsertCustomerByClerkUserId(db, {
         clerkUserId: "user_carol",
         email: "carol.new@example.com",
+        market: "mx",
       });
       expect(second.id).toBe(first.id);
       expect(second.email).toBe("carol.new@example.com");
@@ -60,6 +65,7 @@ describe("customers repo", () => {
       const inserted = await upsertCustomerByClerkUserId(db, {
         clerkUserId: "user_dan",
         email: "dan@example.com",
+        market: "mx",
       });
       const loaded = await getCustomerById(db, inserted.id);
       expect(loaded?.id).toBe(inserted.id);
@@ -70,6 +76,49 @@ describe("customers repo", () => {
       const db = getDb();
       const loaded = await getCustomerById(db, "00000000-0000-0000-0000-000000000000");
       expect(loaded).toBeUndefined();
+    });
+  });
+
+  describe("upsertCustomerByClerkUserId — country handling", () => {
+    it("sets country from market on insert (non-default market)", async () => {
+      const db = getDb();
+      const c = await upsertCustomerByClerkUserId(db, {
+        clerkUserId: "u_country_ar",
+        email: "ar@example.com",
+        market: "ar",
+      });
+      expect(c.country).toBe("ar");
+    });
+
+    it("does not overwrite country on subsequent upserts", async () => {
+      const db = getDb();
+      const first = await upsertCustomerByClerkUserId(db, {
+        clerkUserId: "u_country_keep",
+        email: "k@example.com",
+        market: "mx",
+      });
+      expect(first.country).toBe("mx");
+      const second = await upsertCustomerByClerkUserId(db, {
+        clerkUserId: "u_country_keep",
+        email: "k@example.com",
+        market: "ar",
+      });
+      expect(second.country).toBe("mx");
+    });
+
+    it("updates email on conflict", async () => {
+      const db = getDb();
+      await upsertCustomerByClerkUserId(db, {
+        clerkUserId: "u_email",
+        email: "old@example.com",
+        market: "mx",
+      });
+      const updated = await upsertCustomerByClerkUserId(db, {
+        clerkUserId: "u_email",
+        email: "new@example.com",
+        market: "mx",
+      });
+      expect(updated.email).toBe("new@example.com");
     });
   });
 });

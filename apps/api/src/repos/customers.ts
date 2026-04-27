@@ -5,11 +5,14 @@ import { customers, type Customer } from "../db/schema/customers";
 export interface UpsertCustomerInput {
   clerkUserId: string;
   email: string;
+  market: string; // sets country on insert; preserved on subsequent upserts
 }
 
 /**
- * Idempotent upsert by clerk_user_id. If a row exists, updates `email` +
- * `updated_at` and returns it; otherwise inserts and returns the new row.
+ * Idempotent upsert by clerk_user_id. On insert, sets country = market.
+ * On conflict, updates only email + updated_at — country is NEVER
+ * overwritten so a customer's country survives a market mismatch in
+ * an incoming request.
  *
  * Keyed on clerk_user_id (not email) because email can change in Clerk but
  * the Clerk user id is stable for the account lifetime.
@@ -23,14 +26,13 @@ export async function upsertCustomerByClerkUserId(
     .values({
       clerkUserId: input.clerkUserId,
       email: input.email,
+      country: input.market,
     })
     .onConflictDoUpdate({
       target: customers.clerkUserId,
       set: {
         email: input.email,
-        // Explicit — Drizzle's schema-level $onUpdate hook does not always fire
-        // on the SET clause of INSERT ... ON CONFLICT DO UPDATE. Set manually
-        // so updated_at always advances on upsert.
+        // country deliberately NOT updated here.
         updatedAt: new Date(),
       },
     })

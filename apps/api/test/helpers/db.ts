@@ -54,9 +54,11 @@ export async function resetDb(db: Db): Promise<void> {
   // generated query readable.
   await db.execute(sql`
     TRUNCATE TABLE
+      payment_attempts,
+      subscription_runs,
+      webhook_events,
       discount_redemptions,
       discount_codes,
-      subscription_billings,
       subscriptions,
       order_items,
       orders,
