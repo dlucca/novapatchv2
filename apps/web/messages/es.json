@@ -408,6 +408,26 @@
         "science": "La ciencia",
         "comparison": "Comparativa"
       }
+    },
+    "footer": {
+      "columns": {
+        "shop":  { "title": "Comprar",  "links": { "store": "Tienda", "subs": "Suscripciones", "warranty": "Garantía" } },
+        "help":  { "title": "Ayuda",    "links": { "contact": "Contáctanos", "faq": "Preguntas frecuentes", "refund": "Solicitar reembolso" } },
+        "about": { "title": "Nosotros", "links": { "us": "Nosotros", "why": "¿Por qué parches?", "subscribe": "Suscríbete y ahorra" } },
+        "legal": { "title": "Legal",    "links": { "privacy": "Aviso de Privacidad", "terms": "Términos y Condiciones" } }
+      },
+      "newsletter": {
+        "title": "Newsletter",
+        "lead": "Novedades y ofertas",
+        "placeholder": "tu@correo.com",
+        "submit": "Suscribirse",
+        "success": "Te suscribimos. Mira tu inbox.",
+        "error_invalid": "Email inválido",
+        "error_generic": "Algo salió mal. Intenta luego."
+      },
+      "tagline": "Hecho con ciencia.",
+      "rights": "© {year} Novapatch · {tagline}",
+      "coming_soon": "Próximamente"
     }
   },
   "site": {

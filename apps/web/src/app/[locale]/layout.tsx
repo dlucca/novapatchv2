@@ -35,7 +35,7 @@ export default async function LocaleLayout({
           <NextIntlClientProvider>
             <Navbar locale={locale} />
             {children}
-            <Footer locale={locale} />
+            <Footer />
             <CountryGate />
             <CartDrawer />
             <Toaster position="bottom-right" richColors />

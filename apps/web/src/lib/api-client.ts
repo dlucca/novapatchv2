@@ -83,7 +83,7 @@ export async function submitWaitlist(args: {
   apiUrl: string;
   email: string;
   country: string;            // alpha-2; will uppercase
-  source: "unsupported_modal" | "navbar_selector";
+  source: "unsupported_modal" | "navbar_selector" | "footer";
   detectedCountry?: string;
 }): Promise<{ ok: true; inserted: boolean }> {
   const res = await fetch(`${args.apiUrl}/waitlist`, {
