@@ -81,6 +81,18 @@
     "iniciar_sesion": "Iniciar sesión"
   },
   "pages": {
+    "home": {
+      "hero": {
+        "pill": "Parche del momento · {name}",
+        "title_a": "Bienestar",
+        "title_b_italic": "que se pega",
+        "title_c": "a tu día.",
+        "cta_primary": "Agregar {name} · ${price}",
+        "cta_secondary": "Ver ingredientes",
+        "formula_label": "Fórmula",
+        "selector_label": "Elige el parche · descubre su fórmula"
+      }
+    },
     "nosotros": {
       "hero": {
         "eyebrow": "Nosotros",
