@@ -105,6 +105,28 @@
         "annotation_apply": "Aplicación · 3 segundos",
         "duration_label": "Liberación continua mientras vives tu día.",
         "photo_alt": "Persona aplicando un parche Novapatch en el brazo"
+      },
+      "absorption": {
+        "eyebrow": "La ciencia",
+        "title": "No cualquier ingrediente funciona en un parche.",
+        "lead": "Para atravesar la piel, un ingrediente necesita tener menos de 500 Daltons de masa molecular. El resultado: absorción directa al torrente sanguíneo, sin pasar por el sistema digestivo, durante entre 10 y 12 horas continuas.",
+        "stats": {
+          "size":      { "value": "<500",  "unit": "Da", "label": "Tamaño molecular" },
+          "duration":  { "value": "10–12", "unit": "h",  "label": "Absorción sostenida" },
+          "digestion": { "value": "0",     "unit": "×",  "label": "Digestión requerida" }
+        },
+        "cta": "Encuentra tu parche",
+        "diagram": {
+          "novapatch_label": "NOVAPATCH",
+          "novapatch_subtitle": "Liberación controlada · 10–12 horas",
+          "layers": {
+            "corneo": "ESTRATO CÓRNEO",
+            "epidermis": "EPIDERMIS",
+            "dermis": "DERMIS",
+            "blood": "TORRENTE SANGUÍNEO"
+          },
+          "chip_daltons": "< 500 Daltons"
+        }
       }
     },
     "nosotros": {
