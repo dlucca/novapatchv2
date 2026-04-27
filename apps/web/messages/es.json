@@ -401,6 +401,13 @@
       "clear": "Vaciar bolsa",
       "remove_item": "Quitar {name}",
       "qty_label": "Cantidad de {name}"
+    },
+    "navbar": {
+      "links": {
+        "products": "Los parches",
+        "science": "La ciencia",
+        "comparison": "Comparativa"
+      }
     }
   },
   "site": {
