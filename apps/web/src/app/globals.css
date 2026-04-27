@@ -70,11 +70,78 @@
   --color-input: var(--input);
   --color-ring: var(--ring);
 
-  /* Brand — ported from novafrontend */
-  --color-brand-coral: oklch(0.65 0.23 30);
-  --color-brand-deep-blue: oklch(0.42 0.10 250);
-  --color-brand-sky: oklch(0.72 0.08 240);
-  --color-brand-cream: oklch(0.97 0.01 90);
+  /* === Brand color tokens (DESIGN section 2) === */
+  /* Coral — CTAs, accents, momentos de acción */
+  --color-coral:       oklch(0.65 0.21 30);     /* #E8503A */
+  --color-coral-light: oklch(0.74 0.18 30);     /* #FF7A65 */
+  --color-coral-dark:  oklch(0.56 0.20 30);     /* #C43B28 */
+
+  /* Navy — texto principal, superficies oscuras */
+  --color-navy:        oklch(0.21 0.06 263);    /* #0D1B35 */
+  --color-navy-light:  oklch(0.32 0.09 263);    /* #1D3461 */
+
+  /* Ocean — links, primary actions sobre claros */
+  --color-ocean:       oklch(0.45 0.13 240);    /* #005088 */
+  --color-ocean-light: oklch(0.51 0.14 240);    /* #0068AA */
+  --color-ocean-dark:  oklch(0.37 0.13 240);    /* #003D6B */
+
+  /* Sky — secondary accent */
+  --color-sky:         oklch(0.71 0.10 235);    /* #5BA8D5 */
+  --color-sky-light:   oklch(0.87 0.06 235);    /* #B8DDEF */
+  --color-sky-pale:    oklch(0.96 0.02 235);    /* #EAF5FB */
+
+  /* Teal — diagrams, savings indicators */
+  --color-teal:        oklch(0.69 0.13 195);    /* #1CB1BC */
+  --color-teal-pale:   oklch(0.96 0.02 195);    /* #E4F4F4 */
+
+  /* Gold — patch texture accent (NOVAPATCH pill in Absorption) */
+  --color-gold:        oklch(0.85 0.16 90);     /* #F5C628 */
+
+  /* Lime — offer highlights (puntual) */
+  --color-lime:        oklch(0.85 0.17 110);    /* #C9D849 */
+  --color-lime-dark:   oklch(0.74 0.16 110);    /* #A8B42A */
+
+  /* === Surfaces === */
+  --color-cream:   oklch(0.98 0.01 70);     /* #FAF7F2 — bg principal */
+  --color-warm:    oklch(0.98 0.02 70);     /* #FEF7ED */
+  --color-blush:   oklch(0.96 0.01 25);     /* #F8EDEB — footer, La ciencia */
+  --color-surface: oklch(0.98 0 0);         /* #FAFAFA */
+
+  /* === Per-product triads (DESIGN section 2.3) === */
+  /* Energy */
+  --color-product-energy:     oklch(0.78 0.10 245);  /* #83B5F4 */
+  --color-product-energy-ink: oklch(0.45 0.14 250);  /* #1A5C9A */
+  --color-product-energy-bg:  oklch(0.96 0.02 245);  /* #EBF4FB */
+
+  /* Sleep */
+  --color-product-sleep:      oklch(0.69 0.13 195);  /* #1EB1BC */
+  --color-product-sleep-ink:  oklch(0.45 0.10 175);  /* #0F6B5C */
+  --color-product-sleep-bg:   oklch(0.96 0.02 195);  /* #E4F4F4 */
+
+  /* Glow */
+  --color-product-glow:       oklch(0.65 0.20 25);   /* #F25C54 */
+  --color-product-glow-ink:   oklch(0.50 0.18 25);   /* #B83525 */
+  --color-product-glow-bg:    oklch(0.96 0.02 25);   /* #FAF0EE */
+
+  /* Shield */
+  --color-product-shield:     oklch(0.78 0.16 65);   /* #FFA849 */
+  --color-product-shield-ink: oklch(0.51 0.12 75);   /* #8C6000 */
+  --color-product-shield-bg:  oklch(0.96 0.03 80);   /* #FAF6E9 */
+
+  /* Zen */
+  --color-product-zen:        oklch(0.59 0.10 250);  /* #4E82BC */
+  --color-product-zen-ink:    oklch(0.42 0.13 255);  /* #2A5490 */
+  --color-product-zen-bg:     oklch(0.95 0.02 245);  /* #EBF0F9 */
+
+  /* Woman */
+  --color-product-woman:      oklch(0.72 0.10 320);  /* #C693C4 */
+  --color-product-woman-ink:  oklch(0.40 0.16 310);  /* #6B3080 */
+  --color-product-woman-bg:   oklch(0.95 0.03 315);  /* #F3EBF9 */
+
+  /* === Font tokens (consumed via next/font CSS variables on <html>) === */
+  --font-display:   var(--font-outfit);
+  --font-editorial: var(--font-newsreader);
+  --font-sans:      var(--font-outfit);
 }
 
 @layer base {
@@ -82,7 +149,6 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground;
-    font-family: system-ui, -apple-system, sans-serif;
+    @apply bg-background text-foreground font-sans;
   }
 }
