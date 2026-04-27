@@ -51,7 +51,7 @@ export function Navbar({ locale }: NavbarProps) {
       <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4">
         <Link
           href={base}
-          className="text-lg font-black tracking-tight text-brand-deep-blue"
+          className="text-lg font-black tracking-tight text-navy"
         >
           Novapatch
         </Link>
@@ -64,7 +64,7 @@ export function Navbar({ locale }: NavbarProps) {
               href={item.href}
               className={
                 isActive(item.href)
-                  ? "text-sm font-semibold text-brand-coral underline underline-offset-4"
+                  ? "text-sm font-semibold text-coral underline underline-offset-4"
                   : "text-sm text-muted-foreground hover:text-foreground"
               }
             >
@@ -113,7 +113,7 @@ export function Navbar({ locale }: NavbarProps) {
                     onClick={() => setSheetOpen(false)}
                     className={
                       isActive(item.href)
-                        ? "text-base font-semibold text-brand-coral"
+                        ? "text-base font-semibold text-coral"
                         : "text-base text-foreground"
                     }
                   >

@@ -27,12 +27,12 @@ export default async function TerminosInfluencersPage({
 
   return (
     <main>
-      <section className="bg-brand-cream px-6 py-16">
+      <section className="bg-cream px-6 py-16">
         <div className="mx-auto max-w-4xl">
-          <p className="mb-3 text-xs font-bold uppercase tracking-widest text-brand-coral">
+          <p className="mb-3 text-xs font-bold uppercase tracking-widest text-coral">
             {t("hero.eyebrow")}
           </p>
-          <h1 className="mb-4 text-3xl font-black tracking-tight text-brand-deep-blue md:text-4xl">
+          <h1 className="mb-4 text-3xl font-black tracking-tight text-navy md:text-4xl">
             {t("hero.title")}
           </h1>
           <p className="text-sm text-muted-foreground">{t("hero.body")}</p>
@@ -42,7 +42,7 @@ export default async function TerminosInfluencersPage({
       <div className="mx-auto max-w-3xl px-6 py-12">
         {sections.map((s, i) => (
           <section key={i} className="mb-10 last:mb-0">
-            <h2 className="mb-3 text-lg font-bold text-brand-deep-blue">{s.title}</h2>
+            <h2 className="mb-3 text-lg font-bold text-navy">{s.title}</h2>
             <div>{paragraphs(s.body)}</div>
           </section>
         ))}
