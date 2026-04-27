@@ -128,6 +128,17 @@
           "chip_daltons": "< 500 Daltons"
         }
       },
+      "product_grid": {
+        "eyebrow": "Los parches",
+        "title_a": "Elige el tuyo,",
+        "title_b_italic": "o varios.",
+        "card": {
+          "units_short": "30 parches",
+          "price_per_month": "/mes",
+          "add": "Agregar",
+          "popular": "Popular"
+        }
+      },
       "comparison": {
         "eyebrow": "Comparativa",
         "title_a": "¿Pastilla, gomita",
