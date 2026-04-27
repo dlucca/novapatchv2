@@ -19,6 +19,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import { CountrySelector } from "@/components/site/country-selector";
 
 interface NavbarProps {
   locale: string;
@@ -74,6 +75,11 @@ export function Navbar({ locale }: NavbarProps) {
         </nav>
 
         <div className="flex items-center gap-3">
+          {/* Country selector — desktop only (mobile lives inside the sheet) */}
+          <div className="hidden md:flex items-center gap-3">
+            <CountrySelector />
+            <span className="h-5 w-px bg-navy/10" aria-hidden />
+          </div>
           <SignedIn>
             <Link
               href={`${base}/cuenta`}
@@ -129,6 +135,9 @@ export function Navbar({ locale }: NavbarProps) {
                     {tAcct("mi_cuenta")}
                   </Link>
                 </SignedIn>
+                <div className="border-t border-navy/10 pt-4 mt-2">
+                  <CountrySelector expanded />
+                </div>
               </nav>
             </SheetContent>
           </Sheet>
