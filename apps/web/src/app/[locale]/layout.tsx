@@ -7,6 +7,7 @@ import { outfit, newsreader } from "@/lib/fonts";
 import { Navbar } from "@/components/site/navbar";
 import { Footer } from "@/components/site/footer";
 import { Toaster } from "@/components/ui/sonner";
+import { CountryGate } from "@/components/site/country-gate";
 import "../globals.css";
 
 export const metadata: Metadata = {
@@ -34,6 +35,7 @@ export default async function LocaleLayout({
             <Navbar locale={locale} />
             {children}
             <Footer locale={locale} />
+            <CountryGate />
             <Toaster position="bottom-right" richColors />
           </NextIntlClientProvider>
         </body>

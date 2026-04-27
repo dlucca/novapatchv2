@@ -6,3 +6,4 @@ export * from "./payment-attempts";
 export * from "./webhook-events";
 export * from "./influencers";
 export * from "./discounts";
+export * from "./waitlist";

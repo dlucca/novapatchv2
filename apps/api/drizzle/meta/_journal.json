@@ -36,6 +36,13 @@
       "when": 1777158049310,
       "tag": "0004_flippant_mastermind",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1777294431075,
+      "tag": "0005_yellow_orphan",
+      "breakpoints": true
     }
   ]
 }

@@ -5,6 +5,7 @@ import { healthRoutes } from "./routes/health";
 import { catalogRoutes } from "./routes/catalog";
 import { createMeRoutes } from "./routes/me";
 import { createDiscountRoutes } from "./routes/discounts";
+import { createWaitlistRoutes } from "./routes/waitlist";
 import { apiError } from "./lib/errors";
 import { readEnv } from "./env";
 import type { TokenVerifier, ClerkUserClient } from "./lib/clerk";
@@ -73,6 +74,7 @@ export function createApp(deps: AppDeps = {}): Hono {
 
   if (deps.db) {
     app.route("/discounts", createDiscountRoutes(deps.db));
+    app.route("/waitlist", createWaitlistRoutes({ db: deps.db }));
   }
 
   if (deps.verifier && deps.userClient && deps.db) {

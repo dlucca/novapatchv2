@@ -74,3 +74,41 @@ export function changeFrequency({
     { intervalDays },
   );
 }
+
+/**
+ * POST /waitlist — public lead capture for unsupported countries. No auth.
+ * Throws ApiError on non-2xx; otherwise returns { ok: true, inserted }.
+ */
+export async function submitWaitlist(args: {
+  apiUrl: string;
+  email: string;
+  country: string;            // alpha-2; will uppercase
+  source: "unsupported_modal" | "navbar_selector";
+  detectedCountry?: string;
+}): Promise<{ ok: true; inserted: boolean }> {
+  const res = await fetch(`${args.apiUrl}/waitlist`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      email: args.email,
+      country: args.country.toUpperCase(),
+      source: args.source,
+      ...(args.detectedCountry ? { detectedCountry: args.detectedCountry.toUpperCase() } : {}),
+    }),
+  });
+  if (!res.ok) {
+    let parsed: { error: { code?: string; message?: string; details?: unknown } } | undefined;
+    try {
+      parsed = (await res.json()) as typeof parsed;
+    } catch {
+      parsed = undefined;
+    }
+    throw new ApiError(
+      parsed?.error?.code ?? "waitlist_failed",
+      parsed?.error?.message ?? `waitlist submission failed: ${res.status}`,
+      res.status,
+      parsed?.error?.details,
+    );
+  }
+  return (await res.json()) as { ok: true; inserted: boolean };
+}
