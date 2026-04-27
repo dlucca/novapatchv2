@@ -142,6 +142,58 @@
   --font-display:   var(--font-outfit);
   --font-editorial: var(--font-newsreader);
   --font-sans:      var(--font-outfit);
+
+  /* === Type scale (DESIGN section 3) === */
+  /* Display (clamp para fluidez) */
+  --text-display-xl: clamp(48px, 6vw, 72px);
+  --text-display-xl--line-height: 0.98;
+  --text-display-xl--letter-spacing: -0.035em;
+  --text-display-xl--font-weight: 900;
+
+  --text-display-lg: clamp(40px, 5vw, 62px);
+  --text-display-lg--line-height: 1.0;
+  --text-display-lg--letter-spacing: -0.03em;
+  --text-display-lg--font-weight: 900;
+
+  --text-display-md: clamp(36px, 4.6vw, 56px);
+  --text-display-md--line-height: 1.02;
+  --text-display-md--letter-spacing: -0.03em;
+  --text-display-md--font-weight: 900;
+
+  --text-display-sm: clamp(28px, 3.8vw, 44px);
+  --text-display-sm--line-height: 1.05;
+  --text-display-sm--letter-spacing: -0.025em;
+  --text-display-sm--font-weight: 800;
+
+  /* Inline headings */
+  --text-h3: 22px;
+  --text-h3--line-height: 1.15;
+  --text-h3--letter-spacing: -0.02em;
+  --text-h3--font-weight: 700;
+
+  --text-h4: 18px;
+  --text-h4--line-height: 1.2;
+  --text-h4--letter-spacing: -0.015em;
+  --text-h4--font-weight: 700;
+
+  /* Body */
+  --text-body-lg: 16.5px;
+  --text-body-lg--line-height: 1.6;
+
+  --text-body: 15px;
+  --text-body--line-height: 1.6;
+
+  --text-body-sm: 13.5px;
+  --text-body-sm--line-height: 1.55;
+
+  --text-caption: 12px;
+  --text-caption--line-height: 1.4;
+
+  /* Eyebrow (uppercase label sobre h2 — consumer adds .uppercase) */
+  --text-eyebrow: 11px;
+  --text-eyebrow--line-height: 1.2;
+  --text-eyebrow--letter-spacing: 0.18em;
+  --text-eyebrow--font-weight: 700;
 }
 
 @layer base {
