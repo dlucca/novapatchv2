@@ -3,6 +3,7 @@ import { NextIntlClientProvider, hasLocale } from "next-intl";
 import { notFound } from "next/navigation";
 import { ClerkProvider } from "@clerk/nextjs";
 import { routing } from "@/i18n/routing";
+import { outfit, newsreader } from "@/lib/fonts";
 import { Navbar } from "@/components/site/navbar";
 import { Footer } from "@/components/site/footer";
 import { Toaster } from "@/components/ui/sonner";
@@ -27,7 +28,7 @@ export default async function LocaleLayout({
 
   return (
     <ClerkProvider>
-      <html lang={locale}>
+      <html lang={locale} className={`${outfit.variable} ${newsreader.variable}`}>
         <body>
           <NextIntlClientProvider>
             <Navbar locale={locale} />
