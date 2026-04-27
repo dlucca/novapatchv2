@@ -76,16 +76,18 @@ export function Navbar({ locale }: NavbarProps) {
           Novapatch<span className="text-coral">.</span>
         </Link>
 
-        {/* Home-only anchor links */}
-        {isHome && (
-          <nav className="hidden items-center gap-6 md:flex">
-            {homeAnchors.map((a) => (
+        {/* Desktop nav cluster: Tienda always; home anchors only on home */}
+        <nav className="hidden items-center gap-6 md:flex">
+          <Link href={`${base}/tienda`} className={linkCls}>
+            {tHome("tienda")}
+          </Link>
+          {isHome &&
+            homeAnchors.map((a) => (
               <a key={a.key} href={a.href} className={linkCls}>
                 {tHome(a.key)}
               </a>
             ))}
-          </nav>
-        )}
+        </nav>
 
         <div className="flex items-center gap-2">
           {/* Country selector — desktop only (mobile lives inside the sheet) */}
@@ -132,6 +134,13 @@ export function Navbar({ locale }: NavbarProps) {
                 <SheetTitle>Novapatch</SheetTitle>
               </SheetHeader>
               <nav className="mt-6 flex flex-col gap-4 px-4">
+                <Link
+                  href={`${base}/tienda`}
+                  onClick={() => setSheetOpen(false)}
+                  className="text-base text-foreground"
+                >
+                  {tHome("tienda")}
+                </Link>
                 {isHome &&
                   homeAnchors.map((a) => (
                     <a
