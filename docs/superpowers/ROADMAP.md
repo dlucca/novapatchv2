@@ -57,6 +57,12 @@ codebase. They are binding for all subsequent plans unless explicitly revised.
   formerly listed as Plan #9 is removed (folded into #4). Plan #7 (Plan
   Builder) gains an explicit note that it must replace the
   `<SubscriptionTeaser />` CTA copy + `href` from `/tienda` to `/plan-builder`.
+- **2026-04-27:** **Plan #4b shipped.** `/[locale]/tienda` (product grid) and
+  `/[locale]/productos/[slug]` (PDP) are live as SSG routes with JSON-LD
+  structured data, sitemap + robots integration, per-product editorial content
+  pulled from the marketing knowledge base, and dual CTAs (one-time add-to-cart
+  + subscribe with inline frequency picker). Consumes `NOVA_PRODUCTS`,
+  `useCart`, and `<CartDrawer />` from Plan #4 as planned.
 
 ---
 
@@ -72,7 +78,7 @@ dependencies: earlier items unblock later ones.
 | 2 | Design system upgrade: fonts (Outfit + Newsreader), per-product color triads, full type scale, sombras/radii, animation primitives | not started | 0 | Tienda/PDP/Plan Builder need these tokens before they can render correctly. |
 | 3 | Geo detection middleware + country cookie + Navbar selector + unsupported-country modal | not started | 0 | Independent surface; can run in parallel with #1 / #2 if needed. |
 | 4 | Home (Direction C) + Cart store (`useCart`) + `<CartDrawer />` | not started | 2 | Marketing entry point for ads. Establishes shared cart store + drawer that all subsequent storefront surfaces (Tienda, PDP, Plan Builder, Checkout) consume. **Scope-swapped 2026-04-27** — originally Tienda + PDP; that work moved to Plan #4b. |
-| 4b | Tienda grid page (`/tienda`) + PDP (`/productos/[slug]` with SEO) | not started | 4 | Reuses `NOVA_PRODUCTS`, `useCart`, and `<CartDrawer />` shipped in Plan #4. Adds product grid + per-slug PDP with structured data (decision #6). Replaces the now-superseded spec 2026-04-25-tienda-and-checkout-design. |
+| 4b | Tienda grid page (`/tienda`) + PDP (`/productos/[slug]` with SEO) | **done** (2026-04-27) | 4 | Reuses `NOVA_PRODUCTS`, `useCart`, and `<CartDrawer />` shipped in Plan #4. Adds product grid + per-slug PDP with structured data (decision #6). Replaces the now-superseded spec 2026-04-25-tienda-and-checkout-design. shipped — `/[locale]/tienda` + `/[locale]/productos/[slug]` (SSG, JSON-LD, sitemap, robots), per-product editorial content from marketing knowledge base, dual CTAs (one-time + subscribe with inline freq picker). |
 | 5 | Stripe MX integration (`StripeProvider` real, Elements client, webhooks) | not started | 1 | Required for real checkout. |
 | 6 | Checkout end-to-end (`/checkout` for logged-in + `/checkout` public for guest one-time, Stripe Elements, idempotency) | not started | 4b, 5 | Closes the buying loop. |
 | 7 | Plan Builder (`/suscripciones`) with bottom bar + redirect to `/checkout` | **done** (2026-04-27) | 4, 5 | Key conversion surface for subscriptions. Route lives at `/${locale}/suscripciones`; uses canonical PRD discounts (30d=20%, 60d=15%, 90d=10%) — supersedes the earlier 15/10/5 figure in decision #2. `<SubscriptionTeaser />` CTA repointed from `#productos` to `/${locale}/suscripciones`. Cart store extended with optional `CartSubscription` metadata; cart drawer renders a per-product subscription badge. Checkout redirect deferred to Plan #6. |
