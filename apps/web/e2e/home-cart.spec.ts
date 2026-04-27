@@ -10,27 +10,27 @@ test.describe("Home + cart happy path", () => {
     await page.goto("/mx");
     await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
 
-    // Click Energy in selector (auto-rotation will pause)
-    await page.getByRole("button", { name: /Mostrar parche Energy/i }).click();
-    await expect(page.getByRole("button", { name: /Mostrar parche Energy/i })).toHaveAttribute("aria-pressed", "true");
+    // Click Glow in selector to lock auto-rotation on Glow
+    await page.getByRole("button", { name: /Mostrar parche Glow/i }).click();
+    await expect(page.getByRole("button", { name: /Mostrar parche Glow/i })).toHaveAttribute("aria-pressed", "true");
 
-    // Click Agregar on Energy product card
-    await page.getByTestId("pcard-energy").getByRole("button", { name: /Agregar/i }).click();
+    // Hero primary CTA adds the currently selected product (Glow) to the cart
+    await page.getByRole("button", { name: /Agregar Glow · \$750/i }).click();
     const drawer = page.getByLabel(/Tu bolsa/);
     await expect(drawer).toBeVisible();
-    await expect(drawer.getByText("Energy")).toBeVisible();
+    await expect(drawer.getByText("Glow")).toBeVisible();
 
     // Close drawer (Escape)
     await page.keyboard.press("Escape");
 
     // Reopen via nav cart button
     await page.getByRole("button", { name: /Bolsa, 1 parche/ }).click();
-    await expect(drawer.getByText("Energy")).toBeVisible();
+    await expect(drawer.getByText("Glow")).toBeVisible();
 
     // Reload and confirm persistence
     await page.reload();
     await page.getByRole("button", { name: /Bolsa, 1 parche/ }).click();
-    await expect(drawer.getByText("Energy")).toBeVisible();
+    await expect(drawer.getByText("Glow")).toBeVisible();
 
     // Clear cart
     await page.getByRole("button", { name: "Vaciar bolsa" }).click();

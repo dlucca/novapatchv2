@@ -163,14 +163,16 @@
         }
       },
       "product_grid": {
-        "eyebrow": "Los parches",
-        "title_a": "Elige el tuyo,",
-        "title_b_italic": "o varios.",
+        "eyebrow": "Conocé los seis",
+        "title_a": "Seis parches,",
+        "title_b_italic": "una historia distinta cada uno",
+        "cta_all": "Ver toda la tienda →",
         "card": {
           "units_short": "30 parches",
           "price_per_month": "/mes",
           "add": "Agregar",
-          "popular": "Popular"
+          "popular": "Popular",
+          "see_details": "Ver detalles →"
         }
       },
       "subscription_teaser": {

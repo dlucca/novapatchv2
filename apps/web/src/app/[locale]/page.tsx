@@ -19,7 +19,7 @@ export default async function HomePage({ params }: HomePageProps) {
       <Absorption />
       {/* Server component — pass locale explicitly */}
       <Comparison locale={locale} />
-      <ProductGrid />
+      <ProductGrid locale={locale} />
       <SubscriptionTeaser locale={locale} />
       <FinalCTA />
     </>
