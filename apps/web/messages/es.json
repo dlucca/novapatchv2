@@ -139,6 +139,26 @@
           "popular": "Popular"
         }
       },
+      "subscription_teaser": {
+        "eyebrow": "Suscríbete y ahorra",
+        "title_a": "Arma tu rutina.",
+        "title_b_italic": "Recibe a tu ritmo",
+        "lead": "Elige los parches que quieres y la frecuencia con la que quieres recibirlos: cada 30, 60 o 90 días. Mientras más seguido, mayor descuento. Cancela cuando quieras.",
+        "cta": "Suscríbete y ahorra",
+        "no_commitment": "Sin compromiso · Cancela cuando quieras",
+        "tiers": {
+          "30": { "freq": "Cada 30 días", "tag": "Compromiso alto" },
+          "60": { "freq": "Cada 60 días", "tag": "Equilibrado" },
+          "90": { "freq": "Cada 90 días", "tag": "Probar la marca" }
+        },
+        "discount_format": "−{percent}%"
+      },
+      "final_cta": {
+        "title_a": "Pega, olvida y",
+        "title_b_italic": "deja que trabaje",
+        "lead": "Suscripción con 20% de descuento. Pausa, cambia o cancela cuando quieras.",
+        "cta": "Empieza tu ritual"
+      },
       "comparison": {
         "eyebrow": "Comparativa",
         "title_a": "¿Pastilla, gomita",
