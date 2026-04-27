@@ -7,7 +7,7 @@ test.describe("Home + cart happy path", () => {
       route.fulfill({ status: 200, body: JSON.stringify({ ok: true }) }),
     );
 
-    await page.goto("/es");
+    await page.goto("/mx");
     await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
 
     // Click Energy in selector (auto-rotation will pause)
@@ -16,20 +16,21 @@ test.describe("Home + cart happy path", () => {
 
     // Click Agregar on Energy product card
     await page.getByTestId("pcard-energy").getByRole("button", { name: /Agregar/i }).click();
-    await expect(page.getByText("Tu bolsa")).toBeVisible();
-    await expect(page.getByText("Energy")).toBeVisible();
+    const drawer = page.getByLabel(/Tu bolsa/);
+    await expect(drawer).toBeVisible();
+    await expect(drawer.getByText("Energy")).toBeVisible();
 
     // Close drawer (Escape)
     await page.keyboard.press("Escape");
 
     // Reopen via nav cart button
     await page.getByRole("button", { name: /Bolsa, 1 parche/ }).click();
-    await expect(page.getByText("Energy")).toBeVisible();
+    await expect(drawer.getByText("Energy")).toBeVisible();
 
     // Reload and confirm persistence
     await page.reload();
     await page.getByRole("button", { name: /Bolsa, 1 parche/ }).click();
-    await expect(page.getByText("Energy")).toBeVisible();
+    await expect(drawer.getByText("Energy")).toBeVisible();
 
     // Clear cart
     await page.getByRole("button", { name: "Vaciar bolsa" }).click();

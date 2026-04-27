@@ -11,8 +11,11 @@ export default defineConfig({
   },
   webServer: {
     command: "bun run dev",
-    url: "http://localhost:3000",
+    url: "http://localhost:3000/mx",
     reuseExistingServer: true,
-    timeout: 120_000,
+    timeout: 180_000,
+    env: {
+      NEXT_PUBLIC_API_URL: "http://localhost:3000/api",
+    },
   },
 });
