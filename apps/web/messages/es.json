@@ -370,9 +370,27 @@
           "body": "Solo aplica al primer pedido por cliente\n\nSolicitud dentro de los 30 días naturales de recibido\n\nMáximo un reembolso por cliente\n\nNo aplica a ciclos posteriores de suscripción"
         }
       }
+    },
+    "country_gate": {
+      "flag_emoji": "🇲🇽",
+      "title": "Pronto en tu país",
+      "body": "Estamos lanzando en México. Dejanos tu email y te avisamos cuando lleguemos a {country}.",
+      "email_label": "Email",
+      "email_placeholder": "tu@email.com",
+      "submit": "Avisame cuando lleguen",
+      "submitting": "Enviando...",
+      "explore_anyway": "Explorar Novapatch México igual",
+      "explore_caption": "Sólo enviamos a México por ahora.",
+      "toast_success": "Listo. Te avisamos cuando lleguemos a {country}.",
+      "toast_error": "No pudimos guardar tu email. Probá de nuevo.",
+      "validation_invalid_email": "Ingresá un email válido."
     }
   },
   "site": {
+    "country_selector": {
+      "label": "País",
+      "current_aria": "País actual: {country}"
+    },
     "navbar": {
       "tienda": "Tienda",
       "suscripciones": "Suscripciones",
