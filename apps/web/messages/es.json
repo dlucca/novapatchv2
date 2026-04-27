@@ -91,6 +91,20 @@
         "cta_secondary": "Ver ingredientes",
         "formula_label": "Fórmula",
         "selector_label": "Elige el parche · descubre su fórmula"
+      },
+      "how_it_works": {
+        "eyebrow": "Uso diario",
+        "title_a": "Pega, olvida",
+        "title_b_italic": "y deja que trabaje",
+        "lead": "Tres segundos por la mañana. El parche hace el resto durante todo tu día — discreto bajo la ropa, sin olor, sin recordatorios.",
+        "steps": {
+          "1": { "title": "Pega",   "desc": "Una vez al día en piel limpia. Discreto y sin olor." },
+          "2": { "title": "Olvida", "desc": "Libera vitaminas 10–12h. Sin horarios, sin picos." },
+          "3": { "title": "Vive",   "desc": "Tu día no para. Tu bienestar tampoco." }
+        },
+        "annotation_apply": "Aplicación · 3 segundos",
+        "duration_label": "Liberación continua mientras vives tu día.",
+        "photo_alt": "Persona aplicando un parche Novapatch en el brazo"
       }
     },
     "nosotros": {
