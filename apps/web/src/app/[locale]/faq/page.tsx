@@ -33,12 +33,12 @@ export default async function FaqPage({
 
   return (
     <main>
-      <section className="bg-brand-cream px-6 py-20">
+      <section className="bg-cream px-6 py-20">
         <div className="mx-auto max-w-4xl">
-          <p className="mb-4 text-xs font-bold uppercase tracking-widest text-brand-coral">
+          <p className="mb-4 text-xs font-bold uppercase tracking-widest text-coral">
             {t("hero.eyebrow")}
           </p>
-          <h1 className="mb-6 text-4xl font-black tracking-tight text-brand-deep-blue md:text-5xl">
+          <h1 className="mb-6 text-4xl font-black tracking-tight text-navy md:text-5xl">
             {t("hero.title")}
           </h1>
           <p className="max-w-3xl text-base text-muted-foreground md:text-lg">
@@ -51,7 +51,7 @@ export default async function FaqPage({
         <Accordion type="single" collapsible>
           {questions.map((qa, i) => (
             <AccordionItem key={i} value={`q-${i}`}>
-              <AccordionTrigger className="text-left text-base font-medium text-brand-deep-blue">
+              <AccordionTrigger className="text-left text-base font-medium text-navy">
                 {qa.q}
               </AccordionTrigger>
               <AccordionContent>{paragraphs(qa.a)}</AccordionContent>

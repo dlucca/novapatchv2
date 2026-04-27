@@ -39,12 +39,12 @@ export async function Footer({ locale }: FooterProps) {
   ];
 
   return (
-    <footer className="mt-16 border-t border-border bg-brand-cream">
+    <footer className="mt-16 border-t border-border bg-cream">
       <div className="mx-auto max-w-6xl px-4 py-12">
         <div className="grid gap-8 md:grid-cols-3">
           {columns.map((col) => (
             <div key={col.title}>
-              <h3 className="mb-3 text-sm font-bold uppercase tracking-wider text-brand-deep-blue">
+              <h3 className="mb-3 text-sm font-bold uppercase tracking-wider text-navy">
                 {col.title}
               </h3>
               <ul className="flex flex-col gap-2">
