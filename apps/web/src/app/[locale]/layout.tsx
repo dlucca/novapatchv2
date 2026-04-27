@@ -8,6 +8,7 @@ import { Navbar } from "@/components/site/navbar";
 import { Footer } from "@/components/site/footer";
 import { Toaster } from "@/components/ui/sonner";
 import { CountryGate } from "@/components/site/country-gate";
+import { CartDrawer } from "@/components/cart/cart-drawer";
 import "../globals.css";
 
 export const metadata: Metadata = {
@@ -36,6 +37,7 @@ export default async function LocaleLayout({
             {children}
             <Footer locale={locale} />
             <CountryGate />
+            <CartDrawer />
             <Toaster position="bottom-right" richColors />
           </NextIntlClientProvider>
         </body>
