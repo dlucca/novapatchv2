@@ -1,6 +1,6 @@
 # Novapatch v2 — Roadmap
 
-**Last updated:** 2026-04-25
+**Last updated:** 2026-04-27
 **Source-of-truth docs:**
 - [`source/PRD.md`](source/PRD.md) — product requirements (v1.0)
 - [`source/DESIGN.md`](source/DESIGN.md) — design system (v1.0)
@@ -45,6 +45,18 @@ codebase. They are binding for all subsequent plans unless explicitly revised.
 
 - **2026-04-25:** initial Q&A with Diego after PRD + DESIGN review. All 11
   decisions above set.
+- **2026-04-27:** **Plan #4 scope swap.** Plan #4 was originally "Tienda
+  (`/tienda`) + Cart drawer + PDP". After brainstorming
+  (`docs/superpowers/specs/2026-04-27-home-direction-c-design.md`) we decided
+  to ship **Home (Direction C) + Cart store (`useCart`) + `<CartDrawer />`**
+  as Plan #4 first — Home is the ads entry point, and pulling the cart store +
+  drawer up alongside it gives every later surface (Tienda, PDP, Plan Builder,
+  Checkout) a stable foundation. The original Tienda + PDP scope moved to
+  **Plan #4b**, which now consumes `NOVA_PRODUCTS`, `useCart`, and
+  `<CartDrawer />` from Plan #4 instead of building them. The Home page
+  formerly listed as Plan #9 is removed (folded into #4). Plan #7 (Plan
+  Builder) gains an explicit note that it must replace the
+  `<SubscriptionTeaser />` CTA copy + `href` from `/tienda` to `/plan-builder`.
 
 ---
 
@@ -59,12 +71,12 @@ dependencies: earlier items unblock later ones.
 | 1 | Schema extension: `subscription_runs`, `payment_attempts`, `webhook_events`, `customers.gateway_customer_ids`, fulfillment fields on `orders` | not started | 0 | Worker, Stripe, and admin all read/write these tables. |
 | 2 | Design system upgrade: fonts (Outfit + Newsreader), per-product color triads, full type scale, sombras/radii, animation primitives | not started | 0 | Tienda/PDP/Plan Builder need these tokens before they can render correctly. |
 | 3 | Geo detection middleware + country cookie + Navbar selector + unsupported-country modal | not started | 0 | Independent surface; can run in parallel with #1 / #2 if needed. |
-| 4 | Tienda (`/tienda`) + Cart drawer + PDP (`/productos/[slug]` with SEO) | not started | 1, 2 | Storefront entry points. Replaces the now-superseded spec 2026-04-25-tienda-and-checkout-design. |
+| 4 | Home (Direction C) + Cart store (`useCart`) + `<CartDrawer />` | not started | 2 | Marketing entry point for ads. Establishes shared cart store + drawer that all subsequent storefront surfaces (Tienda, PDP, Plan Builder, Checkout) consume. **Scope-swapped 2026-04-27** — originally Tienda + PDP; that work moved to Plan #4b. |
+| 4b | Tienda grid page (`/tienda`) + PDP (`/productos/[slug]` with SEO) | not started | 4 | Reuses `NOVA_PRODUCTS`, `useCart`, and `<CartDrawer />` shipped in Plan #4. Adds product grid + per-slug PDP with structured data (decision #6). Replaces the now-superseded spec 2026-04-25-tienda-and-checkout-design. |
 | 5 | Stripe MX integration (`StripeProvider` real, Elements client, webhooks) | not started | 1 | Required for real checkout. |
-| 6 | Checkout end-to-end (`/checkout` for logged-in + `/checkout` public for guest one-time, Stripe Elements, idempotency) | not started | 4, 5 | Closes the buying loop. |
-| 7 | Plan Builder (`/suscripciones`) with bottom bar + redirect to `/checkout` | not started | 4, 5 | Key conversion surface for subscriptions. |
+| 6 | Checkout end-to-end (`/checkout` for logged-in + `/checkout` public for guest one-time, Stripe Elements, idempotency) | not started | 4b, 5 | Closes the buying loop. |
+| 7 | Plan Builder (`/suscripciones`) with bottom bar + redirect to `/checkout` | not started | 4, 5 | Key conversion surface for subscriptions. **Note:** this plan must replace the `<SubscriptionTeaser />` CTA copy + `href` (currently pointing at `/tienda` from Plan #4) so it links to `/plan-builder`. |
 | 8 | Worker scheduler (`POST /internal/process-runs`) with retry policy, `FOR UPDATE SKIP LOCKED`, idempotency via `run.id` | not started | 1, 5 | Day-2 of every active subscription depends on this. |
-| 9 | Home page (DirectionC) — hero auto-rotation, Absorption section with descending dots, comparativa, social proof, FAQ, final CTA | not started | 2, 4 | Marketing surface for ads. Built last because content is mostly static. |
 | 10 | Admin shell + CRUD productos + edición de pricing por región | not started | 1 | Internal tools start here. |
 | 11 | Admin: orders + subscriptions + customers + discounts + fulfillment queue + influencer apps | not started | 10 | Operational completeness. |
 | 12 | Public forms: `/contacto`, `/reembolso`, `/influencers/aplicar` (DB persist + Resend email) | not started | — | Independent; can run any time after #2. |
