@@ -503,7 +503,8 @@
       "checkout_disabled_tooltip": "Próximamente",
       "clear": "Vaciar bolsa",
       "remove_item": "Quitar {name}",
-      "qty_label": "Cantidad de {name}"
+      "qty_label": "Cantidad de {name}",
+      "subscription_badge": "Cada {interval} días · −{discount}%"
     },
     "navbar": {
       "links": {

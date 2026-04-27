@@ -80,6 +80,17 @@ export function CartDrawer() {
                       </button>
                     </div>
                     <p className="text-sm text-navy/70">${it.price} MXN</p>
+                    {it.subscription && (
+                      <p
+                        className="mt-1 inline-block rounded-full px-2 py-0.5 text-[11px] font-semibold text-white"
+                        style={{ background: it.color }}
+                      >
+                        {t("subscription_badge", {
+                          interval: it.subscription.interval_days,
+                          discount: it.subscription.discount_percentage,
+                        })}
+                      </p>
+                    )}
                     <div className="mt-2 inline-flex items-center gap-2 rounded-full border border-navy/10 bg-white px-1">
                       <button
                         type="button"

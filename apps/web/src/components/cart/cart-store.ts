@@ -3,6 +3,11 @@ import { persist } from "zustand/middleware";
 import type { ProductMeta } from "@/lib/products";
 import type { PersistStorage, StorageValue } from "zustand/middleware";
 
+export type CartSubscription = {
+  interval_days: 30 | 60 | 90;
+  discount_percentage: 20 | 15 | 10;
+};
+
 export type CartItem = {
   slug: string;
   name: string;
@@ -11,13 +16,14 @@ export type CartItem = {
   color: string;
   ink: string;
   image: string;
+  subscription?: CartSubscription;
 };
 
 type CartState = {
   items: CartItem[];
   drawerOpen: boolean;
   hydrated: boolean;
-  addItem: (p: ProductMeta, price: number) => void;
+  addItem: (p: ProductMeta, price: number, subscription?: CartSubscription) => void;
   removeItem: (slug: string) => void;
   setQty: (slug: string, qty: number) => void;
   clear: () => void;
@@ -52,36 +58,40 @@ const lazyLocalStorage: PersistStorage<{ items: CartItem[] }> = {
   },
 };
 
+// Dedupe key: subscription items share a line only when both slug AND interval
+// match. Different intervals for the same slug = separate lines.
+const sameLine = (i: CartItem, slug: string, sub?: CartSubscription) => {
+  if (!sub) return i.slug === slug && !i.subscription;
+  return i.slug === slug && i.subscription?.interval_days === sub.interval_days;
+};
+
 export const useCart = create<CartState>()(
   persist(
     (set) => ({
       items: [],
       drawerOpen: false,
       hydrated: false,
-      addItem: (p, price) =>
+      addItem: (p, price, subscription) =>
         set((s) => {
-          const ex = s.items.find((i) => i.slug === p.slug);
+          const ex = s.items.find((i) => sameLine(i, p.slug, subscription));
           if (ex) {
             return {
               items: s.items.map((i) =>
-                i.slug === p.slug ? { ...i, qty: i.qty + 1 } : i,
+                sameLine(i, p.slug, subscription) ? { ...i, qty: i.qty + 1 } : i,
               ),
             };
           }
-          return {
-            items: [
-              ...s.items,
-              {
-                slug: p.slug,
-                name: p.name,
-                price,
-                qty: 1,
-                color: p.color,
-                ink: p.ink,
-                image: p.image,
-              },
-            ],
+          const newItem: CartItem = {
+            slug: p.slug,
+            name: p.name,
+            price,
+            qty: 1,
+            color: p.color,
+            ink: p.ink,
+            image: p.image,
+            ...(subscription !== undefined && { subscription }),
           };
+          return { items: [...s.items, newItem] };
         }),
       removeItem: (slug) =>
         set((s) => ({ items: s.items.filter((i) => i.slug !== slug) })),

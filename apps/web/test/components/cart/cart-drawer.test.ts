@@ -83,4 +83,19 @@ describe("CartDrawer behaviors (via store)", () => {
     useCart.getState().clear();
     expect(useCart.getState().items).toHaveLength(0);
   });
+
+  it("preserves subscription metadata on a cart item through the store", () => {
+    const subItem = {
+      ...energyItem,
+      qty: 1,
+      price: 600,
+      subscription: { interval_days: 30 as const, discount_percentage: 20 as const },
+    };
+    useCart.setState({ items: [subItem] });
+    const got = useCart.getState().items[0];
+    expect(got?.subscription).toEqual({
+      interval_days: 30,
+      discount_percentage: 20,
+    });
+  });
 });
