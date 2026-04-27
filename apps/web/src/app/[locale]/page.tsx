@@ -1,30 +1,27 @@
-import { getTranslations } from "next-intl/server";
-import Link from "next/link";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { Hero } from "@/components/home/hero";
+import { HowItWorks } from "@/components/home/how-it-works";
+import { Absorption } from "@/components/home/absorption";
+import { Comparison } from "@/components/home/comparison";
+import { ProductGrid } from "@/components/home/product-grid";
+import { SubscriptionTeaser } from "@/components/home/subscription-teaser";
+import { FinalCTA } from "@/components/home/final-cta";
 
-export default async function Home({
-  params,
-}: {
+interface HomePageProps {
   params: Promise<{ locale: string }>;
-}) {
+}
+
+export default async function HomePage({ params }: HomePageProps) {
   const { locale } = await params;
-  const t = await getTranslations({ locale, namespace: "home" });
   return (
-    <main className="min-h-screen p-12">
-      <Card className="mx-auto max-w-2xl">
-        <CardHeader>
-          <CardTitle>{t("title")}</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <p className="text-muted-foreground">{t("subtitle")}</p>
-          <Link
-            href={`/${locale}/cuenta`}
-            className="mt-6 inline-block rounded bg-primary px-4 py-2 text-sm font-medium text-primary-foreground"
-          >
-            {t("cta_cuenta")}
-          </Link>
-        </CardContent>
-      </Card>
-    </main>
+    <>
+      <Hero />
+      <HowItWorks />
+      <Absorption />
+      {/* Server component — pass locale explicitly */}
+      <Comparison locale={locale} />
+      <ProductGrid />
+      <SubscriptionTeaser locale={locale} />
+      <FinalCTA />
+    </>
   );
 }

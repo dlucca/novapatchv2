@@ -1,79 +1,130 @@
-import Link from "next/link";
-import { getTranslations } from "next-intl/server";
+"use client";
 
-interface FooterProps {
-  locale: string;
+import { useState, type FormEvent } from "react";
+import { useTranslations } from "next-intl";
+import { z } from "zod";
+import { toast } from "sonner";
+import { submitWaitlist } from "@/lib/api-client";
+import { ApiError } from "@/lib/api";
+import { getCookie } from "@/lib/cookies";
+
+const COLUMNS = [
+  { key: "shop", links: ["store", "subs", "warranty"] },
+  { key: "help", links: ["contact", "faq", "refund"] },
+  { key: "about", links: ["us", "why", "subscribe"] },
+  { key: "legal", links: ["privacy", "terms"] },
+] as const;
+
+// Only "subscribe" has a real (anchor) destination today.
+const ENABLED_LINKS = new Set<string>(["about.subscribe"]);
+const linkHref = (col: string, key: string): string =>
+  col === "about" && key === "subscribe" ? "#productos" : "#";
+
+export function validateEmail(raw: string): string | null {
+  const cleaned = raw.trim().toLowerCase();
+  const parsed = z.string().email().max(255).safeParse(cleaned);
+  return parsed.success ? cleaned : null;
 }
 
-export async function Footer({ locale }: FooterProps) {
-  const t = await getTranslations({ locale, namespace: "site.footer" });
-  const base = `/${locale}`;
+export function Footer() {
+  const t = useTranslations("components.footer");
+  const [email, setEmail] = useState("");
+  const [busy, setBusy] = useState(false);
 
-  const columns = [
-    {
-      title: t("sections.navega"),
-      links: [
-        { href: `${base}/tienda`, label: t("links.tienda") },
-        { href: `${base}/suscripciones`, label: t("links.suscripciones") },
-        { href: `${base}/faq`, label: t("links.faq") },
-        { href: `${base}/contacto`, label: t("links.contacto") },
-      ],
-    },
-    {
-      title: t("sections.legales"),
-      links: [
-        { href: `${base}/privacidad`, label: t("links.privacidad") },
-        { href: `${base}/terminos`, label: t("links.terminos") },
-        { href: `${base}/terminos-influencers`, label: t("links.terminos_influencers") },
-        { href: `${base}/garantia`, label: t("links.garantia") },
-        { href: `${base}/reembolso`, label: t("links.reembolso") },
-      ],
-    },
-    {
-      title: t("sections.novapatch"),
-      links: [
-        { href: `${base}/nosotros`, label: t("links.nosotros") },
-        { href: `${base}/influencers`, label: t("links.influencers") },
-      ],
-    },
-  ];
+  const onSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+    if (busy) return;
+    const cleaned = validateEmail(email);
+    if (!cleaned) {
+      toast.error(t("newsletter.error_invalid"));
+      return;
+    }
+    const country = (getCookie("country") ?? "MX").toUpperCase();
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+    if (!apiUrl) {
+      toast.error(t("newsletter.error_generic"));
+      return;
+    }
+    setBusy(true);
+    try {
+      await submitWaitlist({ apiUrl, email: cleaned, country, source: "footer" });
+      toast.success(t("newsletter.success"));
+      setEmail("");
+    } catch (err) {
+      if (err instanceof ApiError && err.code === "invalid_input") {
+        toast.error(t("newsletter.error_invalid"));
+      } else {
+        toast.error(t("newsletter.error_generic"));
+      }
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const year = new Date().getFullYear();
 
   return (
-    <footer className="mt-16 border-t border-border bg-cream">
-      <div className="mx-auto max-w-6xl px-4 py-12">
-        <div className="grid gap-8 md:grid-cols-3">
-          {columns.map((col) => (
-            <div key={col.title}>
-              <h3 className="mb-3 text-sm font-bold uppercase tracking-wider text-navy">
-                {col.title}
-              </h3>
-              <ul className="flex flex-col gap-2">
-                {col.links.map((l) => (
-                  <li key={l.href}>
-                    <Link
-                      href={l.href}
-                      className="text-sm text-muted-foreground hover:text-foreground"
+    <footer className="bg-[var(--cream-warm)] py-16">
+      <div className="mx-auto grid max-w-6xl gap-10 px-4 md:grid-cols-2 lg:grid-cols-[repeat(4,1fr)_1.4fr]">
+        {COLUMNS.map((col) => (
+          <div key={col.key}>
+            <h4 className="font-outfit text-sm font-black uppercase tracking-wider text-navy">
+              {t(`columns.${col.key}.title`)}
+            </h4>
+            <ul className="mt-4 space-y-2 text-sm">
+              {col.links.map((lk) => {
+                const enabled = ENABLED_LINKS.has(`${col.key}.${lk}`);
+                const disabledProps = !enabled
+                  ? { "aria-disabled": "true" as const, title: t("coming_soon") }
+                  : {};
+                return (
+                  <li key={lk}>
+                    <a
+                      href={linkHref(col.key, lk)}
+                      {...disabledProps}
+                      className={
+                        enabled
+                          ? "text-navy/80 hover:text-coral"
+                          : "pointer-events-none text-navy/50 opacity-60"
+                      }
                     >
-                      {l.label}
-                    </Link>
+                      {t(`columns.${col.key}.links.${lk}`)}
+                    </a>
                   </li>
-                ))}
-              </ul>
-            </div>
-          ))}
-        </div>
+                );
+              })}
+            </ul>
+          </div>
+        ))}
 
-        <div className="mt-10 flex flex-col gap-2 border-t border-border pt-6 text-xs text-muted-foreground md:flex-row md:items-center md:justify-between">
-          <p>
-            {t("copyright")} · {t("tagline")}
-          </p>
-          <a
-            href={`mailto:${t("contact_email")}`}
-            className="hover:text-foreground"
-          >
-            {t("contact_label")}
-          </a>
-        </div>
+        <form onSubmit={onSubmit} className="md:col-span-2 lg:col-span-1">
+          <h4 className="font-outfit text-sm font-black uppercase tracking-wider text-navy">
+            {t("newsletter.title")}
+          </h4>
+          <p className="mt-2 text-sm text-navy/70">{t("newsletter.lead")}</p>
+          <div className="mt-3 flex gap-2">
+            <input
+              type="email"
+              required
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder={t("newsletter.placeholder")}
+              className="flex-1 rounded-full border border-navy/10 bg-white px-4 py-2 text-sm text-navy focus:border-coral focus:outline-none"
+            />
+            <button
+              type="submit"
+              disabled={busy}
+              className="rounded-full bg-coral px-4 py-2 text-sm font-semibold text-white hover:bg-coral/90 disabled:opacity-60"
+            >
+              {t("newsletter.submit")}
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <div className="mx-auto mt-12 flex max-w-6xl items-center justify-between border-t border-navy/10 px-4 pt-6 text-xs text-navy/60">
+        <span>{t("rights", { year, tagline: t("tagline") })}</span>
+        <span>Hecho en México</span>
       </div>
     </footer>
   );

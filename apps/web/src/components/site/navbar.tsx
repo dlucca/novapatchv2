@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
@@ -20,78 +20,96 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { CountrySelector } from "@/components/site/country-selector";
+import { CartButton } from "@/components/cart/cart-button";
+import { HOME_ANCHORS } from "@/lib/home-anchors";
 
 interface NavbarProps {
   locale: string;
 }
 
-interface NavItem {
-  href: string;
-  key: "tienda" | "suscripciones" | "nosotros" | "faq" | "influencers";
-}
-
 export function Navbar({ locale }: NavbarProps) {
   const tNav = useTranslations("site.navbar");
+  const tHome = useTranslations("components.navbar.links");
   const tAcct = useTranslations("nav");
   const pathname = usePathname();
   const [sheetOpen, setSheetOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const base = `/${locale}`;
+  const isHome = pathname === base || pathname === `${base}/`;
+  const variant: "transparent" | "default" = isHome ? "transparent" : "default";
 
-  const items: NavItem[] = [
-    { href: `${base}/tienda`, key: "tienda" },
-    { href: `${base}/suscripciones`, key: "suscripciones" },
-    { href: `${base}/nosotros`, key: "nosotros" },
-    { href: `${base}/faq`, key: "faq" },
-    { href: `${base}/influencers`, key: "influencers" },
+  useEffect(() => {
+    if (variant !== "transparent") return;
+    const onScroll = () => setScrolled(window.scrollY > 100);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, [variant]);
+
+  const headerCls =
+    variant === "transparent"
+      ? `absolute left-0 right-0 top-0 z-40 transition-colors duration-300 ${
+          scrolled ? "bg-navy/[0.92] backdrop-blur" : "bg-transparent"
+        }`
+      : "sticky top-0 z-40 border-b border-navy/10 bg-cream";
+
+  const linkCls =
+    variant === "transparent"
+      ? "text-sm text-white/85 hover:text-white"
+      : "text-sm text-navy/70 hover:text-navy";
+
+  const homeAnchors = [
+    { href: `#${HOME_ANCHORS.products}`, key: "products" as const },
+    { href: `#${HOME_ANCHORS.science}`, key: "science" as const },
+    { href: `#${HOME_ANCHORS.comparison}`, key: "comparison" as const },
   ];
 
-  const isActive = (href: string) => pathname === href || pathname.startsWith(`${href}/`);
-
   return (
-    <header className="border-b border-border bg-background">
+    <header className={headerCls}>
       <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4">
         <Link
           href={base}
-          className="text-lg font-black tracking-tight text-navy"
+          className={`text-lg font-black tracking-tight ${
+            variant === "transparent" ? "text-white" : "text-navy"
+          }`}
         >
-          Novapatch
+          Novapatch<span className="text-coral">.</span>
         </Link>
 
-        {/* Desktop links */}
-        <nav className="hidden items-center gap-6 md:flex">
-          {items.map((item) => (
-            <Link
-              key={item.key}
-              href={item.href}
-              className={
-                isActive(item.href)
-                  ? "text-sm font-semibold text-coral underline underline-offset-4"
-                  : "text-sm text-muted-foreground hover:text-foreground"
-              }
-            >
-              {tNav(item.key)}
-            </Link>
-          ))}
-        </nav>
+        {/* Home-only anchor links */}
+        {isHome && (
+          <nav className="hidden items-center gap-6 md:flex">
+            {homeAnchors.map((a) => (
+              <a key={a.key} href={a.href} className={linkCls}>
+                {tHome(a.key)}
+              </a>
+            ))}
+          </nav>
+        )}
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2">
           {/* Country selector — desktop only (mobile lives inside the sheet) */}
-          <div className="hidden md:flex items-center gap-3">
+          <div className="hidden md:flex items-center gap-2">
             <CountrySelector />
-            <span className="h-5 w-px bg-navy/10" aria-hidden />
           </div>
+          <CartButton
+            {...(variant === "transparent" && { variant: "transparent" as const })}
+          />
           <SignedIn>
-            <Link
-              href={`${base}/cuenta`}
-              className="hidden text-sm text-muted-foreground hover:text-foreground md:inline"
-            >
-              {tAcct("mi_cuenta")}
-            </Link>
             <UserButton />
           </SignedIn>
           <SignedOut>
             <SignInButton mode="modal">
-              <Button size="sm">{tAcct("iniciar_sesion")}</Button>
+              <Button
+                size="sm"
+                className={
+                  variant === "transparent"
+                    ? "bg-white text-navy hover:bg-white/90"
+                    : ""
+                }
+              >
+                {tAcct("iniciar_sesion")}
+              </Button>
             </SignInButton>
           </SignedOut>
 
@@ -102,7 +120,9 @@ export function Navbar({ locale }: NavbarProps) {
                 variant="ghost"
                 size="icon"
                 aria-label={tNav("open_menu")}
-                className="md:hidden"
+                className={`md:hidden ${
+                  variant === "transparent" ? "text-white hover:bg-white/10" : ""
+                }`}
               >
                 <Menu className="h-5 w-5" />
               </Button>
@@ -112,20 +132,17 @@ export function Navbar({ locale }: NavbarProps) {
                 <SheetTitle>Novapatch</SheetTitle>
               </SheetHeader>
               <nav className="mt-6 flex flex-col gap-4 px-4">
-                {items.map((item) => (
-                  <Link
-                    key={item.key}
-                    href={item.href}
-                    onClick={() => setSheetOpen(false)}
-                    className={
-                      isActive(item.href)
-                        ? "text-base font-semibold text-coral"
-                        : "text-base text-foreground"
-                    }
-                  >
-                    {tNav(item.key)}
-                  </Link>
-                ))}
+                {isHome &&
+                  homeAnchors.map((a) => (
+                    <a
+                      key={a.key}
+                      href={a.href}
+                      onClick={() => setSheetOpen(false)}
+                      className="text-base text-foreground"
+                    >
+                      {tHome(a.key)}
+                    </a>
+                  ))}
                 <SignedIn>
                   <Link
                     href={`${base}/cuenta`}
@@ -135,7 +152,7 @@ export function Navbar({ locale }: NavbarProps) {
                     {tAcct("mi_cuenta")}
                   </Link>
                 </SignedIn>
-                <div className="border-t border-navy/10 pt-4 mt-2">
+                <div className="mt-2 border-t border-navy/10 pt-4">
                   <CountrySelector expanded />
                 </div>
               </nav>

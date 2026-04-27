@@ -81,6 +81,109 @@
     "iniciar_sesion": "Iniciar sesión"
   },
   "pages": {
+    "home": {
+      "hero": {
+        "pill": "Parche del momento · {name}",
+        "title_a": "Bienestar",
+        "title_b_italic": "que se pega",
+        "title_c": "a tu día.",
+        "cta_primary": "Agregar {name} · ${price}",
+        "cta_secondary": "Ver ingredientes",
+        "formula_label": "Fórmula",
+        "selector_label": "Elige el parche · descubre su fórmula"
+      },
+      "how_it_works": {
+        "eyebrow": "Uso diario",
+        "title_a": "Pega, olvida",
+        "title_b_italic": "y deja que trabaje",
+        "lead": "Tres segundos por la mañana. El parche hace el resto durante todo tu día — discreto bajo la ropa, sin olor, sin recordatorios.",
+        "steps": {
+          "1": { "title": "Pega",   "desc": "Una vez al día en piel limpia. Discreto y sin olor." },
+          "2": { "title": "Olvida", "desc": "Libera vitaminas 10–12h. Sin horarios, sin picos." },
+          "3": { "title": "Vive",   "desc": "Tu día no para. Tu bienestar tampoco." }
+        },
+        "annotation_apply": "Aplicación · 3 segundos",
+        "duration_label": "Liberación continua mientras vives tu día.",
+        "photo_alt": "Persona aplicando un parche Novapatch en el brazo"
+      },
+      "absorption": {
+        "eyebrow": "La ciencia",
+        "title": "No cualquier ingrediente funciona en un parche.",
+        "lead": "Para atravesar la piel, un ingrediente necesita tener menos de 500 Daltons de masa molecular. El resultado: absorción directa al torrente sanguíneo, sin pasar por el sistema digestivo, durante entre 10 y 12 horas continuas.",
+        "stats": {
+          "size":      { "value": "<500",  "unit": "Da", "label": "Tamaño molecular" },
+          "duration":  { "value": "10–12", "unit": "h",  "label": "Absorción sostenida" },
+          "digestion": { "value": "0",     "unit": "×",  "label": "Digestión requerida" }
+        },
+        "cta": "Encuentra tu parche",
+        "diagram": {
+          "novapatch_label": "NOVAPATCH",
+          "novapatch_subtitle": "Liberación controlada · 10–12 horas",
+          "layers": {
+            "corneo": "ESTRATO CÓRNEO",
+            "epidermis": "EPIDERMIS",
+            "dermis": "DERMIS",
+            "blood": "TORRENTE SANGUÍNEO"
+          },
+          "chip_daltons": "< 500 Daltons"
+        }
+      },
+      "product_grid": {
+        "eyebrow": "Los parches",
+        "title_a": "Elige el tuyo,",
+        "title_b_italic": "o varios.",
+        "card": {
+          "units_short": "30 parches",
+          "price_per_month": "/mes",
+          "add": "Agregar",
+          "popular": "Popular"
+        }
+      },
+      "subscription_teaser": {
+        "eyebrow": "Suscríbete y ahorra",
+        "title_a": "Arma tu rutina.",
+        "title_b_italic": "Recibe a tu ritmo",
+        "lead": "Elige los parches que quieres y la frecuencia con la que quieres recibirlos: cada 30, 60 o 90 días. Mientras más seguido, mayor descuento. Cancela cuando quieras.",
+        "cta": "Suscríbete y ahorra",
+        "no_commitment": "Sin compromiso · Cancela cuando quieras",
+        "tiers": {
+          "30": { "freq": "Cada 30 días", "tag": "Compromiso alto" },
+          "60": { "freq": "Cada 60 días", "tag": "Equilibrado" },
+          "90": { "freq": "Cada 90 días", "tag": "Probar la marca" }
+        },
+        "discount_format": "−{percent}%"
+      },
+      "final_cta": {
+        "title_a": "Pega, olvida y",
+        "title_b_italic": "deja que trabaje",
+        "lead": "Suscripción con 20% de descuento. Pausa, cambia o cancela cuando quieras.",
+        "cta": "Empieza tu ritual"
+      },
+      "comparison": {
+        "eyebrow": "Comparativa",
+        "title_a": "¿Pastilla, gomita",
+        "title_b_italic": "o parche?",
+        "lead": "Lo simple se repite. Lo complejo se abandona.",
+        "columns": {
+          "novapatch": { "name": "Novapatch", "sub": "Parche transdérmico" },
+          "capsules":  { "name": "Cápsulas",  "sub": "Vía oral" },
+          "gummies":   { "name": "Gomitas",   "sub": "Vía oral + azúcar" }
+        },
+        "rows": {
+          "absorption":    "Absorción efectiva",
+          "release":       "Liberación sostenida",
+          "no_liver":      "Sin pasar por el hígado",
+          "no_sugar":      "Sin azúcar ni excipientes",
+          "no_water":      "Sin sabor, sin agua",
+          "no_forgetting": "Uso diario sin olvidos"
+        },
+        "values": {
+          "absorption": ["90%", "10–20%", "10–20%"],
+          "release":    ["10–12h", "2–4h", "2–4h"]
+        },
+        "winner_badge": "Novapatch"
+      }
+    },
     "nosotros": {
       "hero": {
         "eyebrow": "Nosotros",
@@ -384,6 +487,50 @@
       "toast_success": "Listo. Te avisamos cuando lleguemos a {country}.",
       "toast_error": "No pudimos guardar tu email. Probá de nuevo.",
       "validation_invalid_email": "Ingresá un email válido."
+    }
+  },
+  "components": {
+    "cart": {
+      "button_aria": "{count, plural, =0 {Bolsa, vacía} one {Bolsa, # parche} other {Bolsa, # parches}}",
+      "drawer_title": "Tu bolsa",
+      "drawer_count": "{count, plural, one {# parche} other {# parches}}",
+      "empty_title": "Tu bolsa está vacía",
+      "empty_cta": "Empieza tu ritual",
+      "subtotal": "Subtotal",
+      "shipping": "Envío",
+      "shipping_later": "Calculado luego",
+      "checkout_cta": "Ir al checkout",
+      "checkout_disabled_tooltip": "Próximamente",
+      "clear": "Vaciar bolsa",
+      "remove_item": "Quitar {name}",
+      "qty_label": "Cantidad de {name}"
+    },
+    "navbar": {
+      "links": {
+        "products": "Los parches",
+        "science": "La ciencia",
+        "comparison": "Comparativa"
+      }
+    },
+    "footer": {
+      "columns": {
+        "shop":  { "title": "Comprar",  "links": { "store": "Tienda", "subs": "Suscripciones", "warranty": "Garantía" } },
+        "help":  { "title": "Ayuda",    "links": { "contact": "Contáctanos", "faq": "Preguntas frecuentes", "refund": "Solicitar reembolso" } },
+        "about": { "title": "Nosotros", "links": { "us": "Nosotros", "why": "¿Por qué parches?", "subscribe": "Suscríbete y ahorra" } },
+        "legal": { "title": "Legal",    "links": { "privacy": "Aviso de Privacidad", "terms": "Términos y Condiciones" } }
+      },
+      "newsletter": {
+        "title": "Newsletter",
+        "lead": "Novedades y ofertas",
+        "placeholder": "tu@correo.com",
+        "submit": "Suscribirse",
+        "success": "Te suscribimos. Mira tu inbox.",
+        "error_invalid": "Email inválido",
+        "error_generic": "Algo salió mal. Intenta luego."
+      },
+      "tagline": "Hecho con ciencia.",
+      "rights": "© {year} Novapatch · {tagline}",
+      "coming_soon": "Próximamente"
     }
   },
   "site": {
