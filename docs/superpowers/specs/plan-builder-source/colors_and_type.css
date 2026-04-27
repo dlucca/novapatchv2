@@ -1,0 +1,248 @@
+/* ============================================================
+   Novapatch — Colors & Type Tokens
+   Source of truth for the brand. Mirrors apps/storefront/app/globals.css
+   from dlucca/novafrontend with tokens extended for design work.
+   ============================================================ */
+
+@import url("https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap");
+
+:root {
+  /* ── Brand — Core ───────────────────────────────────────── */
+  --color-coral:        #E8503A;   /* CTAs, accents, subscription badges */
+  --color-coral-light:  #FF7A65;   /* hover */
+  --color-coral-dark:   #C43B28;   /* active */
+
+  --color-navy:         #0D1B35;   /* primary text, dark surfaces */
+  --color-navy-light:   #1D3461;   /* secondary headings */
+
+  --color-ocean:        #005088;   /* link, primary actions on light */
+  --color-ocean-light:  #0068AA;
+  --color-ocean-dark:   #003D6B;
+
+  --color-sky:          #5BA8D5;   /* secondary accent */
+  --color-sky-light:    #B8DDEF;   /* card fills */
+  --color-sky-pale:     #EAF5FB;   /* subtle list hover */
+
+  --color-teal:         #1CB1BC;   /* science/diagram accent */
+  --color-teal-pale:    #E4F4F4;
+
+  --color-gold:         #F5C628;   /* patch texture accent */
+  --color-lime:         #C9D849;   /* offer highlights */
+  --color-lime-dark:    #A8B42A;
+
+  /* ── Surfaces ───────────────────────────────────────────── */
+  --color-cream:        #FAF7F2;
+  --color-warm:         #FEF7ED;
+  --color-blush:        #F8EDEB;   /* footer, absorption section */
+  --color-surface:      #FAFAFA;
+  --color-white:        #FFFFFF;
+  --color-bg:           #FFFFFF;
+
+  /* ── Product accents (from product-meta.ts + brief) ─────── */
+  --product-energy:     #2B7CC1;   /* (brief: #83B5F4 light variant) */
+  --product-energy-bg:  #EBF4FB;
+  --product-energy-ink: #1A5C9A;
+
+  --product-sleep:      #1EB1BC;   /* brief */
+  --product-sleep-bg:   #E4F4F4;
+  --product-sleep-ink:  #0F6B5C;
+
+  --product-glow:       #F25C54;   /* brief */
+  --product-glow-bg:    #FAF0EE;
+  --product-glow-ink:   #B83525;
+
+  --product-zen:        #4E82BC;   /* brief */
+  --product-zen-bg:     #EBF0F9;
+  --product-zen-ink:    #2A5490;
+
+  --product-shield:     #FFA849;   /* brief */
+  --product-shield-bg:  #FAF6E9;
+  --product-shield-ink: #8C6000;
+
+  --product-woman:      #C693C4;   /* brief */
+  --product-woman-bg:   #F3EBF9;
+  --product-woman-ink:  #6B3080;
+
+  /* ── Neutrals / grays ───────────────────────────────────── */
+  --gray-50:  #FAFAFA;
+  --gray-100: #F3F4F6;
+  --gray-200: #E5E7EB;
+  --gray-300: #D1D5DB;
+  --gray-400: #9CA3AF;
+  --gray-500: #6B7280;
+  --gray-600: #4B5563;
+  --gray-700: #374151;
+  --gray-800: #1F2937;
+  --gray-900: #111827;
+
+  /* ── Semantic foreground / background ───────────────────── */
+  --fg-1:        #111827;   /* primary text */
+  --fg-2:        #4B5563;   /* body secondary */
+  --fg-3:        #9CA3AF;   /* muted / labels */
+  --fg-inverse:  #FFFFFF;
+  --fg-brand:    var(--color-ocean);
+  --fg-accent:   var(--color-coral);
+
+  --bg-1:        #FFFFFF;
+  --bg-2:        var(--color-cream);
+  --bg-3:        var(--color-blush);
+  --bg-inverse:  var(--color-navy);
+
+  /* ── Borders ────────────────────────────────────────────── */
+  --border-subtle: rgba(13, 27, 53, 0.08);
+  --border-soft:   rgba(13, 27, 53, 0.12);
+  --border-strong: rgba(13, 27, 53, 0.22);
+
+  /* ── Radii ──────────────────────────────────────────────── */
+  --r-xs:  6px;
+  --r-sm:  10px;
+  --r-md:  14px;
+  --r-lg:  20px;   /* product cards */
+  --r-xl:  28px;   /* hero/feature cards */
+  --r-2xl: 32px;
+  --r-pill: 9999px;
+
+  /* ── Shadows ────────────────────────────────────────────── */
+  --shadow-xs: 0 1px 2px rgba(13, 27, 53, 0.06);
+  --shadow-sm: 0 2px 8px rgba(13, 27, 53, 0.06);
+  --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.05);
+  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.12);
+  --shadow-xl: 0 12px 40px rgba(0, 0, 0, 0.14);
+  --shadow-cta: 0 4px 20px rgba(232, 80, 58, 0.22);
+  --shadow-ocean: 0 4px 20px rgba(0, 80, 136, 0.18);
+
+  /* ── Spacing scale (4px base) ───────────────────────────── */
+  --sp-1:  4px;
+  --sp-2:  8px;
+  --sp-3:  12px;
+  --sp-4:  16px;
+  --sp-5:  20px;
+  --sp-6:  24px;
+  --sp-8:  32px;
+  --sp-10: 40px;
+  --sp-12: 48px;
+  --sp-16: 64px;
+  --sp-20: 80px;
+
+  /* ── Typography ─────────────────────────────────────────── */
+  --font-display: "Outfit", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-body:    "Outfit", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono:    ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  /* Type scale (px) */
+  --text-micro:   11px;   /* uppercase labels */
+  --text-caption: 12px;
+  --text-small:   13px;
+  --text-body:    15px;
+  --text-lead:    17px;
+  --text-h4:      20px;
+  --text-h3:      24px;
+  --text-h2:      32px;
+  --text-h1:      44px;
+  --text-display: 62px;   /* hero */
+
+  /* Weights */
+  --w-regular:  400;
+  --w-medium:   500;
+  --w-semibold: 600;
+  --w-bold:     700;
+  --w-black:    900;
+
+  /* Motion */
+  --ease-out-expo: cubic-bezier(0.22, 1, 0.36, 1);
+  --dur-fast: 200ms;
+  --dur-med:  300ms;
+  --dur-slow: 600ms;
+}
+
+/* ============================================================
+   Base element styles — semantic typographic defaults
+   ============================================================ */
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font-body);
+  color: var(--fg-1);
+  background: var(--bg-1);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-feature-settings: "kern" 1, "liga" 1, "calt" 1;
+  font-size: var(--text-body);
+  line-height: 1.55;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  text-wrap: balance;
+  color: var(--color-ocean);
+  letter-spacing: -0.02em;
+  font-weight: var(--w-black);
+  line-height: 1.1;
+  margin: 0;
+}
+
+h1 { font-size: clamp(34px, 8vw, var(--text-display)); line-height: 1.08; }
+h2 { font-size: clamp(26px, 3.2vw, var(--text-h1)); }
+h3 { font-size: var(--text-h2); font-weight: var(--w-bold); }
+h4 { font-size: var(--text-h3); font-weight: var(--w-bold); }
+
+p  { text-wrap: pretty; margin: 0; }
+
+.eyebrow {
+  font-size: var(--text-micro);
+  font-weight: var(--w-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--color-teal);
+}
+
+.lead {
+  font-size: var(--text-lead);
+  color: var(--fg-2);
+  line-height: 1.6;
+}
+
+.muted { color: var(--fg-3); }
+
+code, pre { font-family: var(--font-mono); font-size: 13px; }
+
+::selection { background: var(--color-coral); color: #fff; }
+
+/* ============================================================
+   Utility classes used across card previews
+   ============================================================ */
+
+.np-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: var(--r-pill);
+  font-size: var(--text-micro);
+  font-weight: var(--w-bold);
+  letter-spacing: 0.04em;
+}
+
+.np-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 22px;
+  border-radius: var(--r-pill);
+  font-family: var(--font-body);
+  font-weight: var(--w-bold);
+  font-size: var(--text-body);
+  transition: transform var(--dur-fast) var(--ease-out-expo),
+              background-color var(--dur-fast),
+              box-shadow var(--dur-fast);
+  border: none;
+  cursor: pointer;
+}
+.np-btn--primary   { background: var(--color-coral); color: #fff; box-shadow: var(--shadow-cta); }
+.np-btn--primary:hover  { background: var(--color-coral-dark); transform: translateY(-1px); }
+.np-btn--ocean     { background: var(--color-ocean); color: #fff; box-shadow: var(--shadow-ocean); }
+.np-btn--ocean:hover    { background: var(--color-ocean-dark); transform: translateY(-1px); }
+.np-btn--ghost     { background: #fff; color: var(--color-ocean); border: 2px solid var(--border-soft); }
+.np-btn--ghost:hover    { border-color: var(--color-ocean); }

@@ -238,40 +238,49 @@
       ]
     },
     "suscripciones": {
-      "hero": {
-        "eyebrow": "Suscripciones",
-        "title": "El hábito que no tienes que recordar.",
-        "body": "Elige tus parches, define cada cuánto los quieres y olvídate del resto. Tu bienestar llega solo — con descuento, sin compromiso."
+      "header": {
+        "back": "Volver al inicio",
+        "eyebrow": "Suscríbete y ahorra",
+        "title_a": "Arma tu rutina.",
+        "title_b_italic": "A tu ritmo",
+        "lead": "Activa los parches que quieres recibir. Para cada uno, elige cada cuánto te llega: <strong>30, 60 o 90 días</strong>. Mientras más seguido, mayor descuento.",
+        "lead_strong": "30, 60 o 90 días"
       },
-      "features": {
-        "sin_interrupciones": {
-          "title": "Sin interrupciones",
-          "body": "Tu parche llega antes de que se te acabe. Sin acordarte. Sin perder el ritmo."
+      "legend": {
+        "eyebrow": "Cómo funciona",
+        "intro": "Mientras más seguido recibas tus parches, mayor es tu descuento. Elige la frecuencia que mejor se adapte a tu rutina.",
+        "tiers": {
+          "30": { "label": "Rutina diaria", "sub": "para quien lo usa todos los días" },
+          "60": { "label": "Equilibrio", "sub": "uso frecuente, no a diario" },
+          "90": { "label": "Para probar", "sub": "ideal si recién empiezas" }
         },
-        "precio_suscriptor": {
-          "title": "Precio de suscriptor",
-          "body": "Siempre más bajo que la compra individual. El hábito que sostiene, conviene."
-        },
-        "tu_controlas": {
-          "title": "Tú controlas",
-          "body": "Pausa, cambia o cancela cuando quieras. Sin llamadas, sin penalizaciones."
-        },
-        "pausa": {
-          "title": "Pausa cuando lo necesites",
-          "body": "¿Te vas de viaje o ya tienes stock? Pausa cualquier producto desde tu cuenta, sin explicaciones."
-        },
-        "cambia_frecuencia": {
-          "title": "Cambia tus parches o tu frecuencia",
-          "body": "¿Cambió tu rutina? Ajusta qué productos recibes y cada cuánto, antes de tu próximo envío."
-        },
-        "sin_penalizaciones": {
-          "title": "Cancela sin penalizaciones",
-          "body": "Si decides salir, sales. Sin llamadas, sin formularios complicados, sin cargos extra."
-        }
+        "every_n_days": "Cada {days} días"
       },
-      "cta": {
-        "label": "Armar mi plan",
-        "href": "/tienda"
+      "step1_title": "Activa los parches que quieres",
+      "card": {
+        "freq_label": "¿Cada cuánto te llega?",
+        "per_box": "MXN / caja",
+        "discount_pill": "−{percent}%"
+      },
+      "empty_helper": "<strong>Empieza por uno.</strong> Puedes agregar, pausar o quitar parches cuando quieras.",
+      "empty_helper_strong": "Empieza por uno.",
+      "bottom_bar": {
+        "label_empty": "Tu plan",
+        "label_one": "{count} parche activo",
+        "label_many": "{count} parches activos",
+        "monthly_unit": "MXN / mes",
+        "breakdown_title": "Tu plan mensual",
+        "breakdown_row_sub": "cada {days} días · −{percent}%",
+        "saved": "Ahorras al mes",
+        "saved_amount": "${amount} MXN",
+        "cta_empty": "Activa parches",
+        "cta_subscribe": "Suscribirme"
+      },
+      "trust": {
+        "1_t": "Cancela cuando quieras", "1_d": "Sin permanencia mínima",
+        "2_t": "Envío gratis sobre $800", "2_d": "A todo México",
+        "3_t": "Pausa o salta envíos",   "3_d": "Tú controlas el ritmo",
+        "4_t": "Garantía 30 días",       "4_d": "Reembolso sin preguntas"
       }
     },
     "privacidad": {

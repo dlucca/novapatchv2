@@ -1,69 +1,14 @@
-import Link from "next/link";
-import { getTranslations, getMessages } from "next-intl/server";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import { PlanBuilder } from "@/components/plan/plan-builder";
 
-interface FeatureEntry {
-  title: string;
-  body: string;
-}
-
-function paragraphs(body: string) {
-  return body.split("\n\n").map((p, i) => (
-    <p key={i} className="mb-3 text-sm leading-relaxed text-muted-foreground last:mb-0">
-      {p}
-    </p>
-  ));
-}
-
-export default async function SuscripcionesLandingPage({
+export default async function SuscripcionesPage({
   params,
 }: {
   params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;
-  const t = await getTranslations({ locale, namespace: "pages.suscripciones" });
-  const messages = (await getMessages({ locale })) as {
-    pages: { suscripciones: { features: Record<string, FeatureEntry> } };
-  };
-  const featureKeys = Object.keys(messages.pages.suscripciones.features);
-
   return (
     <main>
-      <section className="bg-cream px-6 py-20">
-        <div className="mx-auto max-w-4xl">
-          <p className="mb-4 text-xs font-bold uppercase tracking-widest text-coral">
-            {t("hero.eyebrow")}
-          </p>
-          <h1 className="mb-6 text-4xl font-black tracking-tight text-navy md:text-5xl">
-            {t("hero.title")}
-          </h1>
-          <div className="max-w-3xl">{paragraphs(t("hero.body"))}</div>
-        </div>
-      </section>
-
-      <div className="mx-auto max-w-6xl px-6 py-16">
-        <div className="grid gap-6 md:grid-cols-3">
-          {featureKeys.map((slug) => (
-            <Card key={slug}>
-              <CardHeader>
-                <CardTitle className="text-lg text-navy">
-                  {t(`features.${slug}.title`)}
-                </CardTitle>
-              </CardHeader>
-              <CardContent>{paragraphs(t(`features.${slug}.body`))}</CardContent>
-            </Card>
-          ))}
-        </div>
-
-        <div className="mt-12 text-center">
-          <Link href={`/${locale}${t("cta.href")}`}>
-            <Button size="lg" className="bg-coral hover:bg-coral/90">
-              {t("cta.label")}
-            </Button>
-          </Link>
-        </div>
-      </div>
+      <PlanBuilder locale={locale} />
     </main>
   );
 }

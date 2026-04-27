@@ -37,7 +37,7 @@ export async function SubscriptionTeaser({ locale = "es" }: SubscriptionTeaserPr
             </h2>
             <p className="mt-4 max-w-md text-white/80">{t("lead")}</p>
             <a
-              href="#productos"
+              href={`/${locale}/suscripciones`}
               className="mt-6 inline-flex items-center gap-2 rounded-full bg-coral px-6 py-3 text-base font-semibold text-white hover:bg-coral/90"
             >
               {t("cta")} →

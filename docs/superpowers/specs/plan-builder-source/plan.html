@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="es-MX">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Arma tu plan · Novapatch</title>
+  <link rel="stylesheet" href="colors_and_type.css">
+  <style>
+    html, body { margin: 0; padding: 0; background: #FAF7F2; font-family: Outfit, sans-serif; color: #0D1B35; }
+    * { box-sizing: border-box; }
+    a { color: inherit; }
+    button { font-family: Outfit, sans-serif; }
+    input { font-family: Outfit, sans-serif; outline: none; }
+    ::selection { background: #E8503A; color: #fff; }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+  <script type="text/babel" src="shared/data.jsx"></script>
+  <script type="text/babel" src="shared/primitives.jsx"></script>
+  <script type="text/babel" src="shared/extras.jsx"></script>
+  <script type="text/babel" src="direction-b.jsx"></script>
+  <script type="text/babel" src="direction-c.jsx"></script>
+  <script type="text/babel" src="plan-builder-mobile.jsx"></script>
+
+  <script type="text/babel">
+    const { useState } = React;
+
+    function PlanPage() {
+      const [cart, setCart] = useState([]);
+      const addItem = (p, price) => {
+        setCart(prev => {
+          const ex = prev.find(i => i.slug === p.slug);
+          if (ex) return prev.map(i => i.slug === p.slug ? { ...i, qty: i.qty + 1 } : i);
+          return [...prev, { slug: p.slug, name: p.name, color: p.color, ink: p.ink, bg: p.bg, price, qty: 1 }];
+        });
+      };
+      const count = cart.reduce((s, i) => s + i.qty, 0);
+
+      return (
+        <div>
+          <NavB cartCount={count} onCart={() => {}} accent="#1CB1BC"/>
+
+          {/* Header — más compacto y respirado */}
+          <section style={{ background: "#0D1B35", color: "#fff", padding: "120px 24px 80px", position: "relative", overflow: "hidden" }}>
+            <div style={{ position: "absolute", top: -160, right: -120, width: 420, height: 420, borderRadius: "50%", background: "radial-gradient(circle, rgba(28,177,188,0.22), transparent 70%)" }}/>
+            <div style={{ position: "absolute", bottom: -200, left: -100, width: 380, height: 380, borderRadius: "50%", background: "radial-gradient(circle, rgba(232,80,58,0.15), transparent 70%)" }}/>
+            <div style={{ maxWidth: 720, margin: "0 auto", position: "relative" }}>
+              <a href="Home Directions.html" style={{
+                display: "inline-flex", alignItems: "center", gap: 8,
+                color: "rgba(255,255,255,0.7)", textDecoration: "none", fontSize: 13.5,
+                marginBottom: 28,
+              }}>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
+                  <line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/>
+                </svg>
+                Volver al inicio
+              </a>
+              <div style={{
+                display: "inline-flex", alignItems: "center", gap: 8,
+                padding: "6px 14px", borderRadius: 9999,
+                background: "rgba(28,177,188,0.16)", border: "1px solid rgba(28,177,188,0.4)",
+                fontSize: 11, fontWeight: 700, letterSpacing: "0.16em", textTransform: "uppercase",
+                color: "#9DE1E8", marginBottom: 22,
+              }}>
+                <span style={{ width: 6, height: 6, borderRadius: 9999, background: "#1CB1BC" }}/>
+                Suscríbete y ahorra
+              </div>
+              <h1 style={{
+                fontFamily: "Outfit", fontWeight: 900, fontSize: "clamp(40px, 5.6vw, 68px)",
+                lineHeight: 0.98, letterSpacing: "-0.035em", margin: 0, color: "#fff", textWrap: "balance",
+              }}>
+                Arma tu rutina.<br/>
+                <span style={{ fontStyle: "italic", color: "#1CB1BC" }}>A tu ritmo</span>.
+              </h1>
+              <p style={{ fontSize: 16, lineHeight: 1.6, color: "rgba(255,255,255,0.72)", margin: "20px 0 0", maxWidth: 540 }}>
+                Activa los parches que quieres recibir. Para cada uno, elige cada cuánto te llega: <strong style={{ color: "#fff", fontWeight: 700 }}>30, 60 o 90 días</strong>. Mientras más seguido, mayor descuento.
+              </p>
+            </div>
+          </section>
+
+          {/* Plan Builder — mobile-first */}
+          <PlanBuilderMobile onAdd={addItem}/>
+
+          {/* Trust strip — also mobile-friendly grid */}
+          <section style={{ background: "#FAF0EA", padding: "48px 24px 120px" }}>
+            <div style={{
+              maxWidth: 720, margin: "0 auto",
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
+              gap: 24,
+            }}>
+              {[
+                { t: "Cancela cuando quieras", d: "Sin permanencia mínima" },
+                { t: "Envío gratis sobre $800", d: "A todo México" },
+                { t: "Pausa o salta envíos", d: "Tú controlas el ritmo" },
+                { t: "Garantía 30 días", d: "Reembolso sin preguntas" },
+              ].map((b) => (
+                <div key={b.t}>
+                  <div style={{ fontFamily: "Outfit", fontWeight: 800, fontSize: 15.5, letterSpacing: "-0.01em", color: "#0D1B35" }}>{b.t}</div>
+                  <div style={{ fontSize: 13, color: "rgba(13,27,53,0.65)", marginTop: 6 }}>{b.d}</div>
+                </div>
+              ))}
+            </div>
+          </section>
+        </div>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById("root")).render(<PlanPage/>);
+  </script>
+</body>
+</html>
