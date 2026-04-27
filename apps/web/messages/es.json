@@ -81,6 +81,40 @@
     "iniciar_sesion": "Iniciar sesión"
   },
   "pages": {
+    "tienda": {
+      "hero": {
+        "eyebrow": "La tienda",
+        "title_a": "Seis parches,",
+        "title_b_italic": "un bienestar para cada día",
+        "lead": "Constancia, no fricción. Activa los hábitos que tu cuerpo agradece todos los días."
+      }
+    },
+    "productos": {
+      "cta": {
+        "add": "Agregar · ${price} MXN",
+        "subscribe_from": "Suscribirme desde ${price}/mes",
+        "subscribe_freq_label": "¿Cada cuánto te llega?",
+        "subscribe_confirm": "Suscribirme · cada {days}d −{percent}%"
+      },
+      "section_titles": {
+        "target_eyebrow": "Para quién",
+        "target_title": "¿Es para ti?",
+        "faq_eyebrow": "Preguntas frecuentes",
+        "faq_title": "Lo que querías preguntar"
+      },
+      "formula": {
+        "daltons_callout": "Pasa por la piel · < 500 Daltons",
+        "ingredient_role_label": "función"
+      },
+      "sticky_cta": {
+        "add": "Agregar →"
+      },
+      "not_found": {
+        "title": "No encontramos ese parche",
+        "lead": "El producto que buscas no existe o cambió de nombre.",
+        "cta": "Volver a la tienda"
+      }
+    },
     "home": {
       "hero": {
         "pill": "Parche del momento · {name}",
@@ -519,7 +553,8 @@
       "links": {
         "products": "Los parches",
         "science": "La ciencia",
-        "comparison": "Comparativa"
+        "comparison": "Comparativa",
+        "tienda": "Tienda"
       }
     },
     "footer": {
