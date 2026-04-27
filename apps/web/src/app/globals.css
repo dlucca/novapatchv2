@@ -205,6 +205,15 @@
   --shadow-card-hero:   0 16px 44px rgb(13 27 53 / 0.10);  /* highlighted */
   --shadow-bar:         0 24px 64px rgb(13 27 53 / 0.32);  /* floating bottom bar */
   --shadow-cta:         0 10px 24px rgb(232 80 58 / 0.4);  /* coral CTAs */
+
+  /* === Animation primitives (DESIGN sections 8.1, 8.2) === */
+  --ease-out:    cubic-bezier(0.22, 1, 0.36, 1);     /* default suave */
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);  /* bounce sutil */
+
+  --duration-fast:   180ms;  /* hovers, button states */
+  --duration-normal: 220ms;  /* toggles */
+  --duration-medium: 280ms;  /* card state changes */
+  --duration-slow:   350ms;  /* drawers, expand panels */
 }
 
 @layer base {
@@ -213,5 +222,14 @@
   }
   body {
     @apply bg-background text-foreground font-sans;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
   }
 }
