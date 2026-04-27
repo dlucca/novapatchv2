@@ -386,6 +386,23 @@
       "validation_invalid_email": "Ingresá un email válido."
     }
   },
+  "components": {
+    "cart": {
+      "button_aria": "{count, plural, =0 {Bolsa, vacía} one {Bolsa, # parche} other {Bolsa, # parches}}",
+      "drawer_title": "Tu bolsa",
+      "drawer_count": "{count, plural, one {# parche} other {# parches}}",
+      "empty_title": "Tu bolsa está vacía",
+      "empty_cta": "Empieza tu ritual",
+      "subtotal": "Subtotal",
+      "shipping": "Envío",
+      "shipping_later": "Calculado luego",
+      "checkout_cta": "Ir al checkout",
+      "checkout_disabled_tooltip": "Próximamente",
+      "clear": "Vaciar bolsa",
+      "remove_item": "Quitar {name}",
+      "qty_label": "Cantidad de {name}"
+    }
+  },
   "site": {
     "country_selector": {
       "label": "País",
