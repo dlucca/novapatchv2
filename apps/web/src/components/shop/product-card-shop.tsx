@@ -14,9 +14,7 @@ interface ProductCardShopProps {
 
 export function ProductCardShop({ product, locale }: ProductCardShopProps) {
   const t = useTranslations("pages.home.product_grid.card");
-  const onAdd = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
+  const onAdd = () => {
     useCart.getState().addItem(product, RETAIL_PRICE);
     useCart.getState().openDrawer();
   };
@@ -50,7 +48,7 @@ export function ProductCardShop({ product, locale }: ProductCardShopProps) {
             className="object-contain p-8 transition-transform duration-500 [@media(hover:hover)]:group-hover:scale-105 [@media(hover:hover)]:group-hover:-rotate-2"
           />
         </div>
-        <div className="p-5">
+        <div className="px-5 pt-5">
           <p
             data-testid="pcard-name"
             className="font-outfit text-2xl font-black text-navy"
@@ -60,24 +58,26 @@ export function ProductCardShop({ product, locale }: ProductCardShopProps) {
           <p className="text-sm text-navy/70">
             {product.tagline} · {t("units_short")}
           </p>
-          <hr className="my-3 border-navy/10" />
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="font-outfit text-xl font-black text-navy">
-                ${RETAIL_PRICE}
-              </p>
-              <p className="text-xs text-navy/60">{t("price_per_month")}</p>
-            </div>
-            <button
-              type="button"
-              onClick={onAdd}
-              className="inline-flex items-center gap-1 rounded-full bg-coral px-4 py-2 text-sm font-semibold text-white hover:bg-coral/90"
-            >
-              {t("add")} +
-            </button>
-          </div>
         </div>
       </Link>
+      <div className="px-5 pb-5">
+        <hr className="my-3 border-navy/10" />
+        <div className="flex items-center justify-between">
+          <div>
+            <p className="font-outfit text-xl font-black text-navy">
+              ${RETAIL_PRICE}
+            </p>
+            <p className="text-xs text-navy/60">{t("price_per_month")}</p>
+          </div>
+          <button
+            type="button"
+            onClick={onAdd}
+            className="inline-flex items-center gap-1 rounded-full bg-coral px-4 py-2 text-sm font-semibold text-white hover:bg-coral/90"
+          >
+            {t("add")} +
+          </button>
+        </div>
+      </div>
     </article>
   );
 }
