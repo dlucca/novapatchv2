@@ -127,6 +127,30 @@
           },
           "chip_daltons": "< 500 Daltons"
         }
+      },
+      "comparison": {
+        "eyebrow": "Comparativa",
+        "title_a": "¿Pastilla, gomita",
+        "title_b_italic": "o parche?",
+        "lead": "Lo simple se repite. Lo complejo se abandona.",
+        "columns": {
+          "novapatch": { "name": "Novapatch", "sub": "Parche transdérmico" },
+          "capsules":  { "name": "Cápsulas",  "sub": "Vía oral" },
+          "gummies":   { "name": "Gomitas",   "sub": "Vía oral + azúcar" }
+        },
+        "rows": {
+          "absorption":    "Absorción efectiva",
+          "release":       "Liberación sostenida",
+          "no_liver":      "Sin pasar por el hígado",
+          "no_sugar":      "Sin azúcar ni excipientes",
+          "no_water":      "Sin sabor, sin agua",
+          "no_forgetting": "Uso diario sin olvidos"
+        },
+        "values": {
+          "absorption": ["90%", "10–20%", "10–20%"],
+          "release":    ["10–12h", "2–4h", "2–4h"]
+        },
+        "winner_badge": "Novapatch"
       }
     },
     "nosotros": {
