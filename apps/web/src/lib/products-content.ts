@@ -415,10 +415,376 @@ const GLOW: ProductContent = {
   tagline: "Glow no se fuerza. Se acompaña.",
 };
 
+const SHIELD: ProductContent = {
+  slug: "shield",
+  hero: {
+    eyebrow: "Cuidado preventivo diario",
+    headline: "Cuidarse antes es cuidarse mejor",
+    subhead: "Un gesto diario que acompaña tus defensas naturales sin rituales complicados.",
+  },
+  problem: {
+    eyebrow: "El problema",
+    title: "El problema no es enfermarse. Es vivir en modo reactivo.",
+    lead: "El cuidado que realmente importa es el que se hace antes. Shield entra como un hábito simple, lejos de las rutinas complejas que se abandonan y de las soluciones que solo aparecen cuando ya te sentís mal.",
+    bullets: [
+      "Cuidarse solo cuando ya te sentís mal",
+      "Abandonar suplementos por falta de constancia",
+      "Cansarse de rutinas demasiado complejas",
+      "No sostener hábitos preventivos en el tiempo",
+    ],
+  },
+  target: {
+    primary_eyebrow: "Hecho para vos si…",
+    primary: [
+      "Te preocupás por tu bienestar general",
+      "Tenés rutinas exigentes y poco tiempo",
+      "Buscás prevención, no soluciones de emergencia",
+      "Valorás la simplicidad por sobre los rituales",
+      "Viajás seguido o cambiás de ritmo",
+    ],
+    not_for_eyebrow: "No es para vos si…",
+    not_for: [
+      "Buscás garantías absolutas de no enfermarte",
+      "Querés un reemplazo de tratamiento médico",
+      "Esperás un efecto inmediato o reactivo",
+      "Te interesan los discursos clínicos o alarmistas",
+    ],
+  },
+  moments: {
+    eyebrow: "Cuándo se usa",
+    title: "Pensado para la prevención cotidiana",
+    items: [
+      {
+        icon: "Sun",
+        title: "Al inicio del día",
+        desc: "Lo pegás cuando arrancás y te acompaña como parte de tu rutina diaria.",
+      },
+      {
+        icon: "Coffee",
+        title: "Épocas de mayor exigencia",
+        desc: "Para cambios de estación, viajes o jornadas con poco descanso.",
+      },
+      {
+        icon: "Shield",
+        title: "Cuidado constante",
+        desc: "Acompaña tus defensas naturales sin tener que pensarlo cada día.",
+      },
+    ],
+  },
+  formula: {
+    eyebrow: "La fórmula",
+    title: "Un parche pensado para acompañarte todos los días",
+    lead: "Ingredientes naturales seleccionados bajo la regla de los 500 Daltons —el criterio que define qué moléculas atraviesan la piel— con liberación progresiva durante el día.",
+    ingredients: [
+      { name: "Vitamina C", role: "Antioxidante clásico del bienestar diario" },
+      { name: "Zinc", role: "Mineral esencial del cuidado cotidiano" },
+      { name: "D3", role: "Vitamina vinculada al bienestar general" },
+      { name: "Vitamina E", role: "Antioxidante que acompaña la rutina" },
+      { name: "Niacinamida", role: "Forma de B3 del cuidado integral" },
+    ],
+  },
+  science: {
+    eyebrow: "La ciencia",
+    title: "Acompaña el funcionamiento natural del cuerpo",
+    lead: "Shield no activa ni estimula de forma extrema: acompaña procesos naturales del cuerpo. Las moléculas se eligen para ser compatibles con la absorción a través de la piel, con liberación progresiva durante varias horas.",
+  },
+  promises: {
+    promise_eyebrow: "Te promete",
+    promise: [
+      "Acompañar tu bienestar diario",
+      "Facilitar hábitos preventivos",
+      "Integrarse a la rutina sin fricción",
+      "Ser fácil de sostener en el tiempo",
+      "Cuidado consciente y simple",
+    ],
+    not_promise_eyebrow: "No te promete",
+    not_promise: [
+      "Evitar enfermedades",
+      "Reemplazar tratamientos médicos",
+      "Resultados inmediatos",
+      "Protección absoluta",
+    ],
+  },
+  claims: {
+    eyebrow: "Por qué Novapatch Shield",
+    items: [
+      "Acompaña el cuidado diario",
+      "Apoyo al bienestar general",
+      "Pensado para la prevención cotidiana",
+      "Ideal para rutinas exigentes",
+      "Cuidado consciente",
+    ],
+  },
+  faq: [
+    {
+      q: "¿Sirve para no enfermarme?",
+      a: "Shield no promete evitar enfermedades ni reemplazar tratamientos médicos. Acompaña el cuidado diario y los hábitos preventivos como parte de una rutina simple y constante.",
+    },
+    {
+      q: "¿Lo uso solo cuando me siento mal?",
+      a: "Está pensado al revés: como un gesto diario y constante, no como una solución reactiva. El valor aparece cuando se sostiene en el tiempo, antes de que aparezca el problema.",
+    },
+    {
+      q: "¿Puedo usarlo en viajes o cambios de estación?",
+      a: "Sí. Esos son justamente algunos de los momentos donde más se nota la utilidad de tener un hábito de cuidado simple que no dependa de comidas ni cápsulas.",
+    },
+    {
+      q: "¿Cómo se usa el parche?",
+      a: "Lo pegás sobre piel limpia y seca al inicio del día. Se integra a tu rutina sin sumar pasos y te acompaña varias horas mientras seguís con lo tuyo.",
+    },
+  ],
+  tagline: "Cuidarse antes es cuidarse mejor.",
+};
+
+const ZEN: ProductContent = {
+  slug: "zen",
+  hero: {
+    eyebrow: "Calma funcional cotidiana",
+    headline: "Calma para seguir, no para frenar",
+    subhead: "Acompaña estados de calma y claridad mental en días intensos, sin desconectarte.",
+  },
+  problem: {
+    eyebrow: "El problema",
+    title: "El problema no es el estrés ocasional. Es vivir siempre acelerada.",
+    lead: "Funcionar en modo alerta permanente cansa. Las soluciones fuertes te dejan plana, las complicadas se abandonan. Zen entra ahí: como un acompañamiento simple para bajar un cambio sin salir del juego.",
+    bullets: [
+      "Funcionar en modo alerta permanente",
+      "Costar frenar al final del día",
+      "Confundir productividad con tensión",
+      "Probar soluciones que te dejan desconectada",
+    ],
+  },
+  target: {
+    primary_eyebrow: "Hecho para vos si…",
+    primary: [
+      "Tenés alta carga mental y agenda intensa",
+      "Trabajás bajo presión seguido",
+      "Buscás equilibrio sin perder foco",
+      "Valorás soluciones simples y sostenibles",
+      "Practicás mindfulness o yoga de forma casual",
+    ],
+    not_for_eyebrow: "No es para vos si…",
+    not_for: [
+      "Buscás un ansiolítico o sedante",
+      "Querés reemplazar terapia o medicación",
+      "Esperás que desaparezca el estrés del todo",
+      "Te interesa una solución terapéutica o clínica",
+    ],
+  },
+  moments: {
+    eyebrow: "Cuándo se usa",
+    title: "Pensado para días intensos",
+    items: [
+      {
+        icon: "Wind",
+        title: "Jornadas exigentes",
+        desc: "Para días de mucha demanda mental o tardes largas que no aflojan.",
+      },
+      {
+        icon: "Coffee",
+        title: "Antes de momentos clave",
+        desc: "Como parte de tu preparación previa a reuniones o presentaciones importantes.",
+      },
+      {
+        icon: "Heart",
+        title: "Como hábito diario",
+        desc: "Calma sin rituales, integrada a tu rutina mientras seguís con lo tuyo.",
+      },
+    ],
+  },
+  formula: {
+    eyebrow: "La fórmula",
+    title: "Un parche pensado para acompañar el equilibrio diario",
+    lead: "Ingredientes naturales seleccionados bajo la regla de los 500 Daltons —el criterio que define qué moléculas atraviesan la piel— con liberación progresiva durante el día.",
+    ingredients: [
+      { name: "Triptófano", role: "Aminoácido vinculado al equilibrio" },
+      { name: "Magnesio", role: "Apoya la relajación natural" },
+      { name: "Taurina", role: "Aminoácido del bienestar cotidiano" },
+      { name: "Manzanilla", role: "Botánico tradicional de la calma" },
+      { name: "B6", role: "Cofactor del metabolismo diario" },
+    ],
+  },
+  science: {
+    eyebrow: "La ciencia",
+    title: "Acompaña estados, no trata emociones",
+    lead: "Zen no es un ansiolítico ni se compara con un fármaco: acompaña estados de calma y equilibrio. Las moléculas se eligen para ser compatibles con la absorción a través de la piel, con liberación progresiva durante varias horas.",
+  },
+  promises: {
+    promise_eyebrow: "Te promete",
+    promise: [
+      "Acompañar estados de calma",
+      "Ayudar a equilibrar el ritmo diario",
+      "Facilitar hábitos de bienestar mental",
+      "Integrarse a la rutina sin fricción",
+      "Calma que te deja presente",
+    ],
+    not_promise_eyebrow: "No te promete",
+    not_promise: [
+      "Eliminar el estrés",
+      "Reemplazar terapia o medicación",
+      "Resultados inmediatos",
+      "Desconexión total",
+    ],
+  },
+  claims: {
+    eyebrow: "Por qué Novapatch Zen",
+    items: [
+      "Acompaña estados de calma",
+      "Ayuda a equilibrar el ritmo",
+      "Bienestar mental cotidiano",
+      "Calma funcional",
+      "Pensado para días intensos",
+    ],
+  },
+  faq: [
+    {
+      q: "¿Es un ansiolítico natural?",
+      a: "No. Zen no trata ansiedad ni reemplaza terapia o medicación. Acompaña estados de calma y equilibrio como parte de un hábito de bienestar mental cotidiano.",
+    },
+    {
+      q: "¿Me va a dejar dormida o sin foco?",
+      a: "Zen está pensado al revés: calma funcional que te deja presente. La idea es bajar un cambio sin desconectarte del trabajo o de lo que estés haciendo.",
+    },
+    {
+      q: "¿Lo puedo usar en días normales o solo cuando estoy estresada?",
+      a: "Funciona mejor como hábito diario que como solución de emergencia. Acompaña tanto jornadas exigentes como días más calmos donde querés sostener el equilibrio.",
+    },
+    {
+      q: "¿Cómo se usa el parche?",
+      a: "Lo pegás sobre piel limpia y seca cuando arrancás el día o antes de un momento exigente. Se integra a tu rutina sin rituales y te acompaña varias horas.",
+    },
+  ],
+  tagline: "Calma para seguir, no para frenar.",
+};
+
+const WOMAN: ProductContent = {
+  slug: "woman",
+  hero: {
+    eyebrow: "Bienestar femenino cotidiano",
+    headline: "Cuidarse también es escucharse",
+    subhead: "Un parche que acompaña tu bienestar respetando los ritmos naturales del cuerpo.",
+  },
+  problem: {
+    eyebrow: "El problema",
+    title: "El bienestar femenino no es lineal. Es cíclico.",
+    lead: "El cuerpo vive distintos estados a lo largo del mes y muchas soluciones lo tratan como si fuera igual todos los días. Woman se posiciona desde el acompañamiento y la simplicidad, no desde la corrección ni la medicalización.",
+    bullets: [
+      "Vivir estados físicos y emocionales distintos cada mes",
+      "Soluciones que no se adaptan a esos cambios",
+      "Abandonar suplementos por falta de constancia",
+      "No querer medicalizar el bienestar diario",
+    ],
+  },
+  target: {
+    primary_eyebrow: "Hecho para vos si…",
+    primary: [
+      "Buscás bienestar sin medicalizarte",
+      "Tenés rutinas exigentes y poco tiempo",
+      "Valorás soluciones simples y sostenibles",
+      "Estás conectada con el autocuidado consciente",
+      "Querés una alternativa a las cápsulas",
+    ],
+    not_for_eyebrow: "No es para vos si…",
+    not_for: [
+      "Buscás un tratamiento para condiciones médicas",
+      "Esperás una promesa hormonal o ginecológica",
+      "Querés una solución extrema o clínica",
+      "Te interesa una comunicación terapéutica",
+    ],
+  },
+  moments: {
+    eyebrow: "Cuándo se usa",
+    title: "El bienestar también acompaña los días distintos",
+    items: [
+      {
+        icon: "Moon",
+        title: "A lo largo del mes",
+        desc: "Pensado para acompañar los distintos momentos del ciclo en la vida real.",
+      },
+      {
+        icon: "Sparkles",
+        title: "Días de mayor exigencia",
+        desc: "Para jornadas largas, viajes o cambios físicos y emocionales.",
+      },
+      {
+        icon: "Heart",
+        title: "Como hábito de autocuidado",
+        desc: "Un gesto diario que se adapta a vos, no al revés.",
+      },
+    ],
+  },
+  formula: {
+    eyebrow: "La fórmula",
+    title: "Un parche que respeta los ritmos del cuerpo",
+    lead: "Ingredientes naturales seleccionados bajo la regla de los 500 Daltons —el criterio que define qué moléculas atraviesan la piel— con liberación progresiva durante el día.",
+    ingredients: [
+      { name: "Extracto de Soya", role: "Botánico tradicional del bienestar femenino" },
+      { name: "B6", role: "Cofactor del metabolismo diario" },
+      { name: "Magnesio", role: "Apoya la relajación natural" },
+      { name: "Ácido Fólico", role: "Vitamina del cuidado cotidiano" },
+      { name: "Hierro", role: "Mineral esencial del bienestar diario" },
+    ],
+  },
+  science: {
+    eyebrow: "La ciencia",
+    title: "Acompaña procesos que ya existen",
+    lead: "Woman no regula, no corrige, no controla: acompaña. Las moléculas se eligen para ser compatibles con la absorción a través de la piel, con liberación progresiva durante varias horas.",
+  },
+  promises: {
+    promise_eyebrow: "Te promete",
+    promise: [
+      "Acompañar tu bienestar femenino",
+      "Respetar los ritmos del cuerpo",
+      "Facilitar hábitos diarios",
+      "Integrarse a la rutina sin fricción",
+      "Ser fácil de sostener en el tiempo",
+    ],
+    not_promise_eyebrow: "No te promete",
+    not_promise: [
+      "Tratar síntomas específicos",
+      "Reemplazar tratamientos médicos",
+      "Resultados inmediatos",
+      "Cambios forzados en el cuerpo",
+    ],
+  },
+  claims: {
+    eyebrow: "Por qué Novapatch Woman",
+    items: [
+      "Acompaña el bienestar femenino",
+      "Respeta los ritmos del cuerpo",
+      "Apoyo al equilibrio diario",
+      "Pensado para el día a día",
+      "Bienestar sin medicalizar",
+    ],
+  },
+  faq: [
+    {
+      q: "¿Regula hormonas o el ciclo?",
+      a: "No. Woman no regula, no corrige y no controla: acompaña tu bienestar respetando los ritmos naturales del cuerpo. No reemplaza tratamientos ginecológicos ni promesas hormonales.",
+    },
+    {
+      q: "¿Lo puedo usar todos los días del mes?",
+      a: "Sí. Está pensado como hábito diario que acompaña tanto los días más exigentes como los más calmos, respetando los distintos momentos del ciclo en la vida real.",
+    },
+    {
+      q: "¿Sirve para síntomas específicos?",
+      a: "Woman no trata síntomas específicos ni reemplaza tratamientos médicos. Acompaña el bienestar femenino general como parte de una rutina simple de autocuidado.",
+    },
+    {
+      q: "¿Cómo se usa el parche?",
+      a: "Lo pegás sobre piel limpia y seca una vez al día. Se integra a tu rutina sin sumar cápsulas ni depender de comidas, y te acompaña varias horas.",
+    },
+  ],
+  tagline: "Cuidarse también es respetar los propios ritmos.",
+};
+
 export const PRODUCTS_CONTENT = {
   energy: ENERGY,
   sleep: SLEEP,
   glow: GLOW,
+  shield: SHIELD,
+  zen: ZEN,
+  woman: WOMAN,
 } as Record<Slug, ProductContent>;
 
 export function getProductContent(slug: string): ProductContent | undefined {

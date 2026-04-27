@@ -8,18 +8,29 @@ describe("products-content", () => {
     expect(getProductContent("")).toBeUndefined();
   });
 
-  it("PRODUCTS_CONTENT is a record (will be populated in Tasks 2/3)", () => {
+  it("PRODUCTS_CONTENT is a record", () => {
     expect(typeof PRODUCTS_CONTENT).toBe("object");
   });
+});
+
+describe("PRODUCTS_CONTENT covers every NOVA_PRODUCTS slug", () => {
+  for (const p of NOVA_PRODUCTS) {
+    it(`${p.slug} has content defined`, () => {
+      expect(PRODUCTS_CONTENT[p.slug]).toBeDefined();
+    });
+  }
 });
 
 const POPULATED: ReadonlyArray<keyof typeof PRODUCTS_CONTENT> = [
   "energy",
   "sleep",
   "glow",
+  "shield",
+  "zen",
+  "woman",
 ];
 
-describe("PRODUCTS_CONTENT (Task 2 batch: energy/sleep/glow)", () => {
+describe("PRODUCTS_CONTENT (all 6 slugs)", () => {
   for (const slug of POPULATED) {
     describe(slug, () => {
       const c = PRODUCTS_CONTENT[slug];
