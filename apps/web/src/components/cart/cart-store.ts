@@ -5,7 +5,7 @@ import type { PersistStorage, StorageValue } from "zustand/middleware";
 
 export type CartSubscription = {
   interval_days: 30 | 60 | 90;
-  discount_percentage: 20 | 15 | 10;
+  discount_percentage: 15 | 10 | 5;
 };
 
 export type CartItem = {

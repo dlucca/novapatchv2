@@ -126,27 +126,27 @@ describe("cart-store", () => {
   it("addItem with subscription stores subscription metadata", () => {
     useCart
       .getState()
-      .addItem(energy, 600, { interval_days: 30, discount_percentage: 20 });
+      .addItem(energy, 638, { interval_days: 30, discount_percentage: 15 });
     const it0 = useCart.getState().items[0];
     expect(it0?.subscription).toEqual({
       interval_days: 30,
-      discount_percentage: 20,
+      discount_percentage: 15,
     });
   });
 
   it("addItem with same slug + same interval bumps qty; different interval creates a new line", () => {
     useCart
       .getState()
-      .addItem(energy, 600, { interval_days: 30, discount_percentage: 20 });
+      .addItem(energy, 638, { interval_days: 30, discount_percentage: 15 });
     useCart
       .getState()
-      .addItem(energy, 600, { interval_days: 30, discount_percentage: 20 });
+      .addItem(energy, 638, { interval_days: 30, discount_percentage: 15 });
     expect(useCart.getState().items).toHaveLength(1);
     expect(useCart.getState().items[0]?.qty).toBe(2);
 
     useCart
       .getState()
-      .addItem(energy, 638, { interval_days: 60, discount_percentage: 15 });
+      .addItem(energy, 675, { interval_days: 60, discount_percentage: 10 });
     expect(useCart.getState().items).toHaveLength(2);
     expect(useCart.getState().items[1]?.subscription?.interval_days).toBe(60);
   });

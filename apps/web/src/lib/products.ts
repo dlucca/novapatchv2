@@ -89,4 +89,4 @@ export const NOVA_PRODUCTS: ProductMeta[] = [
 ];
 
 export const RETAIL_PRICE = 750;
-export const SUB_DISCOUNTS = { 30: 0.20, 60: 0.15, 90: 0.10 } as const;
+export const SUB_DISCOUNTS = { 30: 0.15, 60: 0.10, 90: 0.05 } as const;

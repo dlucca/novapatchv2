@@ -57,24 +57,24 @@ describe("PlanBuilder → cart-store integration", () => {
   it("addItem with subscription metadata creates a line with subscription set", () => {
     useCart
       .getState()
-      .addItem(energy, 600, { interval_days: 30, discount_percentage: 20 });
+      .addItem(energy, 638, { interval_days: 30, discount_percentage: 15 });
     const items = useCart.getState().items;
     expect(items).toHaveLength(1);
     expect(items[0]?.subscription).toEqual({
       interval_days: 30,
-      discount_percentage: 20,
+      discount_percentage: 15,
     });
     expect(items[0]?.qty).toBe(1);
-    expect(items[0]?.price).toBe(600);
+    expect(items[0]?.price).toBe(638);
   });
 
   it("same slug + same freq bumps qty (single line)", () => {
     useCart
       .getState()
-      .addItem(energy, 600, { interval_days: 30, discount_percentage: 20 });
+      .addItem(energy, 638, { interval_days: 30, discount_percentage: 15 });
     useCart
       .getState()
-      .addItem(energy, 600, { interval_days: 30, discount_percentage: 20 });
+      .addItem(energy, 638, { interval_days: 30, discount_percentage: 15 });
     const items = useCart.getState().items;
     expect(items).toHaveLength(1);
     expect(items[0]?.qty).toBe(2);
@@ -83,10 +83,10 @@ describe("PlanBuilder → cart-store integration", () => {
   it("same slug + different freq creates a new line", () => {
     useCart
       .getState()
-      .addItem(energy, 600, { interval_days: 30, discount_percentage: 20 });
+      .addItem(energy, 638, { interval_days: 30, discount_percentage: 15 });
     useCart
       .getState()
-      .addItem(energy, 638, { interval_days: 60, discount_percentage: 15 });
+      .addItem(energy, 675, { interval_days: 60, discount_percentage: 10 });
     const items = useCart.getState().items;
     expect(items).toHaveLength(2);
     expect(items[0]?.subscription?.interval_days).toBe(30);
@@ -97,7 +97,7 @@ describe("PlanBuilder → cart-store integration", () => {
     useCart.getState().addItem(energy, 750); // one-time
     useCart
       .getState()
-      .addItem(energy, 600, { interval_days: 30, discount_percentage: 20 });
+      .addItem(energy, 638, { interval_days: 30, discount_percentage: 15 });
     const items = useCart.getState().items;
     expect(items).toHaveLength(2);
     expect(items[0]?.subscription).toBeUndefined();

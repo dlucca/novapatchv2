@@ -2,13 +2,16 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
+import { useParams } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { NOVA_PRODUCTS, RETAIL_PRICE } from "@/lib/products";
 import { useCart } from "@/components/cart/cart-store";
-import { scrollToAnchor } from "@/lib/home-anchors";
 
 export function Hero() {
   const t = useTranslations("pages.home.hero");
+  const params = useParams();
+  const locale = typeof params.locale === "string" ? params.locale : "mx";
   const [selected, setSelected] = useState(2); // Glow default (popular)
   const [paused, setPaused] = useState(false);
   const product = NOVA_PRODUCTS[selected]!;
@@ -73,6 +76,29 @@ export function Hero() {
             {t("title_c")}
           </h1>
 
+          <p
+            className="mt-5 font-newsreader italic text-lg leading-snug"
+            style={{ color: product.color, transition: "color 700ms" }}
+          >
+            {product.quote}
+          </p>
+
+          <div className="mt-4">
+            <span className="text-[11px] font-bold uppercase tracking-[0.15em] text-white/50">
+              {t("formula_label")}
+            </span>
+            <div className="mt-2 flex flex-wrap gap-2">
+              {product.ingredients.map((ing) => (
+                <span
+                  key={ing}
+                  className="rounded-full border border-white/20 bg-white/10 px-3 py-1 text-xs text-white/80"
+                >
+                  {ing}
+                </span>
+              ))}
+            </div>
+          </div>
+
           <div className="mt-8 flex flex-wrap gap-3">
             <button
               type="button"
@@ -81,13 +107,12 @@ export function Hero() {
             >
               {t("cta_primary", { name: product.name, price: RETAIL_PRICE })}
             </button>
-            <button
-              type="button"
-              onClick={() => scrollToAnchor("products")}
+            <Link
+              href={`/${locale}/suscripciones`}
               className="inline-flex items-center gap-2 rounded-full border border-white/30 px-6 py-3 text-base font-semibold text-white hover:bg-white/10"
             >
               {t("cta_secondary")}
-            </button>
+            </Link>
           </div>
         </div>
 

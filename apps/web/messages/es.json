@@ -122,7 +122,7 @@
         "title_b_italic": "que se pega",
         "title_c": "a tu día.",
         "cta_primary": "Agregar {name} · ${price}",
-        "cta_secondary": "Ver ingredientes",
+        "cta_secondary": "Arma tu suscripción",
         "formula_label": "Fórmula",
         "selector_label": "Elige el parche · descubre su fórmula"
       },
@@ -192,7 +192,7 @@
       "final_cta": {
         "title_a": "Pega, olvida y",
         "title_b_italic": "deja que trabaje",
-        "lead": "Suscripción con 20% de descuento. Pausa, cambia o cancela cuando quieras.",
+        "lead": "Suscripción con hasta 15% de descuento. Pausa, cambia o cancela cuando quieras.",
         "cta": "Empieza tu ritual"
       },
       "comparison": {
@@ -262,7 +262,7 @@
         { "q": "¿Cuánto cuesta el envío?", "a": "El costo de envío es de $85 MXN fijo para todos los pedidos, incluyendo suscripciones." },
         { "q": "¿Puedo rastrear mi pedido?", "a": "Sí. Una vez que tu pedido es despachado recibirás un email con el número de guía para rastrear tu envío en tiempo real." },
         { "q": "¿Qué métodos de pago aceptan?", "a": "Tarjeta de crédito y débito (Visa, Mastercard, American Express)." },
-        { "q": "¿Es seguro pagar en la web?", "a": "Sí. Usamos encriptación SSL y los datos de tu tarjeta se tokenizan mediante Openpay — nunca se almacenan en nuestros servidores." },
+        { "q": "¿Es seguro pagar en la web?", "a": "Sí. Usamos encriptación SSL y los datos de tu tarjeta se tokenizan mediante Stripe — nunca se almacenan en nuestros servidores." },
         { "q": "¿Me pueden dar factura?", "a": "Sí. Solicítala por email a hola@novapatch.care con tus datos fiscales dentro de los 5 días naturales de tu compra." },
         { "q": "¿Cómo se usa el parche?", "a": "1. Retira el film protector. 2. Pega en piel limpia y seca (brazo, hombro o espalda). 3. Presiona 30 segundos. 4. Déjalo actuar 8–12 horas." },
         { "q": "¿El parche es resistente al agua?", "a": "Sí. Puedes ducharte, nadar y hacer ejercicio con el parche puesto. Está diseñado para mantenerse adherido en condiciones normales de humedad." },
@@ -578,6 +578,43 @@
       "tagline": "Hecho con ciencia.",
       "rights": "© {year} Novapatch · {tagline}",
       "coming_soon": "Próximamente"
+    },
+    "checkout": {
+      "title": "Finalizar compra",
+      "back": "← Volver",
+      "section_contact": "Información de contacto",
+      "section_shipping": "Dirección de envío",
+      "section_payment": "Método de pago",
+      "name_label": "Nombre completo",
+      "email_label": "Correo electrónico",
+      "phone_label": "Teléfono (10 dígitos)",
+      "street_label": "Calle y número exterior",
+      "interior_label": "Número interior (opcional)",
+      "colonia_label": "Colonia",
+      "cp_label": "Código postal",
+      "ciudad_label": "Ciudad / Municipio",
+      "estado_label": "Estado",
+      "estado_placeholder": "Selecciona tu estado",
+      "order_summary": "Resumen de tu pedido",
+      "subtotal": "Subtotal",
+      "shipping": "Envío",
+      "shipping_value": "$85 MXN",
+      "total": "Total",
+      "cta": "Pagar ${amount} MXN",
+      "processing": "Procesando...",
+      "err_required": "Campo requerido",
+      "err_email": "Correo no válido",
+      "err_phone": "Ingresa 10 dígitos",
+      "err_cp": "Ingresa 5 dígitos",
+      "empty_title": "Tu bolsa está vacía",
+      "empty_cta": "Ver tienda",
+      "subscription_badge": "Cada {interval} días · −{discount}%"
+    },
+    "checkout_success": {
+      "title": "¡Pedido confirmado!",
+      "lead": "Recibirás un correo con los detalles de tu pedido en breve.",
+      "order_id": "Referencia: {id}",
+      "cta": "Seguir comprando"
     }
   },
   "site": {

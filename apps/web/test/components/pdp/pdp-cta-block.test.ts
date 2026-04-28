@@ -27,15 +27,15 @@ describe("PdpCtaBlock", () => {
 
   it("subscribe flow at 30 days lands subscription metadata + correct price", () => {
     const p = NOVA_PRODUCTS.find((x) => x.slug === "glow")!;
-    const perBox = Math.round(RETAIL_PRICE * 0.8);
+    const perBox = Math.round(RETAIL_PRICE * 0.85);
     useCart
       .getState()
-      .addItem(p, perBox, { interval_days: 30, discount_percentage: 20 });
+      .addItem(p, perBox, { interval_days: 30, discount_percentage: 15 });
     expect(useCart.getState().items[0]).toMatchObject({
       slug: "glow",
       price: perBox,
       qty: 1,
-      subscription: { interval_days: 30, discount_percentage: 20 },
+      subscription: { interval_days: 30, discount_percentage: 15 },
     });
   });
 });

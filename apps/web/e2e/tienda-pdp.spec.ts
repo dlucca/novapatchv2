@@ -28,15 +28,15 @@ test.describe("Tienda + PDP happy path", () => {
       .click();
     // Pick 30d (default selected, but click anyway to verify aria-pressed)
     await page
-      .getByRole("button", { name: /^30\s*d\s*−20%/i })
+      .getByRole("button", { name: /^30\s*d\s*−15%/i })
       .first()
       .click();
     // Confirm — button label changed
     await page
-      .getByRole("button", { name: /Suscribirme · cada 30d −20%/ })
+      .getByRole("button", { name: /Suscribirme · cada 30d −15%/ })
       .click();
 
     await expect(drawer).toBeVisible();
-    await expect(drawer.getByText("Cada 30 días · −20%")).toBeVisible();
+    await expect(drawer.getByText("Cada 30 días · −15%")).toBeVisible();
   });
 });

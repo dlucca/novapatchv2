@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { useRouter, useParams } from "next/navigation";
 import { Minus, Plus, X } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
@@ -10,6 +11,9 @@ import { scrollToAnchor } from "@/lib/home-anchors";
 
 export function CartDrawer() {
   const t = useTranslations("components.cart");
+  const router      = useRouter();
+  const params      = useParams();
+  const locale      = typeof params.locale === "string" ? params.locale : "mx";
   const items       = useCart((s) => s.items);
   const open        = useCart((s) => s.drawerOpen);
   const openDrawer  = useCart((s) => s.openDrawer);
@@ -132,10 +136,11 @@ export function CartDrawer() {
                 </span>
               </div>
               <Button
-                disabled
-                aria-label={t("checkout_disabled_tooltip")}
-                className="mt-4 w-full bg-coral text-white hover:bg-coral/90 disabled:opacity-60"
-                title={t("checkout_disabled_tooltip")}
+                onClick={() => {
+                  closeDrawer();
+                  router.push(`/${locale}/checkout`);
+                }}
+                className="mt-4 w-full bg-coral text-white hover:bg-coral/90"
               >
                 {t("checkout_cta")} →
               </Button>

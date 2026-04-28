@@ -1,9 +1,9 @@
 import { getTranslations } from "next-intl/server";
 
 const TIERS = [
-  { days: 30, off: 20, color: "var(--color-teal)", k: "30" as const },
-  { days: 60, off: 15, color: "var(--color-sky)", k: "60" as const },
-  { days: 90, off: 10, color: "var(--color-gold)", k: "90" as const },
+  { days: 30, off: 15, color: "var(--color-teal)", k: "30" as const },
+  { days: 60, off: 10, color: "var(--color-sky)", k: "60" as const },
+  { days: 90, off: 5, color: "var(--color-gold)", k: "90" as const },
 ];
 
 interface SubscriptionTeaserProps {

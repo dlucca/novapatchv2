@@ -44,6 +44,6 @@ export function saved(items: PlanItem[], retail: number = RETAIL_PRICE): number 
   return fullMonthly(items, retail) - monthly(items, retail);
 }
 
-export function discountPercent(freq: Freq): 20 | 15 | 10 {
-  return Math.round(SUB_DISCOUNTS[freq] * 100) as 20 | 15 | 10;
+export function discountPercent(freq: Freq): 15 | 10 | 5 {
+  return Math.round(SUB_DISCOUNTS[freq] * 100) as 15 | 10 | 5;
 }

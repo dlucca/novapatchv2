@@ -88,14 +88,14 @@ describe("CartDrawer behaviors (via store)", () => {
     const subItem = {
       ...energyItem,
       qty: 1,
-      price: 600,
-      subscription: { interval_days: 30 as const, discount_percentage: 20 as const },
+      price: 638,
+      subscription: { interval_days: 30 as const, discount_percentage: 15 as const },
     };
     useCart.setState({ items: [subItem] });
     const got = useCart.getState().items[0];
     expect(got?.subscription).toEqual({
       interval_days: 30,
-      discount_percentage: 20,
+      discount_percentage: 15,
     });
   });
 });

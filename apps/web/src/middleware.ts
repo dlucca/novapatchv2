@@ -10,7 +10,14 @@ const isProtectedRoute = createRouteMatcher(["/(.*/)?cuenta(.*)"]);
 const COUNTRY_COOKIE = "country";
 const COUNTRY_COOKIE_MAX_AGE = 60 * 60 * 24 * 365; // 1 year
 
+const isApiRoute = (pathname: string) => pathname.startsWith("/api/");
+
 export default clerkMiddleware(async (auth, req) => {
+  // Skip intl routing for API routes — they don't use locale prefixes.
+  if (isApiRoute(req.nextUrl.pathname)) {
+    if (isProtectedRoute(req)) await auth.protect();
+    return;
+  }
   if (isProtectedRoute(req)) {
     await auth.protect();
   }
