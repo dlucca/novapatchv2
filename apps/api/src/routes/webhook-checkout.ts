@@ -1,24 +1,22 @@
 import { Hono } from "hono";
 import { z } from "zod";
-import { resolveMarket, isMarketId, type MarketId } from "@novapatch/markets";
-import { calculateQuote, type CartItemInput, type PricingQuote, type QuoteLine } from "@novapatch/pricing";
-import type { ProductSlug } from "@novapatch/catalog";
+import { resolveMarket, isMarketId } from "@novapatch/markets";
+import { calculateQuote, type CartItemInput } from "@novapatch/pricing";
 import type { Db } from "../db";
-import type { ClerkUserClient } from "../lib/clerk";
 import type { PaymentGateway } from "../lib/payment-gateway";
 import { apiError } from "../lib/errors";
-import { upsertCustomerByClerkUserId } from "../repos/customers";
+import {
+  upsertGuestCustomerByEmail,
+  setGatewayCredentials,
+} from "../repos/customers";
 import {
   findActiveByCode,
   countRedemptionsByCustomer,
 } from "../repos/discount-codes";
 import { validateDiscount } from "../services/validate-discount";
 import { createOrderFromCart } from "../services/create-order";
-import {
-  persistOrder,
-  findOrderByIdempotencyKey,
-  type OrderWithRelations,
-} from "../repos/orders";
+import { persistOrder, findOrderByIdempotencyKey } from "../repos/orders";
+import { serviceAuthMiddleware } from "../middleware/service-auth";
 
 const ItemSchema = z.object({
   slug: z.enum(["energy", "sleep", "glow", "shield", "zen", "woman"]),
@@ -38,78 +36,55 @@ const ShippingAddressSchema = z.object({
 });
 
 const BodySchema = z.object({
+  customerEmail: z.string().email().max(254),
   market: z.string().min(1).max(8),
   items: z.array(ItemSchema).min(1),
   shippingAddress: ShippingAddressSchema,
   paymentToken: z.string().min(1).max(255),
-  deviceSessionId: z.string().min(1).max(255).optional(),
   recurringConsent: z.boolean().optional(),
   discountCode: z.string().min(1).max(64).optional(),
+  /**
+   * Gateway-side credentials captured during checkout for off-session
+   * renewals. Required when the order has any subscription line (Phase 2);
+   * server enforces this combo. Not used for one-time orders.
+   */
+  gatewayCustomer: z.string().min(1).max(255).optional(),
+  paymentMethod: z.string().min(1).max(255).optional(),
 });
 
-export interface CheckoutDeps {
+export interface WebhookCheckoutDeps {
   db: Db;
-  userClient: ClerkUserClient;
   gateway: PaymentGateway;
+  serviceSecret: string;
   getNow: () => Date;
 }
 
 /**
- * Reconstruct a PricingQuote-shaped object from persisted order + items.
+ * Trusted server-to-server checkout for guest orders.
  *
- * Note on `eligibleSubtotal`: the original quote tracks which lines were
- * eligible for the discount (based on appliesTo: "all"|"once"|"subscription").
- * We don't snapshot that scope on the order row, so on replay we return
- * `subtotal` as an upper-bound approximation. This matches the original value
- * when appliesTo==="all" and over-reports for narrower scopes — acceptable for
- * an idempotent replay response.
+ * Called by the apps/web Stripe webhook on `payment_intent.succeeded`.
+ * Authenticates with `X-Service-Auth: <shared_secret>` (NOT Clerk JWT) and
+ * identifies the customer by email, creating a guest record if missing.
+ *
+ * Idempotency: REQUIRED via `Idempotency-Key` header. The webhook uses the
+ * Stripe PaymentIntent id (e.g. `pi_3ABC...`) as the key, so:
+ *   - Stripe webhook retries → same key → idempotent replay (200, no double insert)
+ *   - Frontend success page also calls (future) → same key → also idempotent
+ *
+ * Otherwise the pipeline is identical to `/me/checkout`:
+ *   1. validate body, market, recurring consent
+ *   2. upsert customer (by email here, not Clerk id)
+ *   3. idempotent replay short-circuit
+ *   4. quote + optional discount validation
+ *   5. gateway.charge (Stripe gateway: retrieve PI, validate amount/currency)
+ *   6. persist order + items + subscriptions atomically
  */
-function reconstructQuote(r: OrderWithRelations): PricingQuote {
-  const lines: QuoteLine[] = r.items.map((item) => {
-    const base: QuoteLine = {
-      slug: item.productSlug as ProductSlug,
-      quantity: item.quantity,
-      unitPrice: item.unitPrice,
-      lineSubtotal: item.unitPrice * item.quantity,
-      isSubscription: item.isSubscription,
-    };
-    return item.intervalDays != null
-      ? { ...base, interval: item.intervalDays as 30 | 60 | 90 }
-      : base;
-  });
-  return {
-    market: r.order.market as MarketId,
-    currency: r.order.currency,
-    lines,
-    subtotal: r.order.subtotal,
-    eligibleSubtotal: r.order.subtotal,
-    discountAmount: r.order.discountAmount,
-    taxableBase: r.order.subtotal - r.order.discountAmount,
-    tax: r.order.tax,
-    shipping: r.order.shipping,
-    total: r.order.total,
-  };
-}
-
-function serializeReplay(r: OrderWithRelations) {
-  return {
-    orderId: r.order.id,
-    chargeId: r.order.paymentChargeId,
-    quote: reconstructQuote(r),
-    subscriptions: r.subscriptions.map((s) => ({
-      id: s.id,
-      slug: s.productSlug,
-      interval: s.intervalDays,
-      nextBillingDate: s.nextBillingDate,
-    })),
-  };
-}
-
-export function createCheckoutRoutes(deps: CheckoutDeps): Hono {
+export function createWebhookCheckoutRoutes(deps: WebhookCheckoutDeps): Hono {
   const r = new Hono();
 
+  r.use("*", serviceAuthMiddleware(deps.serviceSecret));
+
   r.post("/", async (c) => {
-    // 1. Idempotency-Key required.
     const idempotencyKey = c.req.header("Idempotency-Key");
     if (!idempotencyKey) {
       const { body, status } = apiError(
@@ -120,7 +95,6 @@ export function createCheckoutRoutes(deps: CheckoutDeps): Hono {
       return c.json(body, status);
     }
 
-    // 2. Parse body.
     const parsed = BodySchema.safeParse(await c.req.json().catch(() => ({})));
     if (!parsed.success) {
       const { body, status } = apiError(
@@ -133,7 +107,6 @@ export function createCheckoutRoutes(deps: CheckoutDeps): Hono {
     }
     const input = parsed.data;
 
-    // 3. Resolve market.
     const marketIdRaw = input.market.trim().toLowerCase();
     if (!isMarketId(marketIdRaw)) {
       const { body, status } = apiError(
@@ -145,7 +118,6 @@ export function createCheckoutRoutes(deps: CheckoutDeps): Hono {
     }
     const market = resolveMarket(marketIdRaw);
 
-    // 4. Recurring consent gate.
     const hasSubscriptionLine = input.items.some((i) => i.subscription !== undefined);
     if (hasSubscriptionLine && input.recurringConsent !== true) {
       const { body, status } = apiError(
@@ -157,16 +129,50 @@ export function createCheckoutRoutes(deps: CheckoutDeps): Hono {
       return c.json(body, status);
     }
 
-    // 5. Upsert customer.
-    const clerkUserId = c.get("clerkUserId");
-    const { email } = await deps.userClient.getUser(clerkUserId);
-    const customer = await upsertCustomerByClerkUserId(deps.db, { clerkUserId, email, market: market.id });
+    // Subscription orders MUST carry gateway credentials so the cron can
+    // renew them off-session later. Without them the sub would be created
+    // but the very first renewal cycle would fail with `missing_payment_method`.
+    if (
+      hasSubscriptionLine &&
+      (!input.gatewayCustomer || !input.paymentMethod)
+    ) {
+      const { body, status } = apiError(
+        "validation_failed",
+        "gateway_credentials_required_for_subscription",
+        400,
+        { reason: "gateway_credentials_required_for_subscription" },
+      );
+      return c.json(body, status);
+    }
 
-    // 6. Idempotent replay.
+    const customer = await upsertGuestCustomerByEmail(deps.db, {
+      email: input.customerEmail,
+      market: market.id,
+    });
+
+    // Stash gateway credentials so the renewal cron can charge off-session.
+    // Done BEFORE the idempotent-replay check so a webhook retry can repair
+    // a customer record where credentials were missing the first time.
+    if (
+      hasSubscriptionLine &&
+      input.gatewayCustomer &&
+      input.paymentMethod
+    ) {
+      await setGatewayCredentials(deps.db, {
+        customerId: customer.id,
+        gatewayName: deps.gateway.name,
+        gatewayCustomerId: input.gatewayCustomer,
+        paymentMethodId: input.paymentMethod,
+        consentAt: deps.getNow(),
+      });
+    }
+
+    // Idempotent replay — same Idempotency-Key (PI id) returns the existing
+    // order without re-charging or re-inserting.
     const existing = await findOrderByIdempotencyKey(deps.db, idempotencyKey);
     if (existing) {
       if (existing.order.customerId !== customer.id) {
-        // Someone else's key — treat as not-found so we don't leak data.
+        // Email mismatch — refuse without leaking which side is wrong.
         const { body, status } = apiError(
           "idempotency_key_missing",
           "Idempotency-Key not found",
@@ -174,21 +180,24 @@ export function createCheckoutRoutes(deps: CheckoutDeps): Hono {
         );
         return c.json(body, status);
       }
-      return c.json(serializeReplay(existing), 200);
+      return c.json(
+        {
+          orderId: existing.order.id,
+          chargeId: existing.order.paymentChargeId,
+          replayed: true,
+        },
+        200,
+      );
     }
 
-    // 7. Normalize items (Zod infers subscription: T | undefined; engine expects
-    //    the field absent when not set — exactOptionalPropertyTypes).
     const items: CartItemInput[] = input.items.map((item) =>
       item.subscription !== undefined
         ? { slug: item.slug, quantity: item.quantity, subscription: item.subscription }
         : { slug: item.slug, quantity: item.quantity },
     );
 
-    // 8. Draft quote for subtotal (needed by validator).
     const draft = calculateQuote({ items, market });
 
-    // 9. Optional discount validation.
     let discountResultForOrder: Parameters<typeof createOrderFromCart>[0]["discountResult"] =
       undefined;
     let discountInput: Parameters<typeof calculateQuote>[0]["discount"] = undefined;
@@ -214,25 +223,22 @@ export function createCheckoutRoutes(deps: CheckoutDeps): Hono {
       };
     }
 
-    // 10. Final quote.
     const quote = calculateQuote({
       items,
       market,
       ...(discountInput ? { discount: discountInput } : {}),
     });
 
-    // 11. Charge gateway (CIT — customer-initiated).
     let chargeResult;
     try {
       chargeResult = await deps.gateway.charge({
         token: input.paymentToken,
         amount: quote.total,
         currency: market.currency,
-        ...(input.deviceSessionId ? { deviceSessionId: input.deviceSessionId } : {}),
       });
     } catch (err) {
       console.warn(
-        "[checkout] gateway threw:",
+        "[webhook-checkout] gateway threw:",
         err instanceof Error ? err.message : err,
       );
       const { body, status } = apiError(
@@ -253,7 +259,6 @@ export function createCheckoutRoutes(deps: CheckoutDeps): Hono {
       return c.json(body, status);
     }
 
-    // 12. Build order rows.
     const built = createOrderFromCart({
       quote,
       customerId: customer.id,
@@ -267,7 +272,6 @@ export function createCheckoutRoutes(deps: CheckoutDeps): Hono {
       ...(discountResultForOrder ? { discountResult: discountResultForOrder } : {}),
     });
 
-    // 13. Persist atomically.
     let persisted;
     try {
       persisted = await persistOrder(deps.db, {
@@ -281,7 +285,38 @@ export function createCheckoutRoutes(deps: CheckoutDeps): Hono {
         },
       });
     } catch (err) {
-      console.error("[checkout] persist failed after charge succeeded:", err);
+      // Race-condition reconciliation: Stripe sometimes fires
+      // payment_intent.succeeded multiple times concurrently. The
+      // findOrderByIdempotencyKey check above is non-atomic with the
+      // INSERT, so two concurrent calls can both pass the replay check and
+      // race on insert. The losing INSERT hits
+      // `orders_idempotency_key_unique` — recover by re-fetching and
+      // returning the existing order (same as a normal idempotent replay).
+      const isDupe =
+        err !== null &&
+        typeof err === "object" &&
+        "code" in err &&
+        (err as { code?: string }).code === "23505" &&
+        "constraint_name" in err &&
+        (err as { constraint_name?: string }).constraint_name ===
+          "orders_idempotency_key_unique";
+      if (isDupe) {
+        const winner = await findOrderByIdempotencyKey(deps.db, idempotencyKey);
+        if (winner && winner.order.customerId === customer.id) {
+          return c.json(
+            {
+              orderId: winner.order.id,
+              chargeId: winner.order.paymentChargeId,
+              replayed: true,
+            },
+            200,
+          );
+        }
+      }
+      console.error(
+        "[webhook-checkout] persist failed after charge succeeded:",
+        err,
+      );
       const { body, status } = apiError(
         "internal_error",
         "order persistence failed after charge succeeded",
@@ -291,12 +326,10 @@ export function createCheckoutRoutes(deps: CheckoutDeps): Hono {
       return c.json(body, status);
     }
 
-    // 14. Respond 201.
     return c.json(
       {
         orderId: persisted.orderId,
         chargeId: chargeResult.chargeId,
-        quote,
         subscriptions: built.subscriptions.map((s, i) => ({
           id: persisted.subscriptionIds[i]!,
           slug: s.productSlug,

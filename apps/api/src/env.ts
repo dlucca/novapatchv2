@@ -29,6 +29,16 @@ const envSchema = z.object({
   OPENPAY_PRIVATE_KEY: z.string().optional(),
   OPENPAY_PUBLIC_KEY: z.string().optional(),
 
+  // Stripe (MX/global). When set, the API uses StripeGateway (confirm-PI flow);
+  // when absent, falls back to the in-memory stub gateway (dev/test only).
+  STRIPE_SECRET_KEY: z.string().optional(),
+
+  // Shared secret for trusted server-to-server calls into apps/api
+  // (e.g. apps/web Stripe webhook → POST /webhook/checkout). When unset, the
+  // /webhook/* routes are not mounted and guest checkout via webhook is disabled.
+  // Must be at least 32 chars; rotate periodically.
+  WEBHOOK_SHARED_SECRET: z.string().min(32).optional(),
+
   MERCADOPAGO_ACCESS_TOKEN: z.string().optional(),
   MERCADOPAGO_PUBLIC_KEY: z.string().optional(),
 

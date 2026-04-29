@@ -6,6 +6,8 @@ import { catalogRoutes } from "./routes/catalog";
 import { createMeRoutes } from "./routes/me";
 import { createDiscountRoutes } from "./routes/discounts";
 import { createWaitlistRoutes } from "./routes/waitlist";
+import { createWebhookCheckoutRoutes } from "./routes/webhook-checkout";
+import { createAdminSubscriptionCronRoutes } from "./routes/admin-subscription-cron";
 import { apiError } from "./lib/errors";
 import { readEnv } from "./env";
 import type { TokenVerifier, ClerkUserClient } from "./lib/clerk";
@@ -17,6 +19,12 @@ export interface AppDeps {
   userClient?: ClerkUserClient;
   db?: Db;
   gateway?: PaymentGateway;
+  /**
+   * Shared secret for `POST /webhook/checkout`. When provided alongside
+   * `db` and `gateway`, the webhook-checkout route is mounted; otherwise it
+   * is omitted (guest-checkout-via-webhook is opt-in).
+   */
+  webhookSharedSecret?: string;
   getNow?: () => Date;
 }
 
@@ -75,6 +83,28 @@ export function createApp(deps: AppDeps = {}): Hono {
   if (deps.db) {
     app.route("/discounts", createDiscountRoutes(deps.db));
     app.route("/waitlist", createWaitlistRoutes({ db: deps.db }));
+  }
+
+  if (deps.db && deps.gateway && deps.webhookSharedSecret) {
+    app.route(
+      "/webhook/checkout",
+      createWebhookCheckoutRoutes({
+        db: deps.db,
+        gateway: deps.gateway,
+        serviceSecret: deps.webhookSharedSecret,
+        getNow: deps.getNow ?? (() => new Date()),
+      }),
+    );
+
+    app.route(
+      "/admin/subscriptions",
+      createAdminSubscriptionCronRoutes({
+        db: deps.db,
+        gateway: deps.gateway,
+        serviceSecret: deps.webhookSharedSecret,
+        getNow: deps.getNow ?? (() => new Date()),
+      }),
+    );
   }
 
   if (deps.verifier && deps.userClient && deps.db) {

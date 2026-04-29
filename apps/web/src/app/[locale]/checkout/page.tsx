@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { Elements } from "@stripe/react-stripe-js";
@@ -23,6 +23,10 @@ export default function CheckoutPage() {
 
   const [clientSecret, setClientSecret] = useState<string | null>(null);
   const [piError, setPiError] = useState<string | null>(null);
+  // Guard against React strict-mode double-mount creating two PaymentIntents.
+  // Without this, the form may end up bound to one PI while /finalize updates
+  // the other, causing the metadata stamp to land on the wrong (abandoned) PI.
+  const piRequestedRef = useRef(false);
 
   // Redirect if cart is empty (after hydration).
   useEffect(() => {
@@ -34,12 +38,14 @@ export default function CheckoutPage() {
   // Create PaymentIntent once cart is known.
   useEffect(() => {
     if (!hydrated || items.length === 0) return;
+    if (piRequestedRef.current) return;
+    piRequestedRef.current = true;
     const subtotal = cartTotal(items);
 
     fetch("/api/checkout/payment-intent", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ amount_mxn: subtotal, items }),
+      body: JSON.stringify({ amount_mxn: subtotal, items, market: locale }),
     })
       .then(async (res) => {
         const data = (await res.json()) as { clientSecret?: string; error?: string };
@@ -47,9 +53,11 @@ export default function CheckoutPage() {
         setClientSecret(data.clientSecret);
       })
       .catch((err: unknown) => {
+        // Reset the guard so the user can retry on transient errors.
+        piRequestedRef.current = false;
         setPiError(err instanceof Error ? err.message : "Error desconocido");
       });
-  }, [hydrated, items]);
+  }, [hydrated, items, locale]);
 
   if (!hydrated || (!clientSecret && !piError)) {
     return (
@@ -103,7 +111,7 @@ export default function CheckoutPage() {
                   locale: "es-419",
                 }}
               >
-                <CheckoutForm items={items} locale={locale} />
+                <CheckoutForm items={items} locale={locale} clientSecret={clientSecret} />
               </Elements>
             )}
           </div>

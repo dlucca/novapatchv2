@@ -1,0 +1,38 @@
+name: Subscription Renewal Cron
+
+on:
+  schedule:
+    - cron: "0 12 * * *"
+  workflow_dispatch:
+
+concurrency:
+  group: subscription-cron
+  cancel-in-progress: false
+
+jobs:
+  run-cron:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Hit /admin/subscriptions/run-cron
+        env:
+          API_URL: ${{ secrets.NOVA_API_URL }}
+          SECRET: ${{ secrets.NOVA_API_WEBHOOK_SECRET }}
+        run: |
+          set -euo pipefail
+          response=$(curl -sS -w "\n%{http_code}" -X POST "$API_URL/admin/subscriptions/run-cron" \
+            -H "Content-Type: application/json" \
+            -H "X-Service-Auth: $SECRET" \
+            -d '{}')
+          body=$(echo "$response" | sed '$d')
+          status=$(echo "$response" | tail -n1)
+          echo "HTTP $status"
+          echo "$body" | jq .
+          if [ "$status" != "200" ]; then
+            echo "::error::Cron returned non-200 status: $status"
+            exit 1
+          fi
+          failed=$(echo "$body" | jq -r '.failed // 0')
+          if [ "$failed" != "0" ]; then
+            echo "::warning::$failed subscription run(s) failed - check logs"
+          fi

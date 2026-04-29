@@ -22,9 +22,10 @@ describe("calculateQuote — no discount", () => {
     expect(q.eligibleSubtotal).toBe(75000);
     expect(q.discountAmount).toBe(0);
     expect(q.taxableBase).toBe(75000);
-    expect(q.tax).toBe(12000);    // round(75000 * 0.16)
+    // MX prices are tax-inclusive in the catalog → engine tax component is 0.
+    expect(q.tax).toBe(0);
     expect(q.shipping).toBe(8500);
-    expect(q.total).toBe(75000 + 12000 + 8500);
+    expect(q.total).toBe(75000 + 8500);
   });
 
   it("sums multiple lines and applies frequency discount on subscription lines", () => {
@@ -45,9 +46,9 @@ describe("calculateQuote — no discount", () => {
     });
     expect(q.subtotal).toBe(150000 + 63750);
     expect(q.taxableBase).toBe(213750);
-    expect(q.tax).toBe(Math.round(213750 * 0.16));
+    expect(q.tax).toBe(0);
     expect(q.shipping).toBe(8500);
-    expect(q.total).toBe(213750 + q.tax + 8500);
+    expect(q.total).toBe(213750 + 8500);
   });
 
   it("throws on quantity < 1", () => {
@@ -95,8 +96,8 @@ describe("calculateQuote — with discount", () => {
     expect(q.eligibleSubtotal).toBe(138750);
     expect(q.discountAmount).toBe(Math.round(138750 * 0.10)); // 13875
     expect(q.taxableBase).toBe(138750 - 13875);
-    expect(q.tax).toBe(Math.round((138750 - 13875) * 0.16));
-    expect(q.total).toBe(q.taxableBase + q.tax + q.shipping);
+    expect(q.tax).toBe(0);
+    expect(q.total).toBe(q.taxableBase + q.shipping);
   });
 
   it("applies a `once` discount only to one-time lines", () => {

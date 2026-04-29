@@ -16,6 +16,7 @@ export type ApiErrorCode =
   | "auth_missing"
   | "auth_malformed"
   | "auth_invalid"
+  | "service_auth_invalid"
   | "discount_not_found"
   | "discount_below_minimum"
   | "discount_max_uses_reached"

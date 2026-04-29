@@ -17,6 +17,8 @@ const SHIPPING_MXN = 85;
 interface CheckoutFormProps {
   items: CartItem[];
   locale: string;
+  /** Stripe client secret, format: `pi_XXX_secret_YYY`. Used to derive the PI id for the finalize call. */
+  clientSecret: string;
 }
 
 type Field = {
@@ -49,7 +51,7 @@ function validateFields(f: Field, t: (k: string) => string): Partial<Record<keyo
   return e;
 }
 
-export function CheckoutForm({ items, locale }: CheckoutFormProps) {
+export function CheckoutForm({ items, locale, clientSecret }: CheckoutFormProps) {
   const t = useTranslations("components.checkout");
   const stripe = useStripe();
   const elements = useElements();
@@ -79,6 +81,52 @@ export function CheckoutForm({ items, locale }: CheckoutFormProps) {
 
     setSubmitting(true);
     setStripeError(null);
+
+    // Stamp customer + shipping data onto the PaymentIntent metadata so the
+    // Stripe webhook can forward it to apps/api for order persistence. Failing
+    // here means the order won't persist server-side, but the charge will
+    // still go through — so we surface the error and abort instead of paying
+    // with no record.
+    //
+    // Stripe client secret format is `pi_XXX_secret_YYY`; the PI id is the
+    // prefix before `_secret_`.
+    const paymentIntentId = clientSecret.split("_secret_")[0];
+    if (!paymentIntentId?.startsWith("pi_")) {
+      setStripeError("No se pudo identificar el pago. Recarga la página e intenta de nuevo.");
+      setSubmitting(false);
+      return;
+    }
+
+    try {
+      const finalizeRes = await fetch("/api/checkout/finalize", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          payment_intent_id: paymentIntentId,
+          customer_email: fields.email,
+          customer_name: fields.name,
+          customer_phone: fields.phone,
+          shipping_address: {
+            line1: fields.street,
+            ...(fields.interior || fields.colonia
+              ? { line2: [fields.interior, fields.colonia].filter(Boolean).join(", ") }
+              : {}),
+            city: fields.ciudad,
+            state: fields.estado,
+            postalCode: fields.cp,
+            country: "MX",
+          },
+          recurring_consent: items.some((i) => i.subscription !== undefined),
+        }),
+      });
+      if (!finalizeRes.ok) throw new Error("finalize failed");
+    } catch {
+      setStripeError(
+        "No se pudo guardar tu información de envío. Intenta de nuevo en unos segundos.",
+      );
+      setSubmitting(false);
+      return;
+    }
 
     const returnUrl = `${window.location.origin}/${locale}/checkout/exito`;
 

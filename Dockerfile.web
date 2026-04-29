@@ -1,0 +1,17 @@
+# Dockerfile for apps/web (Next.js 15).
+# Single-stage to preserve workspace symlinks across the bun install + build.
+FROM oven/bun:1.3-debian
+WORKDIR /app
+
+COPY . .
+RUN bun install --frozen-lockfile
+
+# NEXT_PUBLIC_* vars are baked into the client bundle at build time. Railway
+# injects all service env vars during `docker build` (not just at runtime),
+# so these get picked up automatically without ARG declarations.
+RUN cd apps/web && bun run build
+
+ENV NODE_ENV=production
+EXPOSE 3000
+
+CMD ["sh", "-c", "cd apps/web && bun run start"]
