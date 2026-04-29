@@ -1,6 +1,10 @@
 import { describe, it, expect } from "bun:test";
 import { useTestDb } from "../helpers/db";
-import { upsertCustomerByClerkUserId, getCustomerById } from "../../src/repos/customers";
+import {
+  upsertCustomerByClerkUserId,
+  getCustomerById,
+  setGatewayCredentials,
+} from "../../src/repos/customers";
 
 describe("customers repo", () => {
   const { getDb } = useTestDb();
@@ -119,6 +123,71 @@ describe("customers repo", () => {
         market: "mx",
       });
       expect(updated.email).toBe("new@example.com");
+    });
+  });
+
+  describe("setGatewayCredentials", () => {
+    it("stamps gatewayCustomerIds[gateway], defaultCardId, recurringConsentAt", async () => {
+      const db = getDb();
+      const customer = await upsertCustomerByClerkUserId(db, {
+        clerkUserId: "u_creds",
+        email: "creds@example.com",
+        market: "mx",
+      });
+      const consentAt = new Date("2026-05-01T12:00:00Z");
+      await setGatewayCredentials(db, {
+        customerId: customer.id,
+        gatewayName: "stripe",
+        gatewayCustomerId: "cus_AAA",
+        paymentMethodId: "pm_AAA",
+        consentAt,
+      });
+      const fetched = await getCustomerById(db, customer.id);
+      expect(fetched?.gatewayCustomerIds).toMatchObject({ stripe: "cus_AAA" });
+      expect(fetched?.defaultCardId).toBe("pm_AAA");
+      expect(fetched?.recurringConsentAt?.getTime()).toBe(consentAt.getTime());
+    });
+
+    it("merges into existing gatewayCustomerIds without dropping other gateways", async () => {
+      const db = getDb();
+      const customer = await upsertCustomerByClerkUserId(db, {
+        clerkUserId: "u_merge",
+        email: "merge@example.com",
+        market: "mx",
+      });
+      await setGatewayCredentials(db, {
+        customerId: customer.id,
+        gatewayName: "mercadopago",
+        gatewayCustomerId: "mp_OLD",
+        paymentMethodId: "card_OLD",
+        consentAt: new Date(),
+      });
+      await setGatewayCredentials(db, {
+        customerId: customer.id,
+        gatewayName: "stripe",
+        gatewayCustomerId: "cus_NEW",
+        paymentMethodId: "pm_NEW",
+        consentAt: new Date(),
+      });
+      const fetched = await getCustomerById(db, customer.id);
+      expect(fetched?.gatewayCustomerIds).toMatchObject({
+        mercadopago: "mp_OLD",
+        stripe: "cus_NEW",
+      });
+      expect(fetched?.defaultCardId).toBe("pm_NEW"); // most-recent wins
+    });
+
+    it("throws when customer doesn't exist", async () => {
+      const db = getDb();
+      await expect(
+        setGatewayCredentials(db, {
+          customerId: "00000000-0000-0000-0000-000000000000",
+          gatewayName: "stripe",
+          gatewayCustomerId: "cus_X",
+          paymentMethodId: "pm_X",
+          consentAt: new Date(),
+        }),
+      ).rejects.toThrow(/not found/);
     });
   });
 });

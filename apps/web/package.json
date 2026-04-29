@@ -11,6 +11,9 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@novapatch/catalog": "workspace:*",
+    "@novapatch/markets": "workspace:*",
+    "@novapatch/pricing": "workspace:*",
     "@clerk/nextjs": "^6.5.0",
     "@radix-ui/react-slot": "^1.1.0",
     "@stripe/react-stripe-js": "^6.3.0",

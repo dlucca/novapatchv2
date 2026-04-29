@@ -1,7 +1,31 @@
-import { and, desc, eq } from "drizzle-orm";
+import { and, desc, eq, lte } from "drizzle-orm";
 import type { Db } from "../db";
 import { subscriptions, type Subscription } from "../db/schema/subscriptions";
 import type { SubscriptionInterval, SubscriptionStatus } from "../services/subscription-actions";
+
+/**
+ * Returns all `active` subscriptions whose `next_billing_date` is on or
+ * before the given date (YYYY-MM-DD string, inclusive). Used by the
+ * materializer step of the subscription cron.
+ *
+ * `next_billing_date` is a `date` column (no timezone) — pass a YYYY-MM-DD
+ * string. `paused`, `canceled`, `past_due`, and `delayed_oos` rows are
+ * excluded; the cron only acts on `active`.
+ */
+export async function findDueActiveSubscriptions(
+  db: Db,
+  asOfDate: string,
+): Promise<Subscription[]> {
+  return await db
+    .select()
+    .from(subscriptions)
+    .where(
+      and(
+        eq(subscriptions.status, "active"),
+        lte(subscriptions.nextBillingDate, asOfDate),
+      ),
+    );
+}
 
 export async function listByCustomerId(db: Db, customerId: string): Promise<Subscription[]> {
   return await db

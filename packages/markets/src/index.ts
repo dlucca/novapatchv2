@@ -8,7 +8,12 @@ export const MARKETS: Readonly<Record<MarketId, Readonly<Market>>> = {
     currency: "MXN",
     locale: "es-MX",
     paymentProvider: "openpay",
-    taxRate: 0.16,
+    // Mexican consumer prices are tax-inclusive (IVA already in shelf price).
+    // Catalog basePrice reflects the gross price the customer pays, so the
+    // engine's tax component is 0 here. Keep in sync with the frontend's
+    // total = subtotal + shipping computation. (Other markets keep tax
+    // separate; revisit per market when each launches.)
+    taxRate: 0,
     shippingFlat: 8500,
   },
   br: {

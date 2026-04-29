@@ -116,7 +116,7 @@ describe("POST /discounts/validate", () => {
     expect(body.discountAmount).toBe(7500);
     expect(body.quote.subtotal).toBe(75000);
     expect(body.quote.discountAmount).toBe(7500);
-    expect(body.quote.total).toBe(75000 - 7500 + Math.round((75000 - 7500) * 0.16) + 8500);
+    expect(body.quote.total).toBe(75000 - 7500 + 8500); // MX tax-inclusive: tax=0
   });
 
   it("returns {valid:false, reason:discount_below_minimum} when cart is too small", async () => {

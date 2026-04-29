@@ -9,7 +9,7 @@ describe("MARKETS", () => {
   it("MX uses openpay and MXN", () => {
     expect(MARKETS.mx.currency).toBe("MXN");
     expect(MARKETS.mx.paymentProvider).toBe("openpay");
-    expect(MARKETS.mx.taxRate).toBe(0.16);
+    expect(MARKETS.mx.taxRate).toBe(0); // tax-inclusive shelf prices
   });
 
   it("non-MX markets use mercadopago", () => {

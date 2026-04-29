@@ -331,13 +331,14 @@ describe("POST /me/checkout — gateway + replay + burn prevention", () => {
   it("idempotent replay: second identical request returns 200 with same orderId, no double insert, no double charge", async () => {
     const db = getDb();
     let chargeCalls = 0;
+    const baseGateway = createStubGateway({ defaultOutcome: "succeeded" });
     const gateway = {
-      async charge(input: unknown) {
+      name: "stub" as const,
+      async charge(input: Parameters<typeof baseGateway.charge>[0]) {
         chargeCalls += 1;
-        return createStubGateway({ defaultOutcome: "succeeded" }).charge(
-          input as Parameters<ReturnType<typeof createStubGateway>["charge"]>[0],
-        );
+        return baseGateway.charge(input);
       },
+      chargeRecurring: baseGateway.chargeRecurring,
     };
     const verifier = createStubVerifier({ tok_alice: { clerkUserId: "user_alice" } });
     const userClient = createStubUserClient({

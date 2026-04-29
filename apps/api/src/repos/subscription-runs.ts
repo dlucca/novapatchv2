@@ -1,4 +1,4 @@
-import { and, asc, eq, lte } from "drizzle-orm";
+import { and, asc, count, eq, lte } from "drizzle-orm";
 import type { Db } from "../db";
 import {
   subscriptionRuns,
@@ -118,4 +118,44 @@ export async function markStatus(db: Db, input: MarkStatusInput): Promise<void> 
   if (input.finishedAt !== undefined) set.finishedAt = input.finishedAt;
   if (input.attemptCount !== undefined) set.attemptCount = input.attemptCount;
   await db.update(subscriptionRuns).set(set).where(eq(subscriptionRuns.id, input.id));
+}
+
+/**
+ * Atomically transition a run from `pending` → `processing`. Returns true if
+ * this caller claimed the run, false if another worker beat us (or the row
+ * is no longer pending). Guarded WHERE clause prevents two concurrent
+ * processors from charging the same run.
+ */
+export async function tryClaimRun(
+  db: Db,
+  runId: string,
+  startedAt: Date,
+): Promise<boolean> {
+  const updated = await db
+    .update(subscriptionRuns)
+    .set({ status: "processing", startedAt })
+    .where(
+      and(
+        eq(subscriptionRuns.id, runId),
+        eq(subscriptionRuns.status, "pending"),
+      ),
+    )
+    .returning({ id: subscriptionRuns.id });
+  return updated.length > 0;
+}
+
+/**
+ * Number of existing runs for a subscription. Used to compute the next
+ * cycle_number when materializing (cycles are 1-indexed; cycle 0 is the
+ * signup order, not a run).
+ */
+export async function countRunsForSubscription(
+  db: Db,
+  subscriptionId: string,
+): Promise<number> {
+  const [row] = await db
+    .select({ n: count() })
+    .from(subscriptionRuns)
+    .where(eq(subscriptionRuns.subscriptionId, subscriptionId));
+  return row?.n ?? 0;
 }
