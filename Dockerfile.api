@@ -1,0 +1,18 @@
+# Dockerfile for apps/api (Bun + Hono + Drizzle).
+# Single-stage: workspace symlinks don't survive multi-stage COPY,
+# so we install + run in the same image. Image size hit is acceptable
+# for a backend service.
+FROM oven/bun:1.3-debian
+WORKDIR /app
+
+# Copy everything (Railway already filters via .gitignore on upload).
+COPY . .
+
+RUN bun install --frozen-lockfile
+
+ENV NODE_ENV=production
+EXPOSE 9000
+
+# Run pending DB migrations on boot, then start the server. If migrations fail
+# the container exits and Railway will not route traffic until it succeeds.
+CMD ["sh", "-c", "cd apps/api && bun run src/db/migrate.ts && bun run src/server.ts"]

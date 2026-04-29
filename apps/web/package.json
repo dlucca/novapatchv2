@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev --port 3000",
     "build": "next build",
-    "start": "next start --port 3000",
+    "start": "next start -p ${PORT:-3000}",
     "test": "bun test ./test",
     "test:e2e": "playwright test",
     "typecheck": "tsc --noEmit"
